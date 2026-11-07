@@ -1,0 +1,182 @@
+site_name: Hypersonic CFD Manual
+site_description: A course and a lookup manual for entry aerothermodynamics, hypersonic numerics, thermochemistry and TPS analysis.
+site_author: Juan Pablo Roldan
+site_url: https://juanpabloroldan.github.io/hypersonic-cfd-manual/
+repo_url: https://github.com/JuanPabloRoldan/hypersonic-cfd-manual
+repo_name: hypersonic-cfd-manual
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - navigation.tracking
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tooltips
+  icon:
+    repo: fontawesome/brands/github
+
+extra:
+  status:
+    outline: Outline only, not yet taught
+    draft: Partly written, lesson still pending
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.snippets:
+      base_path: [includes]
+      auto_append: [abbreviations.md]
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+plugins:
+  - search
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+nav:
+  - Home:
+      - index.md
+      - How to use this manual: how-to-use.md
+  - Course:
+      - course/index.md
+      - "Track 0 · Anatomy of a solver":
+          - course/track-0/index.md
+          - "0.1 Governing equations": course/track-0/0-1-governing-equations.md
+          - "0.2 Spatial discretization": course/track-0/0-2-spatial-discretization.md
+          - "0.3 Reconstruction": course/track-0/0-3-reconstruction.md
+          - "0.4 Flux functions": course/track-0/0-4-flux-functions.md
+          - "0.5 Time advancement": course/track-0/0-5-time-advancement.md
+          - "0.6 Sources and stiffness": course/track-0/0-6-sources-and-stiffness.md
+          - "0.7 Boundary conditions": course/track-0/0-7-boundary-conditions.md
+          - "0.8 Verification and diagnosis": course/track-0/0-8-verification.md
+      - "Track 1 · Entry flow physics": course/track-1.md
+      - "Track 2 · Hypersonic numerics": course/track-2.md
+      - "Track 3 · Time integration and cost": course/track-3.md
+      - "Track 4 · Thermochemistry": course/track-4.md
+      - "Track 5 · Walls and surfaces": course/track-5.md
+      - "Track 6 · Shock-layer radiation": course/track-6.md
+      - "Track 7 · TPS and material response": course/track-7.md
+      - "Track 8 · V&V, uncertainty, margins": course/track-8.md
+      - "Track 9 · The TPS design pipeline": course/track-9.md
+      - Session log: course/session-log.md
+  - Reference:
+      - reference/index.md
+      - Implications matrix: reference/implications-matrix.md
+      - Foundations:
+          - Governing equations: reference/foundations/governing-equations.md
+          - Conservation form and weak solutions: reference/foundations/conservation-and-weak-solutions.md
+          - Mathematical character: reference/foundations/mathematical-character.md
+          - Closing the system: reference/foundations/closing-the-system.md
+      - Spatial discretization:
+          - The finite-volume pipeline: reference/spatial/finite-volume-pipeline.md
+          - Discretization families: reference/spatial/discretization-families.md
+          - Reconstruction and limiters: reference/spatial/reconstruction.md
+          - WENO: reference/spatial/weno.md
+          - Riemann solvers: reference/spatial/riemann-solvers.md
+          - Flux-vector splitting: reference/spatial/flux-vector-splitting.md
+          - Central schemes and dissipation: reference/spatial/central-schemes.md
+          - Shock instabilities: reference/spatial/shock-instabilities.md
+          - Viscous fluxes and gradients: reference/spatial/viscous-fluxes.md
+          - Boundary conditions: reference/spatial/boundary-conditions.md
+      - Time integration and convergence:
+          - Time-step limits: reference/time/time-step-limits.md
+          - Explicit methods: reference/time/explicit-methods.md
+          - Implicit methods and Jacobians: reference/time/implicit-methods.md
+          - Point and line relaxation: reference/time/relaxation-methods.md
+          - Local time stepping: reference/time/local-time-stepping.md
+          - Explicit vs implicit: reference/time/explicit-vs-implicit.md
+          - Dual time stepping: reference/time/dual-time-stepping.md
+          - Convergence diagnostics: reference/time/convergence-diagnostics.md
+      - Source terms:
+          - Stiff source terms: reference/sources/stiff-sources.md
+      - Thermochemistry:
+          - Gas models: reference/thermo/gas-models.md
+          - Energy modes and thermodynamics: reference/thermo/energy-modes.md
+          - Thermal nonequilibrium models: reference/thermo/thermal-nonequilibrium.md
+          - Finite-rate chemistry: reference/thermo/finite-rate-chemistry.md
+          - Transport and diffusion: reference/thermo/transport-and-diffusion.md
+      - Walls and surfaces:
+          - Wall boundary conditions: reference/walls/wall-boundary-conditions.md
+          - Surface energy balance: reference/walls/surface-energy-balance.md
+      - Physics:
+          - Entry flow anatomy: reference/physics/entry-flow-anatomy.md
+      - Special formulations:
+          - Space marching (PNS): reference/special/space-marching.md
+  - Codes:
+      - codes/index.md
+      - DPLR: codes/dplr.md
+      - LAURA: codes/laura.md
+      - US3D: codes/us3d.md
+      - FUN3D: codes/fun3d.md
+      - SU2-NEMO: codes/su2-nemo.md
+      - Eilmer: codes/eilmer.md
+      - SPARTA: codes/sparta.md
+      - MFC (contrast): codes/mfc.md
+      - STAR-CCM+: codes/star-ccm.md
+      - Radiation solvers: codes/radiation-tools.md
+      - Material response tools: codes/material-response-tools.md
+      - Mutation++: codes/mutationpp.md
+  - Glossary: glossary.md
+  - Bibliography: references.md
