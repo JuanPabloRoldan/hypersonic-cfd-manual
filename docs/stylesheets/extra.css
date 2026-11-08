@@ -30,5 +30,13 @@
 }
 .md-typeset figcaption { max-width: 42rem; }
 
-/* Implications tables: keep first column readable */
-.md-typeset table:not([class]) td:first-child { white-space: nowrap; }
+/* Use the full browser width instead of Material's ~61rem centred column,
+   capped so lines stay readable on ultra-wide monitors */
+.md-grid { max-width: min(100%, 120rem); }
+
+/* Tables: let wide tables use the full content width and wrap text
+   instead of forcing a horizontal scroll bar */
+.md-typeset__table { display: block; width: 100%; }
+.md-typeset__table table:not([class]) { display: table; width: 100%; }
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th { white-space: normal; }
