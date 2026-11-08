@@ -8,6 +8,13 @@
 *[DG]: Discontinuous Galerkin
 *[DSMC]: Direct simulation Monte Carlo
 *[MUSCL]: Monotone Upstream-centered Schemes for Conservation Laws (van Leer): piecewise-linear reconstruction
+*[ENO]: Essentially non-oscillatory reconstruction (picks the smoothest stencil)
+*[TENO]: Targeted ENO: keeps or drops each stencil with a sharp cutoff, otherwise uses optimal linear weights
+*[AEF]: Algebraic energy flux (turbulent heat flux model)
+*[NSCBC]: Navier–Stokes characteristic boundary conditions
+*[FMPR]: Full-matrix point relaxation
+*[LLF]: Local Lax–Friedrichs
+*[GLF]: Global Lax–Friedrichs
 *[WENO]: Weighted essentially non-oscillatory reconstruction
 *[TVD]: Total variation diminishing
 *[HLL]: Harten–Lax–van Leer approximate Riemann solver (two waves)

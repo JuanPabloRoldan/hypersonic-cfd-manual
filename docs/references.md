@@ -40,12 +40,42 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - B. Einfeldt, "On Godunov-type methods for gas dynamics," *SIAM J. Numer. Anal.* 25 (1988).
 - E. F. Toro, M. Spruce & W. Speares, "Restoration of the contact surface in the HLL-Riemann solver," *Shock Waves* 4 (1994).
 - J. J. Quirk, "A contribution to the great Riemann solver debate," *Int. J. Numer. Meth. Fluids* 18 (1994).
+- K. Peery & S. Imlay, "Blunt-body flow simulations," AIAA Paper 88-2904 (1988).
+- S. D. Kim, B. J. Lee, H. J. Lee & I.-S. Jeung, "Robust HLLC Riemann solver with weighted average flux scheme for strong shock," *J. Comput. Phys.* 228 (2009).
+- Y.-X. Ren, "A robust shock-capturing scheme based on rotated Riemann solvers," *Comput. Fluids* 32 (2003).
+- Z. Shen, W. Yan & G. Yuan, "A robust HLLC-type Riemann solver for strong shock," *J. Comput. Phys.* 309 (2016).
+- A. V. Rodionov, "Artificial viscosity in Godunov-type schemes to cure the carbuncle phenomenon," *J. Comput. Phys.* 345 (2017).
+- Z. Chen, X. Huang, Y.-X. Ren, Z. Xie & M. Zhou, "Mechanism study of shock instability in Riemann-solver-based shock-capturing scheme," *AIAA J.* 56 (2018).
+- N. Fleischmann, S. Adami, X. Y. Hu & N. A. Adams, "A low dissipation method to cure the grid-aligned shock instability," *J. Comput. Phys.* 401 (2020).
+- N. Fleischmann, S. Adami & N. A. Adams, "A shock-stable modification of the HLLC Riemann solver with reduced numerical dissipation," *J. Comput. Phys.* 423 (2020).
+- X. Y. Hu & N. A. Adams, "Low Mach number effect in simulation of high Mach number flow," arXiv:1204.5092 (2012).
+
+## Low-Mach corrections
+
+- H. Guillard & C. Viozat, "On the behaviour of upwind schemes in the low Mach number limit," *Comput. Fluids* 28 (1999).
+- B. Thornber, A. Mosedale, D. Drikakis, D. Youngs & R. J. R. Williams, "An improved reconstruction method for compressible flows with low Mach number features," *J. Comput. Phys.* 227 (2008).
+- S. S. Chen, J. P. Li, Z. Li, W. Yuan & Z. H. Gao, "Anti-dissipation pressure correction under low Mach numbers for Godunov-type schemes," *J. Comput. Phys.* 456 (2022).
+- W. Xie, Y. Zhang, Z. Tian & H. Li, "A unified construction of all-speed HLL-type schemes for hypersonic heating computations," arXiv:2103.06374 (2021).
 - R. W. MacCormack & G. V. Candler, "The solution of the Navier–Stokes equations using Gauss–Seidel line relaxation," *Computers & Fluids* 17 (1989).
 - M.-S. Liou & C. J. Steffen, "A new flux splitting scheme," *J. Comput. Phys.* 107 (1993); M.-S. Liou, "A sequel to AUSM: AUSM+," *J. Comput. Phys.* 129 (1996); "A sequel to AUSM, Part II: AUSM+-up for all speeds," *J. Comput. Phys.* 214 (2006).
 - A. Jameson, W. Schmidt & E. Turkel, "Numerical solution of the Euler equations by finite volume methods using Runge–Kutta time-stepping schemes," AIAA Paper 81-1259 (1981).
 - F. Ducros et al., "Large-eddy simulation of the shock/turbulence interaction," *J. Comput. Phys.* 152 (1999).
 - P. K. Subbareddy & G. V. Candler, "A fully discrete, kinetic energy consistent finite-volume scheme for compressible flows," *J. Comput. Phys.* 228 (2009).
 - G.-S. Jiang & C.-W. Shu, "Efficient implementation of weighted ENO schemes," *J. Comput. Phys.* 126 (1996).
+- A. Harten, B. Engquist, S. Osher & S. R. Chakravarthy, "Uniformly high order accurate essentially non-oscillatory schemes, III," *J. Comput. Phys.* 71 (1987).
+- A. K. Henrick, T. D. Aslam & J. M. Powers, "Mapped weighted essentially non-oscillatory schemes: achieving optimal order near critical points," *J. Comput. Phys.* 207 (2005).
+- X. Y. Hu, Q. Wang & N. A. Adams, "An adaptive central-upwind weighted essentially non-oscillatory scheme," *J. Comput. Phys.* 229 (2010).
+- L. Fu, X. Y. Hu & N. A. Adams, "A family of high-order targeted ENO schemes for compressible-fluid simulations," *J. Comput. Phys.* 305 (2016).
+- D. S. Balsara, S. Garain & C.-W. Shu, "An efficient class of WENO schemes with adaptive order," *J. Comput. Phys.* 326 (2016).
+- S. Shahane et al., "Rational-WENO: A lightweight, physically-consistent three-point weighted essentially non-oscillatory scheme," arXiv:2409.09217 (2024).
+- P. K. Sweby, "High resolution schemes using flux limiters for hyperbolic conservation laws," *SIAM J. Numer. Anal.* 21 (1984).
+- H. C. Yee, "Construction of explicit and implicit symmetric TVD schemes and their applications," *J. Comput. Phys.* 68 (1987).
+- N. P. Waterson & H. Deconinck, "Design principles for bounded higher-order convection schemes – a unified approach," *J. Comput. Phys.* 224 (2007).
+- V. Venkatakrishnan, "Convergence to steady state solutions of the Euler equations on unstructured grids with limiters," *J. Comput. Phys.* 118 (1995).
+- S. F. Davis, "Simplified second-order Godunov-type methods," *SIAM J. Sci. Stat. Comput.* 9 (1988).
+- P. Batten, N. Clarke, C. Lambert & D. M. Causon, "On the choice of wavespeeds for the HLLC Riemann solver," *SIAM J. Sci. Comput.* 18 (1997).
+- V. Coralic & T. Colonius, "Finite-volume WENO scheme for viscous compressible multicomponent flows," *J. Comput. Phys.* 274 (2014).
+- X. Y. Hu, N. A. Adams & C.-W. Shu, "Positivity-preserving method for high-order conservative schemes solving compressible Euler equations," *J. Comput. Phys.* 242 (2013).
 - R. Borges, M. Carmona, B. Costa & W. S. Don, "An improved weighted essentially non-oscillatory scheme for hyperbolic conservation laws," *J. Comput. Phys.* 227 (2008).
 - C.-W. Shu, "Essentially non-oscillatory and weighted essentially non-oscillatory schemes for hyperbolic conservation laws," *Lecture Notes in Mathematics* 1697 (1998).
 
@@ -85,6 +115,12 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 
 - F. S. Billig, "Shock-wave shapes around spherical- and cylindrical-nosed bodies," *J. Spacecraft Rockets* 4 (1967).
 
+## Turbulence modeling
+
+- R. D. W. Bowersox & S. W. North, "Algebraic turbulent energy flux models for hypersonic shear flows," *Prog. Aerosp. Sci.* 46 (2010).
+- J. Huang, G. L. Nicholson, L. Duan, M. M. Choudhari & R. D. W. Bowersox, "Simulation and modeling of cold-wall hypersonic turbulent boundary layers on flat plate," AIAA conference paper (2020), NTRS 20200002806.
+- M. E. Danis & P. Durbin, "Compressibility correction to k–ω models for hypersonic turbulent boundary layers," *AIAA J.* 60 (2022).
+
 ## Materials
 
 - J. Lachaud & N. N. Mansour, "Porous-material analysis toolbox based on OpenFOAM and applications," *J. Thermophys. Heat Transfer* 28 (2014).
@@ -93,6 +129,11 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 
 - S. H. Bryngelson et al., "MFC: An open-source high-order multi-component, multi-phase, and multi-scale compressible flow solver," *Comput. Phys. Commun.* 266 (2021); later MFC papers (Wilfong et al.) on exascale runs and IGR.
 - R. Cao & F. Schäfer, information geometric regularization of the Euler equations (2023 onward; see their papers).
+- B. Wilfong et al., "MFC 5.0: An exascale many-physics flow solver," *Comput. Phys. Commun.* 322 (2026).
+- G. V. Candler, P. K. Subbareddy & J. M. Brock, "Development of the US3D code for advanced compressible and reacting flow simulations," AIAA Paper 2015-1893 (2015).
+- I. Nompelis, T. W. Drayna & G. V. Candler, "Development of a hybrid unstructured implicit solver for the simulation of reacting flows over complex geometries," AIAA Paper 2004-2227 (2004).
+- D. A. Bezgin, A. B. Buhendwa & N. A. Adams, "JAX-Fluids: A fully-differentiable high-order computational fluid dynamics solver for compressible two-phase flows," *Comput. Phys. Commun.* 282 (2023).
+- N. Hoppe et al., ALPACA papers and documentation (TU Munich).
 
 !!! warning "Calibration"
     Citations for code-specific details (DPLR, LAURA, US3D, FUN3D, SU2-NEMO, Eilmer, SPARTA user manuals and development papers) will be added as each code page is written from primary sources.

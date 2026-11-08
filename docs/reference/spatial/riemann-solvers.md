@@ -58,7 +58,7 @@ $$
 \hat{\mathbf F}_{\text{HLL}} = \frac{S_R\,\mathbf F_L - S_L\,\mathbf F_R + S_L S_R\,(\mathbf U_R - \mathbf U_L)}{S_R - S_L}
 $$
 
-for $S_L < 0 < S_R$ (otherwise take the upwind flux). Typical wave-speed estimates: $S_L = \min(u_L - a_L,\ \tilde u - \tilde a)$, $S_R = \max(u_R + a_R,\ \tilde u + \tilde a)$.
+for $S_L < 0 < S_R$ (otherwise take the upwind flux). The result depends on how $S_L$ and $S_R$ are estimated; see [wave-speed estimates](#wave-speed-estimates).
 
 **Strengths:** positivity-preserving with suitable wave speeds; carbuncle-resistant; simple and robust. **Weaknesses:** the contact and shear waves are lost inside the averaged state, so contacts and **boundary layers are smeared**, which degrades heat flux on practical grids.
 
@@ -85,6 +85,10 @@ with species densities scaled by the same factor (mass fractions are carried thr
 
 **Strengths:** resolves contacts and shear layers like Roe, but positivity-preserving with suitable wave speeds and needs no entropy fix; species and extra scalars ride the contact trivially. **Weaknesses:** like Roe, prone to the carbuncle at strong shocks aligned with the grid.
 
+### HLLC-LM
+
+A shock-stable, *lower*-dissipation HLLC (Fleischmann, Adami & Adams, 2020). HLLC is rewritten in an equivalent central form whose dissipation splits into acoustic and contact parts; the acoustic wave speeds are then scaled down smoothly where the face-normal Mach number is below 0.1. Because the transverse faces at a grid-aligned shock are exactly such faces, this removes the carbuncle without adding dissipation. Full formulas on [low-Mach corrections](low-mach-corrections.md#hllc-lm).
+
 ### Rusanov (local Lax–Friedrichs)
 
 One wave speed $S = \max(|u_L| + a_L,\ |u_R| + a_R)$ for everything:
@@ -102,10 +106,35 @@ Most dissipative, very robust, cheapest. Often used as a fallback in difficult c
 | Exact | exact | yes | no | prone | high |
 | Roe | exact | no | yes | prone | medium |
 | HLL / HLLE | smeared | yes (HLLE) | no | resistant | low |
-| HLLC | resolved | yes (suitable speeds) | no | prone | low–medium |
+| HLLC | resolved | yes (suitable speeds) | no | prone (worse in 3D) | low–medium |
+| HLLC-LM | resolved | as HLLC | no | resistant | low–medium |
 | Rusanov | heavily smeared | yes | no | resistant | lowest |
 
-The pattern is the central trade-off of hypersonic flux design: **the dissipation that smears contacts and boundary layers is the same dissipation that suppresses the carbuncle.** Hybrid and rotated solvers, and dissipation applied only at shocks, try to get both. See [shock instabilities](shock-instabilities.md) and [Track 2.2–2.3](../../course/track-2.md).
+The pattern is the classical trade-off of hypersonic flux design: **the dissipation that smears contacts and boundary layers is the same dissipation that suppresses the carbuncle.** Hybrid and rotated solvers, and dissipation applied only at shocks, try to get both. A newer line of work argues the trade-off is partly false: the carbuncle is driven by *mis-scaled* acoustic dissipation at low face-normal Mach numbers, so it can be cured by reducing dissipation there ([HLLC-LM](#hllc-lm), [low-Mach corrections](low-mach-corrections.md)). See [shock instabilities](shock-instabilities.md) and [Track 2.2–2.3](../../course/track-2.md).
+
+## Wave-speed estimates
+
+HLL-family solvers (HLL, HLLE, HLLC, HLLC-LM) need estimates $S_L$, $S_R$ of the fastest left- and right-running signals. Too small and the scheme loses positivity or stability, because a real wave falls outside the fan; too large and it adds dissipation. The common choices, with $c$ the sound speed:
+
+| Estimate | $S_L$, $S_R$ | Notes |
+|---|---|---|
+| Rusanov | $\mp\max(\lvert u_L\rvert  + c_L,\ \lvert u_R\rvert  + c_R)$ | Symmetric and largest; most dissipative. |
+| Davis (1988) | $S_L = \min(u_L - c_L,\ u_R - c_R)$, $S_R = \max(u_L + c_L,\ u_R + c_R)$ | Simple and cheap. A cruder variant uses $u_L - c_L$ and $u_R + c_R$ only. |
+| Einfeldt (1988) | $S_L = \min(u_L - c_L,\ \hat u - \hat c)$, $S_R = \max(u_R + c_R,\ \hat u + \hat c)$, with Roe-averaged $\hat u$ and $\hat c^2 = \dfrac{\sqrt{\rho_L}c_L^2 + \sqrt{\rho_R}c_R^2}{\sqrt{\rho_L} + \sqrt{\rho_R}} + \dfrac12\dfrac{\sqrt{\rho_L\rho_R}}{(\sqrt{\rho_L} + \sqrt{\rho_R})^2}(u_R - u_L)^2$ | The HLLE choice; makes HLL positivity-preserving for the Euler equations. The usual default. |
+| Arithmetic (Coralic & Colonius 2014) | as Einfeldt, with arithmetic averages $\bar u$, $\bar c$ instead of Roe averages | Used in multiphase codes, where Roe averages are awkward. |
+| Toro, pressure-based (Toro et al. 1994) | $S_L = u_L - c_L q_L$, $S_R = u_R + c_R q_R$, with $q_K = \sqrt{1 + \tfrac{\gamma + 1}{2\gamma}(p_*/p_K - 1)}$ if $p_* > p_K$ (a shock on that side), else 1 | Estimates the star pressure $p_*$ first (e.g. two-rarefaction or linearized solvers). Tighter bounds and less dissipation, but tied to a $\gamma$-law EOS; needs an effective $\gamma$ for reacting mixtures. |
+
+For HLLC, the contact speed $S_*$ then follows from the Batten et al. (1997) formula in the [HLLC section](#hllc). For reacting multi-temperature air, the sound speed in all of these is the [frozen sound speed](../foundations/mathematical-character.md#hyperbolic).
+
+## Positivity safeguards
+
+Strong expansions (capsule shoulders and wakes, near-vacuum regions) and strong shocks can drive density, pressure or temperature negative at a face or in an update even when the flux function itself is positivity-preserving, because high-order reconstruction can produce non-physical face states. Codes guard against this at three levels:
+
+- **At the face states.** Check reconstructed $\rho$, $p$ (and species densities, $T$, $T_v$) and fall back to lower-order reconstruction where they are non-physical, or scale the reconstruction towards the cell average (Zhang–Shu-type limiting).
+- **At the flux.** A *positivity-preserving flux limiter* blends the high-order flux with a first-order positive flux (HLL/HLLC with Einfeldt speeds, or Rusanov) just enough to keep the updated cell positive (Hu, Adams & Shu, 2013). ALPACA's "Riemann solver for positivity under flux splitting" is this fallback flux.
+- **After the update (a posteriori).** If a cell ends up non-physical, recompute it with a lower-order, more robust scheme (MOOD-type detection).
+
+Density and pressure floors (for example $10^{-7}$ in ALPACA) are the last line of defence, not a fix. Frequent triggering usually signals a resolution or startup problem.
 
 ## Implications
 
@@ -124,7 +153,7 @@ Knobs: flux scheme, entropy-fix coefficient, wave-speed estimate. Symptoms: carb
 
 ## Which codes
 
-LAURA uses Roe's scheme with Yee-type TVD limiting and an entropy fix; MFC defaults to HLLC (HLL and an exact solver are available); STAR-CCM+ offers Roe and AUSM+ options. DPLR and US3D use [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming) rather than a Riemann solver.
+LAURA uses Roe's scheme with Yee-type TVD limiting and an entropy fix; MFC defaults to HLLC (HLL and an exact solver are available); [ALPACA](../../codes/alpaca.md) offers HLLC, HLLC-LM, HLL and Rusanov with a choice of wave-speed estimates; STAR-CCM+ offers Roe and AUSM+ options. DPLR and US3D use [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming) rather than a Riemann solver.
 
 !!! warning "Calibration"
     These assignments follow the codes' published descriptions; defaults and options change between versions. Verify against current user manuals before relying on them.
@@ -135,4 +164,4 @@ LAURA uses Roe's scheme with Yee-type TVD limiting and an entropy fix; MFC defau
 
 ## References
 
-Toro, *Riemann Solvers and Numerical Methods for Fluid Dynamics* (the standard reference for all of the above); Roe (1981); Harten, Lax & van Leer (1983); Einfeldt (1988); Toro, Spruce & Speares (1994); Quirk (1994). See the [bibliography](../../references.md).
+Toro, *Riemann Solvers and Numerical Methods for Fluid Dynamics* (the standard reference for all of the above); Roe (1981); Harten, Lax & van Leer (1983); Davis (1988); Einfeldt (1988); Toro, Spruce & Speares (1994); Batten et al. (1997); Quirk (1994); Coralic & Colonius (2014); Hu, Adams & Shu (2013); Fleischmann, Adami & Adams (2020). See the [bibliography](../../references.md).

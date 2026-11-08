@@ -61,7 +61,7 @@ The solver "knows" each region locally, at every face, through the signs of the 
 
 | Lens | Effect |
 |---|---|
-| Time step and cost | Two explicit stability limits: convective ($\Delta x/(|u|+a)$) and viscous ($\Delta x^2/2\nu$). See [time-step limits](../time/time-step-limits.md). |
+| Time step and cost | Two explicit stability limits: convective ($\Delta x/(\lvert u\rvert +a)$) and viscous ($\Delta x^2/2\nu$). See [time-step limits](../time/time-step-limits.md). |
 | Steady vs unsteady | Steady problems with subsonic regions must be solved globally (time marching or iteration); purely supersonic regions can be [space-marched](../special/space-marching.md). |
 | Accuracy | Upwinding the hyperbolic part and centring the parabolic part is what each term's character demands. |
 | Robustness | Wrong upwinding (taking information from downstream in a supersonic region) is unstable. |

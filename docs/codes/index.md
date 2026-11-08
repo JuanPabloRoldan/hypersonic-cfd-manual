@@ -17,6 +17,7 @@ What makes DPLR "DPLR"? Each page answers that in the same format: purpose, dist
 | [Eilmer](eilmer.md) | Structured multiblock FV | Several (incl. AUSMDV, HLLC) | Explicit or Newton–Krylov | Multi-temperature, finite-rate |
 | [SPARTA](sparta.md) | DSMC, hierarchical Cartesian grid with cut cells | (particles) | (particles) | Collision-based chemistry |
 | [MFC](mfc.md) | Structured FV/FD, multiphase | HLLC (+ HLL, exact); or IGR | Explicit SSP-RK, GPU | Stiffened-gas multiphase (not a reentry code) |
+| [ALPACA](alpaca.md) | Cartesian FV/FD with multiresolution AMR | HLLC, HLLC-LM, HLL, Rusanov; Roe/LF flux splitting | Explicit SSP-RK | Ideal gas and multiphase (not a reentry code) |
 | [STAR-CCM+](star-ccm.md) | Unstructured FV (commercial) | Roe, AUSM+ | Coupled implicit density-based | 2T in recent versions |
 
 ## Supporting tools

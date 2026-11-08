@@ -24,6 +24,8 @@ A hyperbolic system needs exactly as many boundary conditions at a boundary as t
 
 ### Characteristic far-field and supersonic inflow
 ### Supersonic and subsonic outflow
+
+Supersonic outflow needs no physical condition (extrapolate). Subsonic outflow needs one, and imposing a fixed pressure reflects acoustic waves back into the domain. **Non-reflective (characteristic) conditions** in the Poinsot–Lele/NSCBC style instead set the amplitude of the incoming acoustic wave to relax the pressure towards a target, $\mathcal L_{\text{in}} = \sigma\,(1 - M^2)\,\dfrac{c}{L}\,(p - p_\infty)$, with a relaxation coefficient $\sigma$: zero is perfectly non-reflecting but lets the mean pressure drift; large values pin the pressure but reflect. $\sigma \approx 0.58$ (an optimum attributed to Rudy & Strikwerda) and 0.25 are common choices. *(To be written in Lesson 0.7.)*
 ### Symmetry planes and the axis of axisymmetric flow
 ### Walls
 

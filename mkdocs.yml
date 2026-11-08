@@ -133,11 +133,12 @@ nav:
           - The finite-volume pipeline: reference/spatial/finite-volume-pipeline.md
           - Discretization families: reference/spatial/discretization-families.md
           - Reconstruction and limiters: reference/spatial/reconstruction.md
-          - WENO: reference/spatial/weno.md
+          - ENO, WENO and TENO: reference/spatial/weno.md
           - Riemann solvers: reference/spatial/riemann-solvers.md
           - Flux-vector splitting: reference/spatial/flux-vector-splitting.md
           - Central schemes and dissipation: reference/spatial/central-schemes.md
           - Shock instabilities: reference/spatial/shock-instabilities.md
+          - Low-Mach corrections: reference/spatial/low-mach-corrections.md
           - Viscous fluxes and gradients: reference/spatial/viscous-fluxes.md
           - Boundary conditions: reference/spatial/boundary-conditions.md
       - Time integration and convergence:
@@ -162,6 +163,7 @@ nav:
           - Surface energy balance: reference/walls/surface-energy-balance.md
       - Physics:
           - Entry flow anatomy: reference/physics/entry-flow-anatomy.md
+          - Turbulence modeling: reference/physics/turbulence-modeling.md
       - Special formulations:
           - Space marching (PNS): reference/special/space-marching.md
   - Codes:
@@ -174,6 +176,7 @@ nav:
       - Eilmer: codes/eilmer.md
       - SPARTA: codes/sparta.md
       - MFC (contrast): codes/mfc.md
+      - ALPACA (contrast): codes/alpaca.md
       - STAR-CCM+: codes/star-ccm.md
       - Radiation solvers: codes/radiation-tools.md
       - Material response tools: codes/material-response-tools.md

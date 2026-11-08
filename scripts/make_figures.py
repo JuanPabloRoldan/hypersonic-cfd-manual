@@ -329,6 +329,33 @@ def vib_energy():
     save(fig, "vibrational_energy")
 
 
+# ---------------------------------------------------------------------------
+# 9. Flux limiters on Sweby's diagram
+# ---------------------------------------------------------------------------
+def sweby_limiters():
+    r = np.linspace(0, 4, 400)
+    lim = {
+        "minmod": np.minimum(1, r),
+        "van Leer": (r + abs(r)) / (1 + abs(r)),
+        "van Albada": (r**2 + r) / (r**2 + 1),
+        "MC": np.minimum(np.minimum(2 * r, 0.5 * (1 + r)), 2),
+        "superbee": np.maximum(np.minimum(2 * r, 1), np.minimum(r, 2)),
+        "Koren": np.minimum(np.minimum(2 * r, (1 + 2 * r) / 3), 2),
+    }
+    fig, ax = plt.subplots(figsize=(6.6, 4.2))
+    lo = np.minimum(1, r)
+    hi = np.maximum(np.minimum(2 * r, 1), np.minimum(r, 2))
+    ax.fill_between(r, lo, hi, color=GREY, alpha=0.15, label="second-order TVD region")
+    cols = [C0, C1, C2, C3, "k", "#00838f"]
+    styles = ["-", "-", "--", "-.", ":", "--"]
+    for (name, phi), c, ls in zip(lim.items(), cols, styles):
+        ax.plot(r, phi, color=c, ls=ls, lw=1.6, label=name)
+    ax.set(xlabel=r"$r = \Delta^-/\Delta^+$", ylabel=r"$\phi(r)$", xlim=(0, 4), ylim=(0, 2.3),
+           title="Slope limiters on Sweby's diagram\n(minmod is the lower edge, superbee the upper edge)")
+    ax.legend(fontsize=8, loc="lower right", ncol=2)
+    save(fig, "sweby_limiters")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -338,3 +365,4 @@ if __name__ == "__main__":
     arrhenius_switch()
     blunt_body()
     vib_energy()
+    sweby_limiters()

@@ -34,10 +34,25 @@ In supersonic flow all eigenvalues share a sign and the flux is fully upwinded. 
 
 ### Modified Steger–Warming {#modified-steger-warming}
 
-The fix used in reentry codes evaluates the split Jacobians at an averaged state between the two sides wherever the flow is smooth, which makes the scheme much less dissipative in boundary layers, and reverts to the true Steger–Warming evaluation near shocks, detected by a pressure-gradient sensor. The result keeps the robustness of FVS at shocks while recovering acceptable boundary-layer accuracy.
+The fix used in DPLR and US3D evaluates the split Jacobians not at each side's own state but at a state averaged between the two sides. In the first-order form given by Subbareddy & Candler (2009),
+
+$$
+\hat{\mathbf F}_f = \big(\mathbf R\boldsymbol\Lambda^+\mathbf R^{-1}\big)_f\,\mathbf U_i + \big(\mathbf R\boldsymbol\Lambda^-\mathbf R^{-1}\big)_f\,\mathbf U_{nbr}
+= \big(\mathbf R\boldsymbol\Lambda\mathbf R^{-1}\big)_f\,\frac{\mathbf U_i + \mathbf U_{nbr}}{2} - \frac12\big(\mathbf R|\boldsymbol\Lambda|\mathbf R^{-1}\big)_f\,(\mathbf U_{nbr} - \mathbf U_i),
+$$
+
+with all matrices evaluated at face-averaged values. That expansion is the key insight: a symmetric (central) part plus a dissipation term $\tfrac12\mathbf R|\boldsymbol\Lambda|\mathbf R^{-1}\Delta\mathbf U$. **If the face average is the Roe average, this is exactly the Roe flux.** The signature flux of DPLR and US3D is, in disguise, a Roe-type upwind flux with a different averaging. In practice $\mathbf U_i$, $\mathbf U_{nbr}$ are replaced by MUSCL face states, and the eigenvalues are smoothed near sonic and stagnation points,
+
+$$
+\lambda_k^{\pm} = \tfrac12\Big(\lambda_k \pm \sqrt{\lambda_k^2 + \delta c^2}\Big),\qquad \delta \approx 0.1\text{–}0.2,
+$$
+
+an entropy-fix-like modification that keeps the dissipation from vanishing where an eigenvalue crosses zero. The original MacCormack & Candler (1989) form also blends towards true (side-by-side) Steger–Warming near shocks using a pressure-gradient weight, recovering FVS robustness where it matters while keeping boundary-layer dissipation low elsewhere.
+
+US3D's low-dissipation option keeps this dissipation term but multiplies it by a shock-sensor switch and replaces the central part with a [kinetic-energy-consistent flux](central-schemes.md#kinetic-energy-consistent-fluxes).
 
 !!! warning "Calibration"
-    The averaging and switching details follow MacCormack & Candler (1989) and the DPLR/US3D literature; exact weights and sensor forms differ between codes and versions. To be pinned down from primary sources in Lesson 0.4 / Track 2.3.
+    The face-averaged form, the expansion and the eigenvalue modification are from Subbareddy & Candler (2009). Exact averaging, the pressure-switch form and default $\delta$ in current DPLR and US3D versions should be checked against code documentation in Track 2.3.
 
 ### van Leer
 
@@ -46,6 +61,17 @@ Splits the flux with polynomials in the local Mach number, chosen so $\mathbf F^
 ### AUSM family
 
 Liou's Advection Upstream Splitting Method splits the flux into a convective part (a mass flux upwinded with an interface Mach number) and a pressure part (split separately). Variants (AUSM+, AUSM+-up, AUSMPW+, ...) add low-dissipation behaviour in boundary layers, all-speed preconditioning and shock-stability fixes. Contacts are resolved well. Widely used in SU2 and commercial codes. *(Details to be written in Lesson 0.4.)*
+
+### Flux splitting for finite-difference WENO
+
+High-order finite-difference codes (the Shu–Osher approach, as in ALPACA's and JAX-Fluids' "flux splitting" solver type) reconstruct *fluxes* rather than states. The flux at each point is split, $f^\pm = \tfrac12(f \pm \alpha u)$, usually in characteristic variables, and $f^+$ and $f^-$ are reconstructed with left- and right-biased WENO stencils. The choice of $\alpha$ names the scheme:
+
+- **Global Lax–Friedrichs (GLF):** $\alpha$ = the maximum wave speed over the whole domain (per characteristic field). Most dissipative, most robust, and smooth in the data (good for formal accuracy).
+- **Local Lax–Friedrichs (LLF):** $\alpha$ = the maximum over the local stencil. Less dissipative.
+- **Roe-type splitting:** $\alpha = |\lambda|$ of each characteristic field, upwinding each field by its own speed, with a fallback to LLF where the eigenvalue changes sign (entropy fix).
+- **Low-Mach variants (Roe-M, LLF-M):** limit the acoustic $\alpha$ to $\phi\,|u|$ at low face-normal Mach number, which cures grid-aligned shock instabilities; see [low-Mach corrections](low-mach-corrections.md#roe-m).
+
+Codes using this approach often add a positivity-preserving fallback flux (an HLLC or HLL flux computed from first-order states) where the high-order split flux would produce negative density or pressure; see [positivity safeguards](riemann-solvers.md#positivity-safeguards).
 
 ## Implications
 
@@ -72,4 +98,4 @@ DPLR and US3D use modified Steger–Warming as their base upwind flux (US3D adds
 
 ## References
 
-Steger & Warming (1981); van Leer (1982); MacCormack & Candler (1989); Liou & Steffen (1993); Liou (1996, 2006). See the [bibliography](../../references.md).
+Steger & Warming (1981); van Leer (1982); MacCormack & Candler (1989); Subbareddy & Candler (2009); Shu & Osher (1988); Liou & Steffen (1993); Liou (1996, 2006). See the [bibliography](../../references.md).
