@@ -47,7 +47,26 @@ Nobody solves this system exactly. The left-hand side is usually an approximatio
 Each block is $n\times n$, with $n$ the number of conserved variables per cell. Memory goes as $n^2$ and block factorizations or inversions as $n^3$. Going from a perfect gas ($n = 5$) to 11-species two-temperature air ($n = 16$) multiplies block-operation cost by roughly $(16/5)^3 \approx 33$, before counting the extra source-Jacobian work. An explicit code pays roughly linearly in $n$. See [explicit vs implicit](explicit-vs-implicit.md).
 
 !!! note "Quadratic or cubic?"
-    The $n^3$ figure is for factorizing or inverting the blocks. Codes that factor once and reuse the factors across relaxation sweeps pay mostly the $n^2$ block–vector products per sweep, which is why papers on DPLR-type methods describe the fully coupled cost as scaling *quadratically* with the number of equations. Candler, Subbareddy & Nompelis (2013) go further with a **decoupled implicit method**: solve the mixture (flow) equations with the usual block line relaxation, then the species equations as scalar systems, lagging the off-diagonal source-Jacobian terms. The implicit cost then grows linearly with the number of species, with large memory savings, at little cost in convergence; the source evaluation becomes the dominant cost. *(To be covered in Track 3.4.)*
+    The $n^3$ figure is for factorizing or inverting the blocks. Codes that factor once and reuse the factors across relaxation sweeps pay mostly the $n^2$ block–vector products per sweep, and memory goes as $n^2$ in any case. That is why the US3D paper describes the fully coupled DPLR cost as varying with the *square* of the number of equations (Candler et al. 2015). Both statements are true; which one dominates depends on how many sweeps reuse each factorization and on whether memory, not arithmetic, is the limit.
+
+### Decoupled implicit method {#decoupled-implicit-method}
+
+With many species the coupled implicit operator becomes the bottleneck. In 3-D, fully coupled line relaxation stores seven $n_e\times n_e$ blocks per cell; with 20 species plus vibrational energy $n_e \approx 26$, so roughly $7\times 26^2 \approx 4700$ numbers per cell for the operator alone, against 26 for the solution itself.
+
+Candler, Subbareddy & Nompelis (2013) split the implicit problem in two sequential parts, each a modified [DPLR](relaxation-methods.md#dplr) solve:
+
+1. **Mixture equations.** Total mass, momentum and total energy: a $5\times5$ (3-D) block-tridiagonal line solve, independent of the number of species.
+2. **Species and internal-energy equations** (and turbulence equations in US3D). Their implicit operator is approximated so that it becomes a **scalar** tridiagonal system along each line, using the mixture update from step 1.
+
+The right-hand side is still the full coupled residual, so the converged steady solution is unchanged; only the path to it differs.
+
+Typical values and trade-offs, from the primary sources:
+
+- **Cost scaling:** the implicit solve becomes essentially linear in the number of species; the chemical source term and its Jacobian, inherently quadratic in $n_s$, then dominate the cost.
+- **Speed:** about 3× faster than the fully coupled method for a 20-species kinetics model, with a similar reduction in memory (Candler et al. 2015).
+- **Memory:** a single large Jacobian block per cell instead of seven.
+- **Where it works:** steady problems with moderate to low Damköhler number, i.e. chemistry not much faster than the flow. When chemical time scales are very small relative to flow time scales, convergence suffers and the fully coupled DPLR may be needed.
+- **Status in US3D (2015):** steady-state only, as an optional solution mode; an unsteady formulation was in development.
 
 ## Variants
 
@@ -71,7 +90,7 @@ Krylov solvers that need only Jacobian–vector products, which can be approxima
 
 | Lens | Effect |
 |---|---|
-| Time step and cost | Removes the stability limit; each iteration costs much more than an explicit step (Jacobian assembly, linear solve), with $n^2$ memory and $n^3$ block cost. |
+| Time step and cost | Removes the stability limit; each iteration costs much more than an explicit step (Jacobian assembly, linear solve), with $n^2$ memory and $n^3$ block cost. Decoupling the species equations makes the solve roughly linear in $n_s$ (about 3× faster at 20 species). |
 | Steady vs unsteady | Natural steady-state accelerator; time-accurate with dual time stepping. |
 | Accuracy | Converged steady solutions don't depend on the left-hand-side approximation; time-accurate runs need subiteration convergence. |
 | Robustness | Large steps can drive the solution through unphysical states early on; CFL ramping and startup strategies matter. |
@@ -92,4 +111,4 @@ DPLR ([line relaxation](relaxation-methods.md#line-relaxation)), LAURA (point-im
 
 ## References
 
-Blazek; Hirsch; Wright, Candler & Bose (1998); Knoll & Keyes (2004). See the [bibliography](../../references.md).
+Blazek; Hirsch; Wright, Candler & Bose (1998); Candler, Subbareddy & Nompelis (2013, decoupled method); Candler et al. (2015, US3D); Knoll & Keyes (2004). See the [bibliography](../../references.md).

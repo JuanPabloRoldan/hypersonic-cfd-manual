@@ -34,25 +34,67 @@ In supersonic flow all eigenvalues share a sign and the flux is fully upwinded. 
 
 ### Modified Steger–Warming {#modified-steger-warming}
 
-The fix used in DPLR and US3D evaluates the split Jacobians not at each side's own state but at a state averaged between the two sides. In the first-order form given by Subbareddy & Candler (2009),
+The fix used in DPLR and US3D evaluates the split Jacobians not at each side's own state but at a state averaged between the two sides. In the first-order form (Subbareddy & Candler 2009; Candler, Subbareddy & Nompelis 2015),
 
 $$
-\hat{\mathbf F}_f = \big(\mathbf R\boldsymbol\Lambda^+\mathbf R^{-1}\big)_f\,\mathbf U_i + \big(\mathbf R\boldsymbol\Lambda^-\mathbf R^{-1}\big)_f\,\mathbf U_{nbr}
-= \big(\mathbf R\boldsymbol\Lambda\mathbf R^{-1}\big)_f\,\frac{\mathbf U_i + \mathbf U_{nbr}}{2} - \frac12\big(\mathbf R|\boldsymbol\Lambda|\mathbf R^{-1}\big)_f\,(\mathbf U_{nbr} - \mathbf U_i),
+\hat{\mathbf F}_{i+\frac12} = \big(\mathbf R\boldsymbol\Lambda^+\mathbf R^{-1}\big)_{i+\frac12}\,\mathbf U_i + \big(\mathbf R\boldsymbol\Lambda^-\mathbf R^{-1}\big)_{i+\frac12}\,\mathbf U_{i+1}
+= \big(\mathbf R\boldsymbol\Lambda\mathbf R^{-1}\big)_{i+\frac12}\,\frac{\mathbf U_i + \mathbf U_{i+1}}{2} - \frac12\big(\mathbf R\lvert\boldsymbol\Lambda\rvert\mathbf R^{-1}\big)_{i+\frac12}\,(\mathbf U_{i+1} - \mathbf U_i),
 $$
 
-with all matrices evaluated at face-averaged values. That expansion is the key insight: a symmetric (central) part plus a dissipation term $\tfrac12\mathbf R|\boldsymbol\Lambda|\mathbf R^{-1}\Delta\mathbf U$. **If the face average is the Roe average, this is exactly the Roe flux.** The signature flux of DPLR and US3D is, in disguise, a Roe-type upwind flux with a different averaging. In practice $\mathbf U_i$, $\mathbf U_{nbr}$ are replaced by MUSCL face states, and the eigenvalues are smoothed near sonic and stagnation points,
+with all matrices evaluated at face-averaged values. That expansion is the key insight: a symmetric (central) part plus a dissipation term $\tfrac12\mathbf R\lvert\boldsymbol\Lambda\rvert\mathbf R^{-1}\Delta\mathbf U$. **If the face average is the Roe average, this is exactly the Roe flux.** The signature flux of DPLR and US3D is, in disguise, a Roe-type upwind flux with a different averaging, and it gives results close to Roe's for hypersonic flows. Unlike the original Steger–Warming, it keeps the dissipation in shear layers low, because the averaged Jacobian doesn't see the jump in $\mathbf U$ across a boundary-layer cell as upwind information.
+
+On its own the averaged form is not dissipative enough at strong shocks. Three additions make it a production flux.
+
+#### Eigenvalue limiting {#eigenvalue-limiting}
+
+When the shock-normal Mach number exceeds roughly 6, numerical error can overwhelm the physics. In the stagnation region of a blunt body the convective eigenvalue $\lambda = u'$ (face-normal velocity) goes to zero, the dissipation it carries vanishes, and error accumulates into a [carbuncle](shock-instabilities.md). The usual cure is to align the grid with the bow shock and to keep the eigenvalues in the dissipation away from zero:
 
 $$
-\lambda_k^{\pm} = \tfrac12\Big(\lambda_k \pm \sqrt{\lambda_k^2 + \delta c^2}\Big),\qquad \delta \approx 0.1\text{–}0.2,
+\lambda'^{\pm} = \tfrac12\Big(\lambda \pm \sqrt{\lambda^2 + \varepsilon^2}\Big),\qquad \varepsilon = \varepsilon_0\,a,\qquad 0.1 \le \varepsilon_0 \le 0.3 ,
 $$
 
-an entropy-fix-like modification that keeps the dissipation from vanishing where an eigenvalue crosses zero. The original MacCormack & Candler (1989) form also blends towards true (side-by-side) Steger–Warming near shocks using a pressure-gradient weight, recovering FVS robustness where it matters while keeping boundary-layer dissipation low elsewhere.
+so that $\lambda'^+ - \lambda'^- = \sqrt{\lambda^2+\varepsilon^2}$ never drops below $\varepsilon$. This is the same idea as the entropy fix and the sonic-glitch correction for upwind schemes at sonic points.
 
-US3D's low-dissipation option keeps this dissipation term but multiplies it by a shock-sensor switch and replaces the central part with a [kinetic-energy-consistent flux](central-schemes.md#kinetic-energy-consistent-fluxes).
+![Eigenvalue limiting](../../assets/figures/eigenvalue_limiter.svg)
+
+The limiting **must not be applied in boundary layers**: there $u'$ is legitimately small across the layer, and the floor would drive an artificial flux across the boundary layer and corrupt heat flux. Codes switch it off near walls.
+
+#### Pressure weighting {#pressure-weighting}
+
+For very strong shocks on poorly aligned grids even the first-order flux can go aphysical. The remedy is to slide smoothly back to the original, more dissipative Steger–Warming flux where the pressure jumps. The Jacobians are evaluated from biased data,
+
+$$
+\mathbf U^+ = w\,\mathbf U_i + (1-w)\,\mathbf U_{i+1},\qquad
+\mathbf U^- = (1-w)\,\mathbf U_i + w\,\mathbf U_{i+1},
+$$
+
+with a pressure-dependent weight
+
+$$
+w_{i+\frac12} = 1 - \frac12\,\frac{1}{(g\,\delta p)^2 + 1},\qquad
+\delta p = \frac{p_{i+1} - p_i}{\min(p_i,\,p_{i+1})}.
+$$
+
+Smooth flow gives $\delta p\to0$, $w = \tfrac12$: averaged Jacobians, low dissipation. A strong jump gives $w\to1$: each Jacobian from its own upwind side, which is the original Steger–Warming flux.
+
+![Pressure weight](../../assets/figures/msw_pressure_weight.svg)
+
+The sensitivity $g$ is problem-dependent: $0.5 \le g \le 5$ depending on flow conditions, geometry and how well the grid is aligned with the bow shock (Candler et al. 2015 chapter); Nompelis et al. (2004) used $g = 5$ in their hybrid unstructured solver. Larger $g$ adds dissipation.
+
+#### Which variables to average and reconstruct {#msw-averaging-variables}
+
+Averaging conserved variables to get the face state behaves poorly in boundary layers with strong temperature gradients (a cold wall under a hot shock layer). Candler's group forms the face state from **primitive variables** instead. The same applies to the MUSCL face states: for reacting flow US3D extrapolates and limits species densities, velocity, pressure and specific internal energy, then rebuilds $\mathbf U$, which reduces spurious pressure variations in boundary layers ([consistent primitive reconstruction](reconstruction.md)).
+
+One open problem, flagged in the US3D paper: with very fast reactions, limiting the species densities one equation at a time can break elemental conservation and produce species overshoots and undershoots.
+
+#### Why DPLR likes it
+
+The split Jacobians $\mathbf A^\pm$ are exact linearizations of the flux, so the implicit operator of [line relaxation](../time/relaxation-methods.md#dplr) can be built from the very matrices the flux uses. Candler et al. (2015) name this as part of DPLR's convergence success.
+
+US3D's low-dissipation option keeps this dissipation term, multiplies it by a shock sensor, and replaces the central part with a [kinetic-energy-consistent flux](central-schemes.md#kinetic-energy-consistent-fluxes).
 
 !!! warning "Calibration"
-    The face-averaged form, the expansion and the eigenvalue modification are from Subbareddy & Candler (2009). Exact averaging, the pressure-switch form and default $\delta$ in current DPLR and US3D versions should be checked against code documentation in Track 2.3.
+    The averaged form, the Roe equivalence, eigenvalue limiting with $0.1\le\varepsilon_0\le0.3$, the pressure weight with $0.5\le g\le5$ and primitive-variable averaging are from the Candler, Subbareddy & Nompelis (2015) chapter and Subbareddy & Candler (2009). Default values in current DPLR and US3D releases, and how each code decides where "the boundary layer" is for switching off eigenvalue limiting, are not in these sources; check the DPLR user manual and US3D documentation.
 
 ### van Leer
 
@@ -73,6 +115,26 @@ High-order finite-difference codes (the Shu–Osher approach, as in ALPACA's and
 
 Codes using this approach often add a positivity-preserving fallback flux (an HLLC or HLL flux computed from first-order states) where the high-order split flux would produce negative density or pressure; see [positivity safeguards](riemann-solvers.md#positivity-safeguards).
 
+## Typical values
+
+- Eigenvalue limiter $\varepsilon_0$: 0.1–0.3 (larger for stronger stagnation-region problems); off in boundary layers.
+- Pressure-weight sensitivity $g$: 0.5–5; 5 in Nompelis et al. (2004).
+- Shock-normal Mach number above which unlimited upwind error becomes dangerous on blunt bodies: about 6.
+- Where the switch happens: the weight reaches 0.9 when $g\,\delta p = 2$, i.e. at a 40% pressure jump for $g = 5$ or a 400% jump for $g = 0.5$.
+
+## Trade-offs
+
+- **Averaged vs upwind Jacobians.** Averaged (modified) Jacobians: Roe-like dissipation, sharp boundary layers, good heat flux. Upwind (original) Jacobians: robust at strong shocks, but smear contacts and shear layers. Pressure weighting picks one or the other locally.
+- **Larger $\varepsilon_0$ or $g$.** More robust stagnation regions and shocks; more dissipation, so separation zones shrink and shear layers thicken. In the double-cone test the separation length is the sensitive measure ([reconstruction](reconstruction.md#double-cone-ranking)).
+- **FVS vs Riemann solvers.** Exact, smooth Jacobians that suit implicit line relaxation, versus solvers like HLLC that are designed around the wave structure but have Jacobians that are harder to linearize exactly.
+
+## Effects on stability and robustness
+
+- Without eigenvalue limiting, the stagnation region of a blunt body at high Mach number can grow a carbuncle; with it, the shock stays put.
+- Eigenvalue limiting inside the boundary layer is itself a source of error (artificial cross-layer flux), not a stability aid.
+- Pressure weighting lets the first-order flux survive misaligned strong shocks; it does not remove the spurious vorticity that tetrahedra generate at a shock ([discretization families](discretization-families.md#element-types-at-strong-shocks)).
+- Exact Jacobians make the implicit operator consistent with the residual, which allows large CFL numbers in DPLR.
+
 ## Implications
 
 | Lens | Effect |
@@ -86,7 +148,17 @@ Codes using this approach often add a positivity-preserving fallback flux (an HL
 
 ## In a run
 
-Knobs: scheme selection; for modified Steger–Warming, the pressure-switch sensitivity. Symptoms: heat flux that keeps changing with wall-normal refinement (too much dissipation); small glitches at sonic lines.
+Knobs:
+
+- Scheme selection.
+- Modified Steger–Warming: eigenvalue limiter $\varepsilon_0$, pressure-weight sensitivity $g$, choice of averaging variables.
+
+Symptoms:
+
+- Heat flux that keeps changing with wall-normal refinement: too much dissipation (check that eigenvalue limiting is off near the wall).
+- Bulge or recirculation ahead of the stagnation point: carbuncle; raise $\varepsilon_0$, improve shock alignment.
+- Separation zones that shrink as $g$ or $\varepsilon_0$ grow: the result is dissipation-limited; refine or reduce dissipation.
+- Small glitches at sonic lines: unsmoothed eigenvalues.
 
 ## Which codes
 
@@ -98,4 +170,4 @@ DPLR and US3D use modified Steger–Warming as their base upwind flux (US3D adds
 
 ## References
 
-Steger & Warming (1981); van Leer (1982); MacCormack & Candler (1989); Subbareddy & Candler (2009); Shu & Osher (1988); Liou & Steffen (1993); Liou (1996, 2006). See the [bibliography](../../references.md).
+Steger & Warming (1981); van Leer (1982); MacCormack & Candler (1989); Subbareddy & Candler (2009); Candler, Subbareddy & Nompelis (2015, chapter); Nompelis, Drayna & Candler (2004); Candler et al. (2015, US3D); Shu & Osher (1988); Liou & Steffen (1993); Liou (1996, 2006). See the [bibliography](../../references.md).

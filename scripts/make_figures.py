@@ -356,6 +356,225 @@ def sweby_limiters():
     save(fig, "sweby_limiters")
 
 
+# ---------------------------------------------------------------------------
+# 10. DPLR: wall-normal lines on a blunt-body grid and the matrix they produce.
+#     Geometry is illustrative; the matrix structure is exact for the ordering shown.
+# ---------------------------------------------------------------------------
+def dplr_lines():
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(10.5, 4.6), gridspec_kw={"width_ratios": [1.15, 1]})
+
+    # body-fitted grid around a circular forebody, j from wall (0) to shock (1)
+    ni, nj = 25, 12
+    th = np.linspace(-0.45 * np.pi, 0.45 * np.pi, ni)
+    eta = np.linspace(0, 1, nj) ** 2.0  # clustered toward the wall
+    R = 1.0
+    standoff = 0.22 + 0.45 * (th / (0.5 * np.pi)) ** 2  # shock moves away on the flanks
+    X = np.empty((ni, nj)); Y = np.empty((ni, nj))
+    for i in range(ni):
+        r = R + eta * standoff[i]
+        X[i] = -r * np.cos(th[i]); Y[i] = r * np.sin(th[i])
+    for j in range(nj):
+        ax.plot(X[:, j], Y[:, j], color=GREY, lw=0.45)
+    for i in range(ni):
+        ax.plot(X[i], Y[i], color=GREY, lw=0.45)
+    tb = np.linspace(-0.45 * np.pi, 0.45 * np.pi, 200)
+    ax.fill(np.r_[-np.cos(tb), 0.25, 0.25], np.r_[np.sin(tb), np.sin(tb[-1]), np.sin(tb[0])],
+            color="#cfd8dc", zorder=3)
+    ax.plot(X[:, -1], Y[:, -1], color=C1, lw=2.2, label="bow shock (outer boundary)")
+    for k, i in enumerate([4, 12, 20]):
+        ax.plot(X[i], Y[i], color=C0, lw=3.0, solid_capstyle="round", zorder=4,
+                label="line $i$: all $j$ cells solved together (block-tridiagonal)" if k == 0 else None)
+    i, j = 12, 6
+    ax.annotate("", xy=(X[i + 1, j], Y[i + 1, j]), xytext=(X[i - 1, j], Y[i - 1, j]),
+                arrowprops=dict(arrowstyle="<->", color=C2, lw=1.8), zorder=5)
+    ax.annotate("coupling to lines $i\\pm1$:\nlagged one relaxation step,\nrepeated $k_{max}$ times",
+                xy=(X[i - 1, j] - 0.02, Y[i - 1, j]), xytext=(-2.35, -0.55), color=C2, fontsize=8.5,
+                arrowprops=dict(arrowstyle="->", color=C2, lw=0.9), zorder=6)
+    ax.text(-0.93, 0.02, "wall", fontsize=8.5, ha="left", zorder=6)
+    for yy in (0.55, 0.2, -0.15):
+        ax.annotate("", xy=(-1.55, yy + 0.4), xytext=(-2.3, yy + 0.4),
+                    arrowprops=dict(arrowstyle="->", color="k", lw=0.9))
+    ax.text(-2.3, 1.08, "freestream", fontsize=8.5)
+    ax.set_aspect("equal"); ax.set_xlim(-2.4, 0.3); ax.set_ylim(-1.25, 1.25)
+    ax.set_xticks([]); ax.set_yticks([]); ax.grid(False)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    ax.legend(fontsize=8, loc="lower left", bbox_to_anchor=(0.0, -0.14), frameon=False)
+    ax.set_title("Wall-normal lines (j direction) on a capsule forebody", fontsize=10)
+
+    # matrix: i lines of nj cells, j fastest
+    nl, nc = 5, 6
+    N = nl * nc
+    M = np.zeros((N, N))
+    for L in range(nl):
+        for c in range(nc):
+            r = L * nc + c
+            M[r, r] = 3
+            if c > 0: M[r, r - 1] = 2
+            if c < nc - 1: M[r, r + 1] = 2
+            if L > 0: M[r, r - nc] = 1
+            if L < nl - 1: M[r, r + nc] = 1
+    from matplotlib.colors import ListedColormap
+    cmap = ListedColormap(["white", "#a5d6a7", "#7986cb", "#283593"])
+    bx.imshow(M, cmap=cmap, vmin=0, vmax=3, interpolation="nearest")
+    for L in range(1, nl):
+        bx.axhline(L * nc - 0.5, color=GREY, lw=0.5); bx.axvline(L * nc - 0.5, color=GREY, lw=0.5)
+    bx.set_xticks([]); bx.set_yticks([]); bx.grid(False)
+    bx.set_title("Implicit operator, ordered line by line\n(each square is an $n_e\\times n_e$ block)", fontsize=10)
+    from matplotlib.patches import Patch
+    bx.legend(handles=[Patch(color="#283593", label=r"diagonal block $\hat A$"),
+                       Patch(color="#7986cb", label=r"on-line neighbours $\hat B,\hat C$: kept on the left"),
+                       Patch(color="#a5d6a7", label=r"off-line neighbours $\hat D,\hat E$: moved to the right")],
+              fontsize=7.8, loc="upper center", bbox_to_anchor=(0.5, -0.02), frameon=False)
+    fig.tight_layout()
+    save(fig, "dplr_lines")
+
+
+# ---------------------------------------------------------------------------
+# 11. DPLR vs DP-LUR: numbers reported by Wright, Candler & Bose (1998), M=15
+#     cylinder-wedge, 128x128 grid, y+=1, 8-processor Cray T3E-900.
+# ---------------------------------------------------------------------------
+def dplr_vs_dplur():
+    names = ["DPLR\n(line)", "DP-LUR\nfull matrix", "DP-LUR\ndiagonal"]
+    cols = [C0, C1, GREY]
+    iters = [300, 2300, 6200]
+    cpu = [35, 235, 359]
+    growth = [1, 6, 7]
+    fig, axs = plt.subplots(1, 3, figsize=(10.5, 3.4))
+    data = [(iters, "Iterations to 10 orders\n(Re = 3e4)", ["< 300", "2300", "6200"]),
+            (cpu, "CPU seconds to 10 orders\n(Re = 3e4, 8 PEs)", ["35", "235", "359"]),
+            (growth, "CPU growth, Re 3e4 to 3e8\n(max cell aspect ratio 35 to 125,000)", ["x1", "x6", "x7"])]
+    for ax, (vals, title, labels) in zip(axs, data):
+        bars = ax.bar(names, vals, color=cols, width=0.6)
+        for b, lab in zip(bars, labels):
+            ax.text(b.get_x() + b.get_width() / 2, b.get_height(), lab, ha="center", va="bottom", fontsize=9)
+        ax.set_title(title, fontsize=9.5); ax.tick_params(axis="x", labelsize=8.5)
+        ax.set_ylim(0, max(vals) * 1.18); ax.grid(axis="x", visible=False)
+    fig.suptitle("DPLR against its point-relaxation predecessors (data from Wright, Candler & Bose 1998)",
+                 fontsize=10, y=1.03)
+    fig.tight_layout()
+    save(fig, "dplr_vs_dplur")
+
+
+# ---------------------------------------------------------------------------
+# 12. Modified Steger-Warming pressure weight w(dp) (Candler et al. 2015 chapter)
+# ---------------------------------------------------------------------------
+def msw_pressure_weight():
+    dp = np.linspace(0, 2.0, 400)
+    fig, ax = plt.subplots(figsize=(6.4, 3.8))
+    for g, c, ls in [(0.5, C2, "--"), (1.0, C0, "-"), (5.0, C1, "-.")]:
+        w = 1 - 0.5 / ((g * dp) ** 2 + 1)
+        ax.plot(dp, w, color=c, ls=ls, lw=1.8, label=f"g = {g:g}")
+    ax.axhline(0.5, color=GREY, lw=0.8, ls=":"); ax.axhline(1.0, color=GREY, lw=0.8, ls=":")
+    ax.text(1.98, 0.52, "w = 1/2: Jacobians from the face average\n(low dissipation, Roe-like)", ha="right", fontsize=8)
+    ax.text(1.98, 0.955, "w = 1: Jacobians fully upwind (original Steger-Warming)", ha="right", va="top", fontsize=8)
+    ax.set(xlabel=r"$\delta p = |p_{i+1}-p_i| / \min(p_i,p_{i+1})$", ylabel=r"weight $w_{i+1/2}$",
+           ylim=(0.45, 1.03), xlim=(0, 2),
+           title="Pressure weighting in modified Steger-Warming\n(larger g switches to the dissipative flux at weaker jumps)")
+    ax.legend(fontsize=8.5, loc="center right")
+    save(fig, "msw_pressure_weight")
+
+
+# ---------------------------------------------------------------------------
+# 13. Eigenvalue limiting: effective dissipation coefficient sqrt(l^2 + eps^2)
+# ---------------------------------------------------------------------------
+def eigenvalue_limiter():
+    lam = np.linspace(-1.0, 1.0, 401)  # eigenvalue / sound speed
+    fig, ax = plt.subplots(figsize=(6.4, 3.8))
+    ax.plot(lam, np.abs(lam), color="k", lw=1.6, label=r"$|\lambda|$ (no limiting)")
+    for e0, c, ls in [(0.1, C0, "-"), (0.3, C1, "--")]:
+        ax.plot(lam, np.sqrt(lam ** 2 + e0 ** 2), color=c, ls=ls, lw=1.8,
+                label=rf"$\sqrt{{\lambda^2+\varepsilon^2}}$, $\varepsilon_0={e0}$")
+    ax.axvspan(-0.08, 0.08, color=GREY, alpha=0.12)
+    ax.text(0.0, 0.62, "stagnation point:\n$\\lambda = u'$ goes to zero", ha="center", fontsize=8)
+    ax.set(xlabel=r"eigenvalue $\lambda / a$", ylabel=r"dissipation coefficient $(\lambda^+ - \lambda^-)/a$",
+           xlim=(-1, 1), ylim=(0, 1.05),
+           title="Eigenvalue limiting keeps a floor of dissipation where $u'\\to 0$\n($\\varepsilon = \\varepsilon_0 a$, typically $0.1 \\leq \\varepsilon_0 \\leq 0.3$)")
+    ax.legend(fontsize=8.5, loc="lower right")
+    save(fig, "eigenvalue_limiter")
+
+
+# ---------------------------------------------------------------------------
+# 14. Unstructured MUSCL: virtual upwind point (Darwish & Moukalled), as used
+#     in US3D (Candler et al. 2015 chapter). Geometry is schematic.
+# ---------------------------------------------------------------------------
+def virtual_upwind_point():
+    fig, ax = plt.subplots(figsize=(6.4, 3.6))
+    C = np.array([0.0, 0.0]); D = np.array([1.6, 0.45])
+    P = 2 * C - D
+    tri_C = np.array([[-0.7, -0.75], [0.85, -0.35], [0.25, 0.95]])
+    tri_D = np.array([[0.85, -0.35], [2.3, 0.15], [0.25, 0.95]])
+    for tri, c in [(tri_C, "#e8eaf6"), (tri_D, "#fff3e0")]:
+        ax.fill(tri[:, 0], tri[:, 1], color=c, ec=GREY, lw=1.0)
+    f0, f1 = tri_C[1], tri_C[2]
+    ax.plot([f0[0], f1[0]], [f0[1], f1[1]], color="k", lw=2.4)
+    fm = 0.5 * (f0 + f1)
+    ax.text(fm[0] + 0.07, fm[1] + 0.15, "face $f$", fontsize=9)
+    ax.plot([P[0], D[0]], [P[1], D[1]], color=GREY, ls="--", lw=1)
+    for pt, lab, col in [(C, "C (upwind cell)", C0), (D, "D (downwind cell)", C1), (P, "P (virtual upwind point)", C2)]:
+        ax.plot(*pt, "o", color=col, ms=7, zorder=5)
+    ax.annotate("C", C, xytext=(-14, -14), textcoords="offset points", color=C0, fontsize=10)
+    ax.annotate("D", D, xytext=(6, 6), textcoords="offset points", color=C1, fontsize=10)
+    ax.annotate("P", P, xytext=(-14, -14), textcoords="offset points", color=C2, fontsize=10)
+    ax.annotate("", xy=D, xytext=C, arrowprops=dict(arrowstyle="->", color=C1, lw=1.4))
+    ax.text(0.95, 0.05, r"$\vec r_{CD}$", color=C1, fontsize=10)
+    ax.text(-1.75, -1.05, r"$U_P = U_D - 2\,\nabla U_C\cdot\vec r_{CD}$" "\n"
+            r"$U_{f,L} = U_C + \frac{1}{2}\,\mathrm{limit}\!\left(2\nabla U_C\cdot\vec r_{CD} - (U_D-U_C),\; U_D - U_C\right)$",
+            fontsize=9, va="top")
+    ax.set_aspect("equal"); ax.set_xlim(-1.8, 2.5); ax.set_ylim(-1.75, 1.05)
+    ax.axis("off")
+    ax.set_title("Second-order face state on an unstructured grid: build the missing upwind point", fontsize=10)
+    save(fig, "virtual_upwind_point")
+
+
+# ---------------------------------------------------------------------------
+# 15. Double-cone flow: schematic of the features (25/55 deg, 10.16 cm faces).
+#     Shock positions are schematic, not a computed solution.
+# ---------------------------------------------------------------------------
+def double_cone_schematic():
+    fig, ax = plt.subplots(figsize=(8.2, 5.0))
+    L = 10.16
+    a1, a2 = np.radians(25), np.radians(55)
+    x1, y1 = L * np.cos(a1), L * np.sin(a1)
+    x2, y2 = x1 + L * np.cos(a2), y1 + L * np.sin(a2)
+    ax.fill([0, x1, x2, x2 + 4, x2 + 4, 0], [0, y1, y2, y2, -1.5, -1.5], color="#cfd8dc", ec="k", lw=1.2)
+    S = np.array([4.5, 4.5 * np.tan(a1)])                    # separation point (first cone)
+    R = np.array([x1 + 2.4 * np.cos(a2), y1 + 2.4 * np.sin(a2)])  # reattachment (second cone)
+    I = np.array([8.0, 4.62])                                 # shock-shock interaction
+    Q = np.array([8.4, 4.4])
+    t = np.linspace(0, 1, 60)[:, None]
+    bub = (1 - t) ** 2 * S + 2 * (1 - t) * t * Q + t ** 2 * R
+    ax.fill(np.r_[bub[:, 0], x1], np.r_[bub[:, 1], y1], color="#ffcc80", ec=C1, lw=1.2)
+    ax.plot([0, I[0]], [0, I[1]], color=C0, lw=1.8)            # attached leading-edge shock
+    ax.plot([S[0], I[0]], [S[1], I[1]], color=C3, lw=1.6)      # separation shock
+    yy = np.linspace(I[1], 16.5, 60)
+    xx = (yy + 6.86) / 1.428 - 0.012 * (yy - I[1]) ** 2
+    ax.plot(xx, yy, color=C1, lw=1.8)                          # bow shock
+    ax.plot([I[0], R[0]], [I[1], R[1]], color=GREY, lw=1.2, ls="--")  # transmitted shock
+    ax.plot(*I, "*", color="k", ms=11, zorder=5)
+    ax.plot(*S, "o", color="k", ms=4); ax.plot(*R, "o", color="k", ms=4)
+    kw = dict(fontsize=8.5, arrowprops=dict(arrowstyle="->", lw=0.8, color="k"))
+    ax.annotate("attached leading-edge shock", xy=(3.0, 3.0 * I[1] / I[0]), xytext=(-4.2, 5.2), color=C0, **kw)
+    ax.annotate("separation shock", xy=(6.2, S[1] + 1.7 * (I[1] - S[1]) / (I[0] - S[0])), xytext=(-1.5, 8.2), color=C3, **kw)
+    ax.annotate("shock-shock interaction", xy=I, xytext=(0.5, 11.0), **kw)
+    ax.annotate("bow shock", xy=(xx[40], yy[40]), xytext=(5.0, 15.0), color=C1, **kw)
+    ax.annotate("separation zone", xy=(7.9, 3.95), xytext=(10.5, 1.2), color=C1, **kw)
+    ax.annotate("reattachment:\npeak heat flux", xy=R, xytext=(13.2, 4.6), **kw)
+    ax.annotate("", xy=(-0.6, 2.0), xytext=(-4.4, 2.0), arrowprops=dict(arrowstyle="->", lw=1.2))
+    ax.text(-4.4, 2.4, "Mach 11.3", fontsize=8.5)
+    ax.text(3.2, 0.55, r"25$^\circ$", fontsize=8.5)
+    ax.text(12.9, 7.6, r"55$^\circ$", fontsize=8.5)
+    yd = -2.6
+    for xv in (S[0], R[0]):
+        ax.plot([xv, xv], [yd - 0.2, -1.5], color="k", lw=0.6, ls=":")
+    ax.annotate("", xy=(R[0], yd), xytext=(S[0], yd), arrowprops=dict(arrowstyle="<->", lw=1))
+    ax.text(0.5 * (S[0] + R[0]), yd - 1.0, r"$L_s$: axial separation length", ha="center", fontsize=9)
+    ax.set_aspect("equal"); ax.set_xlim(-4.6, 21); ax.set_ylim(-4.2, 17)
+    ax.axis("off")
+    ax.set_title("Double-cone flow (schematic, not to scale)", fontsize=10)
+    save(fig, "double_cone_schematic")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -366,3 +585,9 @@ if __name__ == "__main__":
     blunt_body()
     vib_energy()
     sweby_limiters()
+    dplr_lines()
+    dplr_vs_dplur()
+    msw_pressure_weight()
+    eigenvalue_limiter()
+    virtual_upwind_point()
+    double_cone_schematic()

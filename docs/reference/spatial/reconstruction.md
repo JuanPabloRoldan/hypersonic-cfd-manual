@@ -76,6 +76,24 @@ so $r \approx 1$ in smooth monotone regions, $r \le 0$ at extrema, and $r$ far f
 
 **Not to be confused with positivity limiters.** Those (Zhang–Shu scaling, positivity-preserving flux limiters) enforce $\rho, p > 0$ rather than monotonicity, and are applied on top of any reconstruction. See [positivity safeguards](riemann-solvers.md#positivity-safeguards).
 
+### How much the limiter matters: the double-cone test {#double-cone-ranking}
+
+The laminar double-cone flow (Holden's 25°–55° model, Run 35: $T_\infty = 138.9$ K, $\rho_\infty = 5.515\times10^{-4}$ kg/m³, $u_\infty = 2713$ m/s, Mach 11.3, unit Reynolds number 133,300 m⁻¹, each conical face 10.16 cm long) is the standard test for numerical dissipation in shock-dominated flows. The attached leading-edge shock, the separation shock and the bow shock off the second cone interact, and the size of the separation bubble at the corner depends sharply on how much dissipation the scheme adds.
+
+![Double-cone flow schematic](../../assets/figures/double_cone_schematic.svg)
+
+Candler, Subbareddy & Nompelis (2015) ran five fluxes (modified Steger–Warming, Lax–Friedrichs, HLL, HLLC, Roe) with four limiters (minmod, van Albada, van Leer, superbee) on a sequence of grids, and used the separation length $L_s$ (axial distance from separation on the first cone to reattachment on the second) as a single-number gauge. Their conclusions:
+
+- **All methods converge to the same $L_s$ under refinement**, but some would need an impractically large grid to get there. On a fixed grid, a larger bubble means less dissipation and a more accurate answer.
+- **The limiter matters at least as much as the flux.** A dissipative limiter such as minmod can spoil a good flux function.
+- **Best on coarse grids:** Roe + superbee, Roe + van Leer, and modified Steger–Warming. Every other combination gave a small bubble, a sign of excessive dissipation.
+- **Van Leer is the best choice for this flow.** Superbee is the least dissipative but can introduce spatial oscillations; minmod is a poor choice.
+- **On the finest grid ($1536\times768$)** the three best methods agree within 0.2%; the two Roe-based solutions differ by 0.04%. Modified Steger–Warming settles at a slightly smaller $L_s$, but the difference is the size of the local axial cell spacing (0.01 cm), so it may not be resolved.
+- **Time convergence matters too:** the bubble takes a long time to settle, and at least 150 flow times (free-stream speed and cone-face length) must be simulated.
+- **Heat flux is less grid-sensitive than $L_s$**, because refining wall-normally (which controls heat flux) is cheaper than refining axially (which controls the separation and reattachment points).
+
+The lesson for aeroheating runs: report the limiter alongside the flux function, and treat a separation length or bubble size that changes with limiter choice as a sign the result is dissipation-limited.
+
 ### Extremum clipping and the stagnation point
 
 Because every TVD limiter returns zero slope at a local extremum, it clips genuine smooth peaks too. In a reentry flow, stagnation-point quantities (pressure, temperature behind the shock) sit at smooth extrema, so the limiter locally drops to first order exactly where heating is evaluated. This is one reason heat-flux accuracy is so sensitive to limiter choice and grid alignment ([Track 2.4](../../course/track-2.md)).
@@ -86,7 +104,7 @@ Reconstruction may act on conservative, primitive or characteristic variables. T
 
 **Conservative variables** ($\rho$, $\rho\mathbf u$, $\rho E$) are the simplest, but have a serious positivity problem at high Mach number. Internal energy is $\rho E - \tfrac12\rho|\mathbf u|^2$; at Mach 25 kinetic energy is about 99% of the total, so pressure is a small difference of two large numbers. Limiting each conserved variable independently can easily produce a face state with negative pressure or temperature.
 
-**Primitive variables** ($\rho_s$, $\mathbf u$, $p$, $T$) make positivity much easier to enforce (limit $p$ and $T$ directly) and keep pressure and velocity exactly constant across an isolated contact discontinuity, avoiding spurious pressure oscillations there. This is the common choice in second-order reentry codes and in multiphase codes like MFC, where material interfaces are contacts.
+**Primitive variables** ($\rho_s$, $\mathbf u$, $p$, $T$) make positivity much easier to enforce (limit $p$ and $T$ directly) and keep pressure and velocity exactly constant across an isolated contact discontinuity, avoiding spurious pressure oscillations there. This is the common choice in second-order reentry codes: US3D, for example, extrapolates and limits species densities, velocity, pressure and specific internal energy, then rebuilds $\mathbf U$, which reduces spurious pressure variations in boundary layers (Candler et al. 2015). It is also the choice in multiphase codes like MFC, where material interfaces are contacts. One caveat for fast chemistry: limiting each species density separately can break elemental conservation and create species overshoots, an open problem noted in the US3D paper.
 
 **Characteristic variables** project the jump onto the eigenvectors of the flux Jacobian, $\mathbf w = \mathbf L\,\Delta\mathbf U$, giving one amplitude per wave family. Their advantage shows up where waves overlap: across a shock all primitives jump at once, and limiting each primitive separately treats a mixture of acoustic and entropy content with one slope, which seeds post-shock oscillations, especially at high order. Characteristic limiting limits each family by its own smoothness. The cost is an eigendecomposition per face, and the decoupling is only approximate because the eigenvectors are frozen at the face. High-order WENO codes often use it; second-order production codes usually don't.
 
@@ -110,7 +128,41 @@ Higher order by blending several candidate stencils with smoothness-dependent we
 
 ### Multidimensional and unstructured reconstruction
 
-On unstructured grids, slopes come from least-squares or Green–Gauss gradients, limited by Barth–Jespersen or Venkatakrishnan limiters. *(To be written in Lesson 0.3.)*
+On unstructured grids there is no "cell $i-1$" to form the upwind difference. Two approaches are common.
+
+**Gradient-limited reconstruction.** Compute a cell gradient by least squares or Green–Gauss, extrapolate $U_f = U_C + \nabla U_C\cdot\vec r_{Cf}$, and scale the gradient with a Barth–Jespersen or Venkatakrishnan limiter so face values stay within the range of the neighbours. Venkatakrishnan's is smooth and preferred for steady convergence.
+
+**Virtual upwind point (Darwish & Moukalled).** Used in US3D (Candler et al. 2015 chapter). For the flux from cell C to its downwind neighbour D across face $f$, build a virtual upwind point P on the line through C and D, at the same distance from C as D but on the other side. Its value comes from the gradient at C:
+
+$$
+U_P = U_C - \nabla U_C\cdot\vec r_{CD} \approx U_D - 2\,\nabla U_C\cdot\vec r_{CD},
+$$
+
+and the second form is preferred because the gradient is centred at C. The ordinary 1-D MUSCL formula then applies along P–C–D:
+
+$$
+U_{f,L} = U_C + \tfrac12\,\mathrm{limit}\big(U_C - U_P,\; U_D - U_C\big)
+= U_C + \tfrac12\,\mathrm{limit}\big(2\nabla U_C\cdot\vec r_{CD} - (U_D - U_C),\; U_D - U_C\big),
+$$
+
+with any of the limiters above and a mirror-image formula for $U_{f,R}$.
+
+![Virtual upwind point](../../assets/figures/virtual_upwind_point.svg)
+
+This keeps the familiar slope-ratio limiters (minmod, van Leer, ...) on arbitrary elements. It still assumes the cell pair is well aligned with the face; on skewed or stretched tetrahedra the gradients degrade. Nompelis et al. (2004) found Green–Gauss gradients error-prone on such cells and switched the stencil to first order at shocks; US3D's viscous gradients use weighted least squares with a deferred correction ([viscous fluxes](viscous-fluxes.md)).
+
+## Trade-offs
+
+- **Minmod vs van Leer vs superbee.** Minmod: most robust, most dissipative; shrinks separation bubbles and smears shear layers. Van Leer and van Albada: the usual production compromise; van Leer was the best performer on the double cone. Superbee: least dissipative, but steepens smooth gradients and can produce oscillations.
+- **Limiter vs flux function.** In shock-dominated flows they are equally important; upgrading the flux while keeping minmod buys little.
+- **Primitive vs conservative variables.** Primitive: positivity and clean contacts; conservative: simpler and exactly what the update needs, but negative pressure at high Mach number is easy to produce.
+- **Gradient-limited vs virtual-point reconstruction on unstructured grids.** Barth–Jespersen/Venkatakrishnan: general, but gradient-scaling limiters can stall convergence. Virtual upwind point: reuses 1-D limiters, but quality depends on the cell pair's alignment.
+
+## Effects on stability and robustness
+
+- Limiters keep the second-order scheme from creating new extrema at shocks; without them, high-Mach shocks produce overshoots that turn into negative pressure.
+- Limiters that switch on and off near a shock stall steady convergence; freezing the limiter late in the run is a common remedy.
+- A dissipative limiter is not a stability fix for a misaligned or tetrahedral shock region; the error there is created by the grid ([discretization families](discretization-families.md#element-types-at-strong-shocks)).
 
 ## Implications
 
@@ -129,8 +181,10 @@ Knobs: spatial order, limiter type, the variable set limited, and sometimes a li
 
 ## Which codes
 
+US3D: MUSCL with TVD limiting of species densities, velocity, pressure and specific internal energy; on unstructured grids the Darwish–Moukalled virtual-point stencil; QUICK-type third order and unbiased higher-order KEC fluxes as options (Candler et al. 2015; Candler, Subbareddy & Nompelis 2015). MFC reconstructs primitive (optionally characteristic) variables with WENO.
+
 !!! warning "Calibration"
-    Code-specific reconstruction details (variable set, limiter defaults) for DPLR, LAURA and US3D are to be filled in from their primary references during Lesson 0.3. MFC reconstructs primitive (optionally characteristic) variables with WENO.
+    Limiter defaults for DPLR, LAURA and US3D, and DPLR's variable set, are still to be filled in from their user manuals during Lesson 0.3. The US3D details above are from the 2015 papers and may have changed since.
 
 ## See also
 
@@ -138,4 +192,4 @@ Knobs: spatial order, limiter type, the variable set limited, and sometimes a li
 
 ## References
 
-van Leer (1979); Sweby (1984); Yee (1987); Waterson & Deconinck (2007) on bounded limiters (Koren, OSPRE, HCUS, SMART); Venkatakrishnan (1995); Toro, *Riemann Solvers and Numerical Methods for Fluid Dynamics*; LeVeque, *Finite Volume Methods for Hyperbolic Problems*; Blazek, *Computational Fluid Dynamics*. See the [bibliography](../../references.md).
+van Leer (1979); Sweby (1984); Yee (1987); Waterson & Deconinck (2007) on bounded limiters (Koren, OSPRE, HCUS, SMART); Venkatakrishnan (1995); Darwish & Moukalled (2003); Candler, Subbareddy & Nompelis (2015, chapter: double-cone comparison); Toro, *Riemann Solvers and Numerical Methods for Fluid Dynamics*; LeVeque, *Finite Volume Methods for Hyperbolic Problems*; Blazek, *Computational Fluid Dynamics*. See the [bibliography](../../references.md).

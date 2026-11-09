@@ -112,6 +112,16 @@ Most dissipative, very robust, cheapest. Often used as a fallback in difficult c
 
 The pattern is the classical trade-off of hypersonic flux design: **the dissipation that smears contacts and boundary layers is the same dissipation that suppresses the carbuncle.** Hybrid and rotated solvers, and dissipation applied only at shocks, try to get both. A newer line of work argues the trade-off is partly false: the carbuncle is driven by *mis-scaled* acoustic dissipation at low face-normal Mach numbers, so it can be cured by reducing dissipation there ([HLLC-LM](#hllc-lm), [low-Mach corrections](low-mach-corrections.md)). See [shock instabilities](shock-instabilities.md) and [Track 2.2–2.3](../../course/track-2.md).
 
+### Dissipation in practice: the double cone {#double-cone-comparison}
+
+On the Mach 11.3 double-cone flow, where the separation-bubble length is a sensitive gauge of dissipation, Candler, Subbareddy & Nompelis (2015) ranked flux and limiter combinations on coarse grids:
+
+- **Least dissipative (largest bubble):** Roe + superbee, Roe + van Leer, and [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming).
+- **Too dissipative:** Lax–Friedrichs (as expected), HLL (it ignores the contact wave), and every combination using minmod, including HLLC + minmod.
+- **Fine-grid limit:** the best three agree within 0.2%; all methods converge to the same answer, but the dissipative ones need far more cells to get there.
+
+The limiter mattered at least as much as the solver. Details on the [reconstruction page](reconstruction.md#double-cone-ranking).
+
 ## Wave-speed estimates
 
 HLL-family solvers (HLL, HLLE, HLLC, HLLC-LM) need estimates $S_L$, $S_R$ of the fastest left- and right-running signals. Too small and the scheme loses positivity or stability, because a real wave falls outside the fan; too large and it adds dissipation. The common choices, with $c$ the sound speed:

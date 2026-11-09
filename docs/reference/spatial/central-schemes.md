@@ -46,11 +46,43 @@ $$
 
 with any symmetric choice of the face mass flux $(\rho u')_f$, and with the kinetic-energy flux in the total-energy equation chosen consistently (it involves $\tfrac12(u_iu_{nbr} + v_iv_{nbr} + w_iw_{nbr})$ times the mass flux). This is the compressible analog of the kinetic-energy-conserving fluxes used in incompressible LES codes, and similar to skew-symmetric forms. They also show the time discretization matters: a "fully discrete" form is needed to keep the property through the time step.
 
+**The fully discrete form.** Kinetic-energy consistency in space is lost if the time integrator is careless. Subbareddy & Candler make the scheme consistent in time as well by writing the kinetic energy as a quadratic product of the parameter vector $\mathbf Z = \sqrt\rho\,(1,\mathbf u)$, which leads to a Roe-type average **between time levels** for the velocity in the convective fluxes:
+
+$$
+\tilde{\mathbf u} = \frac{\sqrt{\rho^{n+1}}\,\mathbf u^{n+1} + \sqrt{\rho^{n}}\,\mathbf u^{n}}{\sqrt{\rho^{n+1}} + \sqrt{\rho^{n}}},
+\qquad
+\mathbf F_f = (\rho u')_f \begin{bmatrix} 1 \\ \tilde{\mathbf u}_f \end{bmatrix}.
+$$
+
+Because the flux depends on $\mathbf U^{n+1}$ the scheme is implicit. The simplest solver is the fixed-point iteration
+
+$$
+\mathbf U^{n+1,k+1} = \mathbf U^n - \frac{\Delta t}{V}\sum_f \mathbf F_f\big(\mathbf U^n,\mathbf U^{n+1,k}\big)\,S_f,\qquad \mathbf U^{n+1,0} = \mathbf U^n,
+$$
+
+stopped when the residual falls below a threshold (Candler, Subbareddy & Nompelis 2015):
+
+- **Iterations:** 3–4 are typically enough, so the cost is similar to a multistage Runge–Kutta step (but second order).
+- **Time step:** this explicit iteration is CFL-limited, CFL ≤ 1.
+- **Implicit alternative:** linearize about time level $n$; exact linearization is onerous because of the density weighting, but approximate linearizations work well in practice.
+
+**Why it is more stable than it looks.** An unbiased flux would normally be expected to oscillate badly near steep gradients. The kinetic-energy constraint limits how much kinetic energy each face can move, which suppresses overshoots and undershoots in non-smooth regions. It is not enough at real shocks: strong shocks still need the added upwind dissipation below.
+
 **Shock capturing** adds the dissipative part of the [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming) flux, $\mathbf D_f = -\tfrac12(\mathbf R|\boldsymbol\Lambda|\mathbf R^{-1})_f(\mathbf U_R - \mathbf U_L)$, with MUSCL face states, multiplied by the Ducros sensor (below), taking the larger of the two cell values at the face.
 
 **Time integration** is implicit: BDF2 with subiterations solved by full-matrix point relaxation, with CFL up to $10^5$ for steady runs. A subtlety: if the implicit Jacobians include full dissipation while the residual uses switched dissipation, unconverged subiterations leave a small extra dissipation that accumulates over many steps; converging the subiterations removes it.
 
 **Validation** in the paper includes the 25°–55° double cone at Mach 11.3 (Holden's CUBRC case), where the separation size is sensitive to numerical dissipation; with the low-dissipation fluxes (TVD-MUSCL with minmod plus the Ducros switch) the computed heat transfer matched experiment and reference simulations, once vibrational relaxation and chemistry were included in the forebody.
+
+**Higher than second order on hexahedral grids.** US3D extends the KEC flux to fourth and sixth order without widening the connectivity, by reusing the cell-centred gradients it already computes for the viscous terms. In 1-D the idea is
+
+$$
+\mathbf U_{i+\frac12} = a\,(\mathbf U_i + \mathbf U_{i+1}) + b\,\Delta x\left(\frac{\partial\mathbf U}{\partial x}\bigg|_i - \frac{\partial\mathbf U}{\partial x}\bigg|_{i+1}\right),
+$$
+
+where $a$ and $b$ set the modified wavenumber. A Taylor expansion shows $a = \tfrac12$, $b = \tfrac18$ cancels the $\Delta x^2$ error and gives a fourth-order face value; using neighbours' gradients again gives sixth order. This assumes smooth variation on a smoothly varying hexahedral grid; on irregular grids the order is lost.
+
+**Sensor limits.** The Ducros sensor (below) misses some discontinuities. Candler et al. give the example of a cold, light gas injected into a hot, heavy stream: the large density jump carries little dilatation and is not flagged. A Mach-number switch or other detector may be needed, and sensor design is still open research for all low-dissipation schemes.
 
 ### Shock sensors
 
@@ -68,6 +100,14 @@ A different route, used in MFC: rather than capturing shocks with limiters and R
 
 !!! warning "Calibration"
     Summary of the published idea (Cao & Schäfer) and its use in MFC (Wilfong et al.); check those papers for the exact formulation.
+
+## Typical values and trade-offs
+
+- **Fully discrete KEC, explicit iteration:** 3–4 iterations per step, CFL ≤ 1, cost comparable to multistage Runge–Kutta.
+- **Implicit KEC (BDF2 + full-matrix point relaxation):** CFL up to $10^5$ for steady runs (Subbareddy & Candler 2009); about 100 for second-order implicit point relaxation in hybrid RANS/LES (Candler et al. 2015).
+- **Order:** 2nd by default, 4th and 6th on smooth hexahedral grids using gradient information.
+- **Large-scale use:** a 216.6-million-element DNS of the HIFiRE-5 elliptic cone in US3D used fourth-order KEC fluxes with third-order explicit Runge–Kutta (Candler et al. 2015).
+- **Trade-off:** far less dissipation than upwind MUSCL (needed for transition, LES and DNS), at the price of depending on a shock sensor; a sensor that misses a discontinuity leaves it unprotected, one that fires too widely makes the scheme as dissipative as upwind.
 
 ## Implications
 
@@ -94,4 +134,4 @@ US3D (KEC plus Ducros-switched modified Steger–Warming dissipation); many aero
 
 ## References
 
-Jameson, Schmidt & Turkel (1981); Ducros et al. (1999); Subbareddy & Candler (2009); Pirozzoli (2011). See the [bibliography](../../references.md).
+Jameson, Schmidt & Turkel (1981); Ducros et al. (1999); Subbareddy & Candler (2009); Candler, Subbareddy & Nompelis (2015, chapter); Candler et al. (2015, US3D); Pirozzoli (2011). See the [bibliography](../../references.md).

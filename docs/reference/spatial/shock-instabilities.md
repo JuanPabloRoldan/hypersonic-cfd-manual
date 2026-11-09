@@ -39,7 +39,12 @@ Contact-resolving solvers, [Roe](riemann-solvers.md#roe) and [HLLC](riemann-solv
 - **Entropy fixes and artificial viscosity** in Roe-type schemes (Rodionov reviews the options).
 - **Rotated Riemann solvers** (Ren): evaluate the flux in a frame aligned with the local flow or shock direction. Effective but expensive.
 - **Shock-stable HLLC variants**: HLLCM (Shen et al., smearing shear velocities across the contact; too dissipative for boundary layers alone), pressure-dissipation HLLC (Xie et al.), HLLC-ADC and HLLC-SWM (Simon & Mandal, controlling the anti-diffusive part near shocks).
-- **Shock-aligned or shock-fitted grids** reduce the trigger; see [Track 2.1](../../course/track-2.md).
+- **Eigenvalue limiting** in upwind fluxes: keep the convective eigenvalue $u'$ in the dissipation from reaching zero at the stagnation point, $\sqrt{\lambda^2 + \varepsilon^2}$ with $\varepsilon = \varepsilon_0 a$, $0.1\le\varepsilon_0\le0.3$. This is the production fix in Candler's group's codes, paired with grid alignment, and is applied when the shock-normal Mach number exceeds about 6. It must be switched off in boundary layers. See [modified Steger–Warming](flux-vector-splitting.md#eigenvalue-limiting).
+- **Pressure-weighted Jacobians** for modified Steger–Warming: revert smoothly to the original, dissipative Steger–Warming flux across strong pressure jumps ([pressure weighting](flux-vector-splitting.md#pressure-weighting)).
+- **Shock-aligned or shock-fitted grids** reduce the trigger: DPLR, LAURA and US3D all have shock-tailoring utilities ([shock alignment](discretization-families.md#shock-alignment)); see also [Track 2.1](../../course/track-2.md).
+
+!!! note "A related but different error: tetrahedra at the shock"
+    A strong shock crossing tetrahedra generates spurious vorticity from an imbalance of momentum flux on the element faces, even with a first-order flux. It is not a carbuncle (no instability needs to grow), and added dissipation does not remove it once created. The cure is hexahedral, shock-aligned cells at the bow shock. See [element types at strong shocks](discretization-families.md#element-types-at-strong-shocks).
 
 ### Fixes that reduce dissipation
 

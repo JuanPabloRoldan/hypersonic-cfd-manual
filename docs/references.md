@@ -57,6 +57,9 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - S. S. Chen, J. P. Li, Z. Li, W. Yuan & Z. H. Gao, "Anti-dissipation pressure correction under low Mach numbers for Godunov-type schemes," *J. Comput. Phys.* 456 (2022).
 - W. Xie, Y. Zhang, Z. Tian & H. Li, "A unified construction of all-speed HLL-type schemes for hypersonic heating computations," arXiv:2103.06374 (2021).
 - R. W. MacCormack & G. V. Candler, "The solution of the Navier–Stokes equations using Gauss–Seidel line relaxation," *Computers & Fluids* 17 (1989), doi:10.1016/0045-7930(89)90012-1.
+- M. S. Darwish & F. Moukalled, "TVD schemes for unstructured grids," *Int. J. Heat Mass Transfer* 46 (2003) 599–611.
+- S.-E. Kim, B. Makarov & D. Caraeni, "A multi-dimensional linear reconstruction scheme for arbitrary unstructured mesh," AIAA Paper 2003-3990 (2003).
+- M. S. Holden & T. P. Wadhams, "Code validation study of laminar shock/boundary layer and shock/shock interactions in hypersonic flow. Part A: Experimental measurements," AIAA Paper 2001-1031 (2001). The double-cone data used for dissipation comparisons.
 - M.-S. Liou & C. J. Steffen, "A new flux splitting scheme," *J. Comput. Phys.* 107 (1993); M.-S. Liou, "A sequel to AUSM: AUSM+," *J. Comput. Phys.* 129 (1996); "A sequel to AUSM, Part II: AUSM+-up for all speeds," *J. Comput. Phys.* 214 (2006).
 - A. Jameson, W. Schmidt & E. Turkel, "Numerical solution of the Euler equations by finite volume methods using Runge–Kutta time-stepping schemes," AIAA Paper 81-1259 (1981).
 - F. Ducros et al., "Large-eddy simulation of the shock/turbulence interaction," *J. Comput. Phys.* 152 (1999).
@@ -84,6 +87,7 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - C.-W. Shu & S. Osher, "Efficient implementation of essentially non-oscillatory shock-capturing schemes," *J. Comput. Phys.* 77 (1988).
 - S. Gottlieb, C.-W. Shu & E. Tadmor, "Strong stability-preserving high-order time discretization methods," *SIAM Rev.* 43 (2001).
 - M. J. Wright, G. V. Candler & D. Bose, "Data-parallel line relaxation method for the Navier–Stokes equations," *AIAA J.* 36 (1998), doi:10.2514/2.586.
+- S. Yoon & A. Jameson, "Lower–upper symmetric-Gauss–Seidel method for the Euler and Navier–Stokes equations," *AIAA J.* 26 (1988).
 - P. A. Gnoffo, "An upwind-biased, point-implicit relaxation algorithm for viscous, compressible perfect-gas flows," NASA TP-2953 (1990).
 - D. A. Knoll & D. E. Keyes, "Jacobian-free Newton–Krylov methods: a survey of approaches and applications," *J. Comput. Phys.* 193 (2004).
 - A. Jameson, "Time dependent calculations using multigrid, with applications to unsteady flows past airfoils and wings," AIAA Paper 91-1596 (1991).

@@ -19,3 +19,13 @@ One entry per session: date, topic, what clicked, what's still shaky.
 | 5 | Burgers: why forms disagree, which is right | Half right: chain-rule failure at discontinuities; the entropy condition is a separate job |
 
 **Still shaky:** questions 2, 4 and 5; rework before moving to Lesson 0.2.
+
+## 2026-11-08 — Manual work: Candler-group papers (no lesson)
+
+**Sources integrated:** Wright, Candler & Bose (1998, DPLR); Nompelis, Drayna & Candler (2004, hybrid unstructured implicit solver); Candler et al. (2015, US3D); Candler, Subbareddy & Nompelis (2015, book chapter).
+
+**Pages changed:** [point and line relaxation](../reference/time/relaxation-methods.md) (full DPLR algorithm, unstructured lines, typical values), [implicit methods](../reference/time/implicit-methods.md#decoupled-implicit-method) (decoupled method), [flux-vector splitting](../reference/spatial/flux-vector-splitting.md#modified-steger-warming) (eigenvalue limiting, pressure weighting, averaging variables), [reconstruction](../reference/spatial/reconstruction.md#double-cone-ranking) (double-cone ranking, virtual upwind point), [discretization families](../reference/spatial/discretization-families.md#element-types-at-strong-shocks) (tetrahedra at shocks, shock tailoring), [central schemes](../reference/spatial/central-schemes.md#kinetic-energy-consistent-fluxes) (fully discrete KEC, high order), [viscous fluxes](../reference/spatial/viscous-fluxes.md#deferred-correction) (deferred correction), plus Riemann solvers, shock instabilities and the codes appendix.
+
+**Style change:** theory pages now carry explicit bullet sections for typical values, trade-offs and effects on stability, alongside the equations and figures (see `CLAUDE.md`).
+
+**Checkpoint:** Lesson 0.1 questions 2, 4 and 5 still open.
