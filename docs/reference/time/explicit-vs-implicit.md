@@ -54,7 +54,7 @@ Explicit cost per step grows roughly linearly with the number of equations $n$ (
 
 ### Shock regularization is not a time-step loophole
 
-MFC's [IGR](../../codes/mfc.md#information-geometric-regularization-igr) replaces the shock-capturing machinery (reconstruction plus Riemann solver) with a regularization that allows simple central fluxes and very low memory. It is still explicit and still CFL-limited; it changes the flux slot, not the time-step constraint.
+MFC's [IGR](../spatial/central-schemes.md#shock-regularization-igr) replaces the shock-capturing machinery (reconstruction plus Riemann solver) with a regularization that allows simple central fluxes and very low memory. It is still explicit and still CFL-limited; it changes the flux slot, not the time-step constraint.
 
 ## Implications
 

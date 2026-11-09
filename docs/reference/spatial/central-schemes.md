@@ -64,7 +64,10 @@ Near one where dilatation dominates (shocks), near zero where vorticity dominate
 
 ### Shock regularization (IGR)
 
-A different route, used in MFC: rather than capturing shocks with limiters and Riemann solvers, modify the equations with an "entropic pressure" obtained from an elliptic solve each step, so shocks are spread over a controlled width and simple central fluxes can be used. It is still explicit and CFL-limited. See [MFC](../../codes/mfc.md#information-geometric-regularization-igr).
+A different route, used in MFC: rather than capturing shocks with limiters and Riemann solvers, modify the equations with an "entropic pressure" obtained from an elliptic solve each step, so shocks are spread over a controlled width and simple central fluxes can be used. This replaces the whole reconstruction-plus-Riemann-solver slot and needs very little memory, which is what enabled very large GPU runs in [MFC](../../codes/index.md#mfc). It is still explicit and CFL-limited, so it does not change the [time-step constraint](../time/explicit-vs-implicit.md#shock-regularization-is-not-a-time-step-loophole).
+
+!!! warning "Calibration"
+    Summary of the published idea (Cao & Schäfer) and its use in MFC (Wilfong et al.); check those papers for the exact formulation.
 
 ## Implications
 
@@ -87,7 +90,7 @@ US3D (KEC plus Ducros-switched modified Steger–Warming dissipation); many aero
 
 ## See also
 
-[Riemann solvers](riemann-solvers.md) · [Flux-vector splitting](flux-vector-splitting.md) · [Shock instabilities](shock-instabilities.md) · [US3D](../../codes/us3d.md)
+[Riemann solvers](riemann-solvers.md) · [Flux-vector splitting](flux-vector-splitting.md) · [Shock instabilities](shock-instabilities.md) · [US3D](../../codes/index.md#us3d)
 
 ## References
 

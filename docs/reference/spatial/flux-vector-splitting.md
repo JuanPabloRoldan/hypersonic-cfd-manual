@@ -94,7 +94,7 @@ DPLR and US3D use modified Steger–Warming as their base upwind flux (US3D adds
 
 ## See also
 
-[Riemann solvers](riemann-solvers.md) · [Central schemes](central-schemes.md) · [Shock instabilities](shock-instabilities.md) · [DPLR](../../codes/dplr.md) · [US3D](../../codes/us3d.md)
+[Riemann solvers](riemann-solvers.md) · [Central schemes](central-schemes.md) · [Shock instabilities](shock-instabilities.md) · [DPLR](../../codes/index.md#dplr) · [US3D](../../codes/index.md#us3d)
 
 ## References
 

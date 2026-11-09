@@ -56,7 +56,7 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - B. Thornber, A. Mosedale, D. Drikakis, D. Youngs & R. J. R. Williams, "An improved reconstruction method for compressible flows with low Mach number features," *J. Comput. Phys.* 227 (2008).
 - S. S. Chen, J. P. Li, Z. Li, W. Yuan & Z. H. Gao, "Anti-dissipation pressure correction under low Mach numbers for Godunov-type schemes," *J. Comput. Phys.* 456 (2022).
 - W. Xie, Y. Zhang, Z. Tian & H. Li, "A unified construction of all-speed HLL-type schemes for hypersonic heating computations," arXiv:2103.06374 (2021).
-- R. W. MacCormack & G. V. Candler, "The solution of the Navier–Stokes equations using Gauss–Seidel line relaxation," *Computers & Fluids* 17 (1989).
+- R. W. MacCormack & G. V. Candler, "The solution of the Navier–Stokes equations using Gauss–Seidel line relaxation," *Computers & Fluids* 17 (1989), doi:10.1016/0045-7930(89)90012-1.
 - M.-S. Liou & C. J. Steffen, "A new flux splitting scheme," *J. Comput. Phys.* 107 (1993); M.-S. Liou, "A sequel to AUSM: AUSM+," *J. Comput. Phys.* 129 (1996); "A sequel to AUSM, Part II: AUSM+-up for all speeds," *J. Comput. Phys.* 214 (2006).
 - A. Jameson, W. Schmidt & E. Turkel, "Numerical solution of the Euler equations by finite volume methods using Runge–Kutta time-stepping schemes," AIAA Paper 81-1259 (1981).
 - F. Ducros et al., "Large-eddy simulation of the shock/turbulence interaction," *J. Comput. Phys.* 152 (1999).
@@ -83,7 +83,7 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 
 - C.-W. Shu & S. Osher, "Efficient implementation of essentially non-oscillatory shock-capturing schemes," *J. Comput. Phys.* 77 (1988).
 - S. Gottlieb, C.-W. Shu & E. Tadmor, "Strong stability-preserving high-order time discretization methods," *SIAM Rev.* 43 (2001).
-- M. J. Wright, G. V. Candler & D. Bose, "Data-parallel line relaxation method for the Navier–Stokes equations," *AIAA J.* 36 (1998).
+- M. J. Wright, G. V. Candler & D. Bose, "Data-parallel line relaxation method for the Navier–Stokes equations," *AIAA J.* 36 (1998), doi:10.2514/2.586.
 - P. A. Gnoffo, "An upwind-biased, point-implicit relaxation algorithm for viscous, compressible perfect-gas flows," NASA TP-2953 (1990).
 - D. A. Knoll & D. E. Keyes, "Jacobian-free Newton–Krylov methods: a survey of approaches and applications," *J. Comput. Phys.* 193 (2004).
 - A. Jameson, "Time dependent calculations using multigrid, with applications to unsteady flows past airfoils and wings," AIAA Paper 91-1596 (1991).
@@ -130,10 +130,15 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - S. H. Bryngelson et al., "MFC: An open-source high-order multi-component, multi-phase, and multi-scale compressible flow solver," *Comput. Phys. Commun.* 266 (2021); later MFC papers (Wilfong et al.) on exascale runs and IGR.
 - R. Cao & F. Schäfer, information geometric regularization of the Euler equations (2023 onward; see their papers).
 - B. Wilfong et al., "MFC 5.0: An exascale many-physics flow solver," *Comput. Phys. Commun.* 322 (2026).
-- G. V. Candler, P. K. Subbareddy & J. M. Brock, "Development of the US3D code for advanced compressible and reacting flow simulations," AIAA Paper 2015-1893 (2015).
+- G. V. Candler, H. B. Johnson, I. Nompelis, V. M. Gidzak, P. K. Subbareddy & M. Barnhardt, "Development of the US3D code for advanced compressible and reacting flow simulations," AIAA Paper 2015-1893 (2015), doi:10.2514/6.2015-1893; NTRS 20180002133.
+- G. V. Candler, P. K. Subbareddy & I. Nompelis, "Decoupled implicit method for aerothermodynamics and reacting flows," *AIAA J.* 51 (2013); reproduced in DTIC report AD1040624.
+- G. V. Candler, P. K. Subbareddy & I. Nompelis, "CFD methods for hypersonic flows and aerothermodynamics," in *Hypersonic Nonequilibrium Flows: Fundamentals and Recent Advances*, AIAA Progress in Astronautics and Aeronautics (2015), doi:10.2514/5.9781624103292.0203.0238.
+- M. J. Wright, T. White & N. Mangini, *Data Parallel Line Relaxation (DPLR) Code User Manual: Acadia – Version 4.01.1*, NASA/TM-2009-215388 (2009), NTRS 20110006930.
+- M. J. Wright, G. V. Candler & M. Prampolini, "Data-parallel lower-upper relaxation method for the Navier–Stokes equations," *AIAA J.* 34 (1996).
+- K. B. Thompson, A. Mazaheri et al., *LAURA Users Manual: 5.6*, NASA/TM-2020-220566 (2020), NTRS 20200002021.
 - I. Nompelis, T. W. Drayna & G. V. Candler, "Development of a hybrid unstructured implicit solver for the simulation of reacting flows over complex geometries," AIAA Paper 2004-2227 (2004).
 - D. A. Bezgin, A. B. Buhendwa & N. A. Adams, "JAX-Fluids: A fully-differentiable high-order computational fluid dynamics solver for compressible two-phase flows," *Comput. Phys. Commun.* 282 (2023).
 - N. Hoppe et al., ALPACA papers and documentation (TU Munich).
 
 !!! warning "Calibration"
-    Citations for code-specific details (DPLR, LAURA, US3D, FUN3D, SU2-NEMO, Eilmer, SPARTA user manuals and development papers) will be added as each code page is written from primary sources.
+    Citations for FUN3D, SU2-NEMO, Eilmer and SPARTA documentation, and for the radiation and material-response tools, will be added as those topics are taught.

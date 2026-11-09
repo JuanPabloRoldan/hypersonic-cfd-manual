@@ -1,57 +1,71 @@
-# Reference manual
+# Theory manual
 
-One page per method or model family, organized by the solver slot it belongs to. Each page can be read cold and follows the same template (see [how to use this manual](../how-to-use.md#page-anatomy)). The [implications matrix](implications-matrix.md) puts the six-lens verdicts for every method side by side.
+The theory manual is ordered the way a solver is built: first the equations being solved and the physical models that close them, then how the equations are discretized in space, how the fluxes and sources are evaluated, and how the discrete system is advanced to a solution. Every page follows the same template (what it is, the problem it solves, how it works, variants, implications, in a run, which codes; see [how to use this manual](../how-to-use.md#page-anatomy)) and can be read cold. The [course](../course/index.md) teaches the same material in a different order and links into these pages.
 
-## By slot
+Pages marked with a hollow circle in the sidebar are outlines; half-filled circles are drafts.
 
-**Foundations.** What every solver is trying to solve.
-[Governing equations](foundations/governing-equations.md) ·
-[Conservation form and weak solutions](foundations/conservation-and-weak-solutions.md) ·
-[Mathematical character](foundations/mathematical-character.md) ·
-[Closing the system](foundations/closing-the-system.md)
+## Contents
 
-**Spatial discretization.** Turning the PDE into a residual.
-[The finite-volume pipeline](spatial/finite-volume-pipeline.md) ·
-[Discretization families](spatial/discretization-families.md) ·
-[Reconstruction and limiters](spatial/reconstruction.md) ·
-[ENO, WENO and TENO](spatial/weno.md) ·
-[Riemann solvers](spatial/riemann-solvers.md) ·
-[Flux-vector splitting](spatial/flux-vector-splitting.md) ·
-[Central schemes and dissipation](spatial/central-schemes.md) ·
-[Shock instabilities](spatial/shock-instabilities.md) ·
-[Low-Mach corrections](spatial/low-mach-corrections.md) ·
-[Viscous fluxes and gradients](spatial/viscous-fluxes.md) ·
-[Boundary conditions](spatial/boundary-conditions.md)
+**Implications matrix.** [Every method on the six lenses, side by side](implications-matrix.md).
 
-**Time integration and convergence.** Driving the residual to zero, or through time.
-[Time-step limits](time/time-step-limits.md) ·
-[Explicit methods](time/explicit-methods.md) ·
-[Implicit methods and Jacobians](time/implicit-methods.md) ·
-[Point and line relaxation](time/relaxation-methods.md) ·
-[Local time stepping](time/local-time-stepping.md) ·
-[Explicit vs implicit](time/explicit-vs-implicit.md) ·
-[Dual time stepping](time/dual-time-stepping.md) ·
-[Convergence diagnostics](time/convergence-diagnostics.md)
+**1 Fundamental equations.** What every solver is trying to solve.
+[1.1 Governing equations](foundations/governing-equations.md) ·
+[1.2 Conservation form and weak solutions](foundations/conservation-and-weak-solutions.md) ·
+[1.3 Mathematical character](foundations/mathematical-character.md) ·
+[1.4 Closing the system](foundations/closing-the-system.md)
 
-**Source terms.**
-[Stiff source terms](sources/stiff-sources.md)
+**2 Entry flow physics.** The flows the equations describe.
+[2.1 Entry flow anatomy](physics/entry-flow-anatomy.md)
 
-**Thermochemistry.** The closures that make it a reentry code.
-[Gas models](thermo/gas-models.md) ·
-[Energy modes and thermodynamics](thermo/energy-modes.md) ·
-[Thermal nonequilibrium models](thermo/thermal-nonequilibrium.md) ·
-[Finite-rate chemistry](thermo/finite-rate-chemistry.md) ·
-[Transport and diffusion](thermo/transport-and-diffusion.md)
+**3 Gas models and thermochemistry.** The closures that make it a reentry code.
+[3.1 Gas models](thermo/gas-models.md) ·
+[3.2 Energy modes and thermodynamics](thermo/energy-modes.md) ·
+[3.3 Thermal nonequilibrium](thermo/thermal-nonequilibrium.md) ·
+[3.4 Finite-rate chemistry](thermo/finite-rate-chemistry.md) ·
+[3.5 Transport and diffusion](thermo/transport-and-diffusion.md)
 
-**Walls and surfaces.**
-[Wall boundary conditions](walls/wall-boundary-conditions.md) ·
-[Surface energy balance](walls/surface-energy-balance.md)
+**4 Turbulence.**
+[4.1 Turbulence modeling for hypersonic boundary layers](physics/turbulence-modeling.md)
 
-**Physics.**
-[Entry flow anatomy](physics/entry-flow-anatomy.md) ·
-[Turbulence modeling](physics/turbulence-modeling.md)
+**5 Boundary conditions and walls.**
+[5.1 Boundary conditions](spatial/boundary-conditions.md) ·
+[5.2 Wall boundary conditions](walls/wall-boundary-conditions.md) ·
+[5.3 Surface energy balance](walls/surface-energy-balance.md)
 
-**Special formulations.**
-[Space marching (PNS)](special/space-marching.md)
+**6 Spatial discretization.** Turning the PDEs into a residual.
+[6.1 The finite-volume method](spatial/finite-volume-pipeline.md) ·
+[6.2 Discretization families](spatial/discretization-families.md) ·
+[6.3 Reconstruction and limiters](spatial/reconstruction.md) ·
+[6.4 ENO, WENO and TENO](spatial/weno.md) ·
+[6.5 Viscous fluxes and gradients](spatial/viscous-fluxes.md)
 
-Physics topics that haven't been taught yet (stagnation heating, SWBLI, shock–shock interactions, transition, rarefaction, radiation, material response) are outlined in the [course tracks](../course/index.md) and get reference pages as they're covered.
+**7 Inviscid flux functions.** Turning two face states into one flux.
+[7.1 Riemann solvers](spatial/riemann-solvers.md) ·
+[7.2 Flux-vector splitting](spatial/flux-vector-splitting.md) ·
+[7.3 Central schemes and dissipation](spatial/central-schemes.md) ·
+[7.4 Low-Mach corrections](spatial/low-mach-corrections.md) ·
+[7.5 Shock instabilities](spatial/shock-instabilities.md)
+
+**8 Source terms.**
+[8.1 Stiff source terms](sources/stiff-sources.md)
+
+**9 Time integration and solvers.** Driving the residual to zero, or through time.
+[9.1 Time-step limits](time/time-step-limits.md) ·
+[9.2 Explicit methods](time/explicit-methods.md) ·
+[9.3 Implicit methods and Jacobians](time/implicit-methods.md) ·
+[9.4 Point and line relaxation](time/relaxation-methods.md) ·
+[9.5 Local time stepping](time/local-time-stepping.md) ·
+[9.6 Dual time stepping](time/dual-time-stepping.md) ·
+[9.7 Explicit vs implicit](time/explicit-vs-implicit.md)
+
+**10 Reduced equations.**
+[10.1 Space marching (PNS)](special/space-marching.md)
+
+**11 Verification and diagnosis.**
+[11.1 Convergence diagnostics](time/convergence-diagnostics.md)
+
+**Appendix.** [A Codes at a glance](../codes/index.md): each production code's choice in each slot, with primary sources.
+
+## Chapters still to come
+
+Shock-layer radiation, material response and ablation, and the physics topics of Track 1 (stagnation heating, entropy layers, SWBLI, shock–shock interactions, transition, rarefaction) will become chapters as they are taught. Their outlines are in the [course tracks](../course/index.md).

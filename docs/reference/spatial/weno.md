@@ -126,14 +126,14 @@ Knobs: scheme and order, weight variant, $\varepsilon$ or $C_T$, reconstructed v
 
 ## Which codes
 
-MFC uses WENO (several orders, with JS/M/Z-type variants) on primitive variables, with HLLC fluxes and explicit SSP-RK time stepping. [ALPACA](../../codes/alpaca.md) and JAX-Fluids (TU Munich) offer WENO, WENO-Z, WENO-CU6, WENO-AO and TENO variants. US3D and other research codes use high-order or low-dissipation options for DNS of transition; production aeroheating codes (DPLR, LAURA) stay second order. Why they stay there is a [Track 2.7](../../course/track-2.md) topic.
+MFC uses WENO (several orders, with JS/M/Z-type variants) on primitive variables, with HLLC fluxes and explicit SSP-RK time stepping. [ALPACA](../../codes/index.md#alpaca) and JAX-Fluids (TU Munich) offer WENO, WENO-Z, WENO-CU6, WENO-AO and TENO variants. US3D and other research codes use high-order or low-dissipation options for DNS of transition; production aeroheating codes (DPLR, LAURA) stay second order. Why they stay there is a [Track 2.7](../../course/track-2.md) topic.
 
 !!! warning "Calibration"
     Option lists change between code versions; check current documentation.
 
 ## See also
 
-[Reconstruction and limiters](reconstruction.md) · [Riemann solvers](riemann-solvers.md) · [Central schemes](central-schemes.md) · [MFC](../../codes/mfc.md)
+[Reconstruction and limiters](reconstruction.md) · [Riemann solvers](riemann-solvers.md) · [Central schemes](central-schemes.md) · [MFC](../../codes/index.md#mfc)
 
 ## References
 

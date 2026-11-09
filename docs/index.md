@@ -4,33 +4,33 @@ This is a course and a lookup manual for atmospheric entry: the flow physics aro
 
 The goal isn't to know what a method is called. It's to know **what it implies for a run**: its time step and cost, whether it can do steady or unsteady problems, how accurate it is (above all for wall heat flux), how robust it is, which physics it captures or silently smears, and how it maps to hardware. Every page is written through that lens.
 
-## Two ways in
+## Where to start
 
 <div class="grid cards" markdown>
 
--   :material-school: **[The course](course/index.md)**
+-   :material-book-open-variant: **[Theory manual](reference/index.md)**
+
+    ---
+
+    Eleven numbered chapters in the order a solver is built: equations, physical models, spatial discretization, flux functions, sources, time integration, verification. One page per method family, each with the same structure, so any choice a code makes can be looked up and its effect on a run understood.
+
+-   :material-school: **[Course](course/index.md)**
 
     ---
 
     Ten tracks taught in order, starting with the anatomy of a solver. Lessons explain, connect and end in checkpoint questions with model answers you can expand.
-
--   :material-book-open-variant: **[The reference](reference/index.md)**
-
-    ---
-
-    One page per method or model family (Riemann solvers, limiters, relaxation methods, gas models, ...), each with the same structure, so you can look up any choice a code makes and see what it does to a run.
-
--   :material-code-braces: **[Codes](codes/index.md)**
-
-    ---
-
-    What makes DPLR "DPLR"? Case studies of production and open codes, with each code's choices placed in the solver anatomy. MFC appears as the contrast case.
 
 -   :material-alphabetical: **[Glossary](glossary.md)**
 
     ---
 
     Every term nailed down in the course, in a fixed format: what it is, the problem it solves, its implications, how it shows up in a run.
+
+-   :material-table: **[Codes at a glance](codes/index.md)**
+
+    ---
+
+    Which choice DPLR, LAURA, US3D and the other production codes make in each slot, with their primary sources.
 
 </div>
 
@@ -54,7 +54,7 @@ flowchart TD
     TA --> VD["Verification<br/>and diagnosis"]
 ```
 
-The course follows the same order: [Track 0](course/track-0/index.md) walks through these slots one at a time, then the later tracks fill in the physics (entry flows, thermochemistry, walls, radiation, materials) and the numerics that capture it.
+The [theory manual](reference/index.md) is organized around these slots, and the course walks through them in [Track 0](course/track-0/index.md) one at a time, then the later tracks fill in the physics (entry flows, thermochemistry, walls, radiation, materials) and the numerics that capture it.
 
 ## Status of the manual
 

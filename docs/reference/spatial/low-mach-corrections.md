@@ -96,7 +96,7 @@ Knobs: the correction type and its limit Mach number ($M_{\text{lim}} = 0.1$ in 
 
 ## Which codes
 
-ALPACA offers HLLC-LM ("HLLC low-Mach fix", with or without a shock sensor) and Roe-M / LLF-M flux splittings with $\phi = 5$ ([ALPACA](../../codes/alpaca.md)); MFC offers the Chen and Thornber corrections. Production reentry codes approach the same trade-off differently: [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming) with eigenvalue limiting, or Roe with entropy fixes and shock-aligned grids.
+ALPACA offers HLLC-LM ("HLLC low-Mach fix", with or without a shock sensor) and Roe-M / LLF-M flux splittings with $\phi = 5$ ([ALPACA](../../codes/index.md#alpaca)); MFC offers the Chen and Thornber corrections. Production reentry codes approach the same trade-off differently: [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming) with eigenvalue limiting, or Roe with entropy fixes and shock-aligned grids.
 
 ## See also
 

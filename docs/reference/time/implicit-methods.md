@@ -46,6 +46,9 @@ Nobody solves this system exactly. The left-hand side is usually an approximatio
 
 Each block is $n\times n$, with $n$ the number of conserved variables per cell. Memory goes as $n^2$ and block factorizations or inversions as $n^3$. Going from a perfect gas ($n = 5$) to 11-species two-temperature air ($n = 16$) multiplies block-operation cost by roughly $(16/5)^3 \approx 33$, before counting the extra source-Jacobian work. An explicit code pays roughly linearly in $n$. See [explicit vs implicit](explicit-vs-implicit.md).
 
+!!! note "Quadratic or cubic?"
+    The $n^3$ figure is for factorizing or inverting the blocks. Codes that factor once and reuse the factors across relaxation sweeps pay mostly the $n^2$ block–vector products per sweep, which is why papers on DPLR-type methods describe the fully coupled cost as scaling *quadratically* with the number of equations. Candler, Subbareddy & Nompelis (2013) go further with a **decoupled implicit method**: solve the mixture (flow) equations with the usual block line relaxation, then the species equations as scalar systems, lagging the off-diagonal source-Jacobian terms. The implicit cost then grows linearly with the number of species, with large memory savings, at little cost in convergence; the source evaluation becomes the dominant cost. *(To be covered in Track 3.4.)*
+
 ## Variants
 
 ### Steady state via pseudo-time

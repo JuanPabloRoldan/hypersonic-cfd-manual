@@ -63,7 +63,7 @@ In an ionized gas, electrons diffuse far faster than ions, but any separation cr
 
 ### Libraries
 
-Mutation++ (VKI) provides transport, thermodynamics and chemistry to several codes. *(See [Mutation++](../../codes/mutationpp.md).)*
+Mutation++ (VKI) provides transport, thermodynamics and chemistry to several codes. *(See [Mutation++](../../codes/index.md#mutationpp).)*
 
 ## Implications
 

@@ -14,7 +14,7 @@ The energy balance at the heated surface: convective and diffusive heating, inci
 
 ## The problem it solves
 
-It connects the flow solution to the [material response](../../codes/material-response-tools.md), and explains why CFD hands over a heat-transfer coefficient and recovery enthalpy rather than a raw heat flux.
+It connects the flow solution to the [material response](../../codes/index.md#material-response-tools), and explains why CFD hands over a heat-transfer coefficient and recovery enthalpy rather than a raw heat flux.
 
 ## How it works
 

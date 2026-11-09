@@ -2,10 +2,14 @@
 
 This repo is a MkDocs (Material) site that serves two purposes at once:
 
-1. **A course** (`docs/course/`): the teaching sequence, Tracks 0–9, with lessons that explain, connect and end in checkpoint questions.
-2. **A lookup manual** (`docs/reference/`, `docs/codes/`, `docs/glossary.md`): one page per method or model family, written so it can be read cold, in the spirit of a commercial code's theory guide.
+1. **A theory manual** (`docs/reference/`, shown as the "Theory manual" tab): one page per method or model family, written so it can be read cold, organized like a commercial code's theory guide (the STAR-CCM+ theory guide is the model). Chapters are numbered in the order a solver is built: 1 fundamental equations, 2 entry flow physics, 3 gas models and thermochemistry, 4 turbulence, 5 boundary conditions and walls, 6 spatial discretization, 7 inviscid flux functions, 8 source terms, 9 time integration and solvers, 10 reduced equations, 11 verification and diagnosis, then appendices. Numbers live in the `nav` labels in `mkdocs.yml` (and in `docs/reference/index.md`), not in file names, so URLs stay stable. New chapters (radiation, material response, Track 1 physics topics) are inserted where they belong in that order and the later numbers shifted.
+2. **A course** (`docs/course/`): the teaching sequence, Tracks 0–9, with lessons that explain, connect and end in checkpoint questions.
 
-Lessons teach and link out. Reference pages hold the durable explanation. When a lesson explains something at length, the reference page should hold the full version and the lesson should summarize it and link to it.
+Plus `docs/glossary.md`, `docs/references.md`, and one appendix page, `docs/codes/index.md` ("Codes at a glance"), which compares the production codes slot by slot and lists their primary sources.
+
+Lessons teach and link out. Theory pages hold the durable explanation. When a lesson explains something at length, the theory page should hold the full version and the lesson should summarize it and link to it.
+
+**Codes are not organized as separate pages.** What a code does is recorded on the method pages, in each page's "Which codes" section, and summarized in the appendix table. Research and contrast codes (MFC, ALPACA/JAX-Fluids) appear only as alternatives or sources of extra numerics on method pages, not as subjects of their own. Link to a code with `codes/index.md#<code>` (anchors: `dplr`, `laura`, `us3d`, `fun3d`, `su2-nemo`, `eilmer`, `sparta`, `star-ccm`, `radiation-solvers`, `material-response-tools`, `mutationpp`, `mfc`, `alpaca`).
 
 ## Linking rule (the most important convention)
 
@@ -31,7 +35,7 @@ Every reference page starts with a `page-meta` block:
 </div>
 ```
 
-## Reference page template
+## Theory page template
 
 ```markdown
 # <Method or model family>

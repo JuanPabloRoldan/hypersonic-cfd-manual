@@ -153,7 +153,7 @@ Knobs: flux scheme, entropy-fix coefficient, wave-speed estimate. Symptoms: carb
 
 ## Which codes
 
-LAURA uses Roe's scheme with Yee-type TVD limiting and an entropy fix; MFC defaults to HLLC (HLL and an exact solver are available); [ALPACA](../../codes/alpaca.md) offers HLLC, HLLC-LM, HLL and Rusanov with a choice of wave-speed estimates; STAR-CCM+ offers Roe and AUSM+ options. DPLR and US3D use [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming) rather than a Riemann solver.
+LAURA uses Roe's scheme with Yee-type TVD limiting and an entropy fix; MFC defaults to HLLC (HLL and an exact solver are available); [ALPACA](../../codes/index.md#alpaca) offers HLLC, HLLC-LM, HLL and Rusanov with a choice of wave-speed estimates; STAR-CCM+ offers Roe and AUSM+ options. DPLR and US3D use [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming) rather than a Riemann solver.
 
 !!! warning "Calibration"
     These assignments follow the codes' published descriptions; defaults and options change between versions. Verify against current user manuals before relying on them.

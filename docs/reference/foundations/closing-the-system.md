@@ -72,7 +72,7 @@ With $n_s$ species, $n_r$ reactions and $k$ Newton iterations:
 
 ## Variants
 
-The closures differ by [gas model](../thermo/gas-models.md): a perfect gas needs only $p = (\gamma-1)\rho e$; equilibrium air replaces kinetics with a table lookup $p(\rho, e)$, $T(\rho, e)$; finite-rate multi-temperature models need all four. Libraries such as [Mutation++](../../codes/mutationpp.md) package the thermodynamic, transport and kinetic closures for several codes.
+The closures differ by [gas model](../thermo/gas-models.md): a perfect gas needs only $p = (\gamma-1)\rho e$; equilibrium air replaces kinetics with a table lookup $p(\rho, e)$, $T(\rho, e)$; finite-rate multi-temperature models need all four. Libraries such as [Mutation++](../../codes/index.md#mutationpp) package the thermodynamic, transport and kinetic closures for several codes.
 
 ## Implications
 
@@ -91,7 +91,7 @@ Knobs: gas model, species and reaction set, rate source (Park, Dunn–Kang, ...)
 
 ## Which codes
 
-DPLR, LAURA and US3D use built-in thermochemistry with similar model families; SU2-NEMO can use [Mutation++](../../codes/mutationpp.md). See the [code pages](../../codes/index.md).
+DPLR, LAURA and US3D use built-in thermochemistry with similar model families; SU2-NEMO can use [Mutation++](../../codes/index.md#mutationpp). See the [code pages](../../codes/index.md).
 
 ## See also
 

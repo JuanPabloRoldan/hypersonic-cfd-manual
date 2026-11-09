@@ -1,12 +1,14 @@
 # How to use this manual
 
-## Course vs reference
+## Theory manual vs course
 
-The **course** is a sequence. Lessons build on each other, tell a story, contrast choices, and end in checkpoint questions. Read them in order.
+The **theory manual** is ordered like a solver's theory guide: numbered chapters from the governing equations through physical models, discretization, fluxes, sources and time integration. Each page covers one method or model family and can be read cold.
 
-The **reference** is a lookup. Each page covers one method or model family and can be read cold. When a lesson mentions a Riemann solver, a limiter or a relaxation method, it links to the reference page, and the reference page links back to the lesson where it was taught.
+The **course** is a teaching sequence. Lessons build on each other, tell a story, contrast choices, and end in checkpoint questions. Read them in order.
 
-The rule of thumb: the lesson is where you learn *why*; the reference is where you come back for *what exactly*.
+When a lesson mentions a Riemann solver, a limiter or a relaxation method, it links to the reference page, and the theory page links back to the lesson where it was taught.
+
+The rule of thumb: the lesson is where you learn *why*; the theory manual is where you come back for *what exactly*.
 
 ## Depth tags
 
@@ -18,7 +20,7 @@ Every topic carries one of two tags.
 
 ## The implications lens
 
-Every method, model or setting is judged on the same six questions, and reference pages end with a table answering them:
+Every method, model or setting is judged on the same six questions, and theory pages end with a table answering them:
 
 | Lens | The question |
 |---|---|
@@ -33,7 +35,7 @@ The [implications matrix](reference/implications-matrix.md) collects these table
 
 ## Page anatomy
 
-Reference pages follow a fixed template, so you always know where to look:
+Theory pages follow a fixed template, so you always know where to look:
 
 1. **What it is**: one or two paragraphs.
 2. **The problem it solves**: why the method exists.

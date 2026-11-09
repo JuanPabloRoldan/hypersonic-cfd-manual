@@ -66,7 +66,7 @@ Knobs: number of sweeps per iteration, line direction, Jacobi vs Gauss–Seidel 
 
 ## See also
 
-[Implicit methods](implicit-methods.md) · [Local time stepping](local-time-stepping.md) · [Explicit vs implicit](explicit-vs-implicit.md) · [DPLR](../../codes/dplr.md)
+[Implicit methods](implicit-methods.md) · [Local time stepping](local-time-stepping.md) · [Explicit vs implicit](explicit-vs-implicit.md) · [DPLR](../../codes/index.md#dplr)
 
 ## References
 
