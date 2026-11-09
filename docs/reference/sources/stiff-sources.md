@@ -5,7 +5,7 @@ status: draft
 # Stiff source terms
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.6 sources and stiffness; Track 4.4 · **Depth:** [deep] · **Taught in:** [Lesson 0.6](../../course/track-0/0-6-sources-and-stiffness.md) (pending; previewed in Lesson 0.1)
+**Slot:** Track 0.6 sources and stiffness; Track 4.4 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -64,7 +64,7 @@ Knobs: source treatment (point-implicit, split), chemistry startup (frozen chemi
 ## Which codes
 
 !!! warning "Calibration"
-    Production reentry codes (DPLR, LAURA, US3D) treat sources implicitly as part of their implicit systems. Operator splitting with stiff ODE integrators is more common in unsteady combustion and in some research codes. Code-specific details to be filled in Track 4.4.
+    Production reentry codes (DPLR, LAURA, US3D) treat sources implicitly as part of their implicit systems. Operator splitting with stiff ODE integrators is more common in unsteady combustion and in some research codes. Code-specific details to be filled.
 
 ## See also
 

@@ -5,7 +5,7 @@ status: draft
 # Thermal nonequilibrium models
 
 <div class="page-meta" markdown>
-**Slot:** Track 4.2 · **Depth:** [deep] · **Taught in:** [Track 4](../../course/track-4.md) (pending; previewed in Lesson 0.1 follow-ups)
+**Slot:** Track 4.2 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -26,7 +26,7 @@ $$
 
 driving each species' vibrational energy towards its value at the translational temperature, with relaxation times $\tau_s$ from the **Millikan–White** correlation (plus Park's high-temperature collision-limited correction). Vibration–dissociation coupling enters through the energy removed with dissociating molecules ($\sum_s\dot\omega_s e_{v,s}$ in the $e_v$ equation) and through the [controlling temperature](finite-rate-chemistry.md#parks-controlling-temperature) in the rates.
 
-*(Derivations, Millikan–White coefficients and the high-temperature correction: Track 4.2.)*
+*(Derivations, Millikan–White coefficients and the high-temperature correction: to be written.)*
 
 ## Variants
 
@@ -52,7 +52,7 @@ A separate rotational temperature. Rotation is fast, so this matters only in ver
 
 ### State-to-state {#state-to-state}
 
-Every vibrational (and possibly electronic) level of every molecule is treated as its own pseudo-species with its own rate equations: hundreds to thousands of equations. Coarse-grained variants group levels into bins. These models show that the vibrational populations behind a shock are **not Boltzmann** at all, so "a temperature $T_v$" is itself a modeling assumption. That reaches directly into nonequilibrium radiation ([Track 6.3](../../course/track-6.md)) and into how dissociation rates should be modeled. Rate data come increasingly from ab initio potential surfaces and quasi-classical trajectory (QCT) calculations ([Track 4.7](../../course/track-4.md)).
+Every vibrational (and possibly electronic) level of every molecule is treated as its own pseudo-species with its own rate equations: hundreds to thousands of equations. Coarse-grained variants group levels into bins. These models show that the vibrational populations behind a shock are **not Boltzmann** at all, so "a temperature $T_v$" is itself a modeling assumption. That reaches directly into nonequilibrium radiation and into how dissociation rates should be modeled. Rate data come increasingly from ab initio potential surfaces and quasi-classical trajectory (QCT) calculations.
 
 ## Implications
 

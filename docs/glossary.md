@@ -1,12 +1,11 @@
 # Glossary
 
-Every term nailed down in the course, in a fixed format. Entries marked *provisional* belong to a checkpoint that is still open; they are correct, but not yet confirmed as understood.
+Key terms in a fixed format: what each is, the problem it solves, its implications and how it shows up in a run.
 
 ---
 
 ### Cell Reynolds number (also: wall cell Reynolds number, $Re_\Delta$)
 
-*Provisional (Lesson 0.1, checkpoint Q2).*
 
 - **Depth:** [deep] · **Slot:** time advancement; heat-flux accuracy (Track 2.4)
 - **What it is:** $Re_\Delta = (|u| + a)\,\Delta x/\nu$, the ratio of convective to diffusive transport across one cell. At the wall it is usually written $\rho a\Delta n/\mu$.
@@ -68,7 +67,6 @@ Every term nailed down in the course, in a fixed format. Entries marked *provisi
 
 ### Entropy condition
 
-*Provisional (Lesson 0.1, checkpoint Q5).*
 
 - **Depth:** [deep] · **Slot:** governing equations; flux functions
 - **What it is:** the extra condition (entropy must not decrease across a shock; characteristics run into it) that selects the physical weak solution.
@@ -160,7 +158,6 @@ Every term nailed down in the course, in a fixed format. Entries marked *provisi
 
 ### Rankine–Hugoniot conditions
 
-*Provisional (Lesson 0.1, checkpoint Q5).*
 
 - **Depth:** [deep] · **Slot:** governing equations
 - **What it is:** $s\,[U] = [F(U)]$: the jump conditions across a discontinuity moving at speed $s$, from the integral form.
@@ -202,7 +199,6 @@ Every term nailed down in the course, in a fixed format. Entries marked *provisi
 
 ### Weak solution
 
-*Provisional (Lesson 0.1, checkpoint Q5).*
 
 - **Depth:** [deep] · **Slot:** governing equations
 - **What it is:** a function satisfying the integral form of a conservation law against every smooth test function; allowed to be discontinuous.

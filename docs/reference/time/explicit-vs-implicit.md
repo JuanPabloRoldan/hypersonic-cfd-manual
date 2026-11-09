@@ -1,7 +1,7 @@
 # Explicit vs implicit: the cost model
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.5; Track 3 · **Depth:** [deep] · **Taught in:** [Lesson 0.1](../../course/track-0/0-1-governing-equations.md) (follow-up questions), [Track 3](../../course/track-3.md)
+**Slot:** Track 0.5; Track 3 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -74,7 +74,7 @@ The choice is usually made by the code, not the input deck. Within implicit code
 ## Which codes
 
 !!! warning "Calibration"
-    DPLR: implicit line relaxation, steady and time-accurate (subiterations). LAURA: point-implicit relaxation (line-implicit options in newer versions, to be checked). US3D: implicit relaxation on unstructured grids, implicit second-order time stepping for LES/DNS, explicit options too. FUN3D: implicit point/line relaxation, BDF2 with subiterations. MFC: explicit SSP-RK. To be verified against primary sources in Track 3.
+    DPLR: implicit line relaxation, steady and time-accurate (subiterations). LAURA: point-implicit relaxation (line-implicit options in newer versions, to be checked). US3D: implicit relaxation on unstructured grids, implicit second-order time stepping for LES/DNS, explicit options too. FUN3D: implicit point/line relaxation, BDF2 with subiterations. MFC: explicit SSP-RK. To be verified against primary sources.
 
 ## See also
 

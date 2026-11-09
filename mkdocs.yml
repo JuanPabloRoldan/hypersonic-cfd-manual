@@ -1,5 +1,5 @@
 site_name: Hypersonic CFD Manual
-site_description: A course and a lookup manual for entry aerothermodynamics, hypersonic numerics, thermochemistry and TPS analysis.
+site_description: A theory manual for entry aerothermodynamics, hypersonic numerics, thermochemistry and TPS analysis.
 site_author: Juan Pablo Roldan
 site_url: https://juanpabloroldan.github.io/hypersonic-cfd-manual/
 repo_url: https://github.com/JuanPabloRoldan/hypersonic-cfd-manual
@@ -149,27 +149,5 @@ nav:
           - "11.1 Convergence diagnostics": reference/time/convergence-diagnostics.md
       - "Appendix":
           - "A Codes at a glance": codes/index.md
-  - Course:
-      - course/index.md
-      - "Track 0 · Anatomy of a solver":
-          - course/track-0/index.md
-          - "0.1 Governing equations": course/track-0/0-1-governing-equations.md
-          - "0.2 Spatial discretization": course/track-0/0-2-spatial-discretization.md
-          - "0.3 Reconstruction": course/track-0/0-3-reconstruction.md
-          - "0.4 Flux functions": course/track-0/0-4-flux-functions.md
-          - "0.5 Time advancement": course/track-0/0-5-time-advancement.md
-          - "0.6 Sources and stiffness": course/track-0/0-6-sources-and-stiffness.md
-          - "0.7 Boundary conditions": course/track-0/0-7-boundary-conditions.md
-          - "0.8 Verification and diagnosis": course/track-0/0-8-verification.md
-      - "Track 1 · Entry flow physics": course/track-1.md
-      - "Track 2 · Hypersonic numerics": course/track-2.md
-      - "Track 3 · Time integration and cost": course/track-3.md
-      - "Track 4 · Thermochemistry": course/track-4.md
-      - "Track 5 · Walls and surfaces": course/track-5.md
-      - "Track 6 · Shock-layer radiation": course/track-6.md
-      - "Track 7 · TPS and material response": course/track-7.md
-      - "Track 8 · V&V, uncertainty, margins": course/track-8.md
-      - "Track 9 · The TPS design pipeline": course/track-9.md
-      - Session log: course/session-log.md
   - Glossary: glossary.md
   - Bibliography: references.md

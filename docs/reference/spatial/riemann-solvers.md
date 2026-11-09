@@ -5,7 +5,7 @@ status: draft
 # Riemann solvers
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.4 flux functions · **Depth:** [deep] · **Taught in:** [Lesson 0.4](../../course/track-0/0-4-flux-functions.md) (pending)
+**Slot:** Track 0.4 flux functions · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -110,7 +110,7 @@ Most dissipative, very robust, cheapest. Often used as a fallback in difficult c
 | HLLC-LM | resolved | as HLLC | no | resistant | low–medium |
 | Rusanov | heavily smeared | yes | no | resistant | lowest |
 
-The pattern is the classical trade-off of hypersonic flux design: **the dissipation that smears contacts and boundary layers is the same dissipation that suppresses the carbuncle.** Hybrid and rotated solvers, and dissipation applied only at shocks, try to get both. A newer line of work argues the trade-off is partly false: the carbuncle is driven by *mis-scaled* acoustic dissipation at low face-normal Mach numbers, so it can be cured by reducing dissipation there ([HLLC-LM](#hllc-lm), [low-Mach corrections](low-mach-corrections.md)). See [shock instabilities](shock-instabilities.md) and [Track 2.2–2.3](../../course/track-2.md).
+The pattern is the classical trade-off of hypersonic flux design: **the dissipation that smears contacts and boundary layers is the same dissipation that suppresses the carbuncle.** Hybrid and rotated solvers, and dissipation applied only at shocks, try to get both. A newer line of work argues the trade-off is partly false: the carbuncle is driven by *mis-scaled* acoustic dissipation at low face-normal Mach numbers, so it can be cured by reducing dissipation there ([HLLC-LM](#hllc-lm), [low-Mach corrections](low-mach-corrections.md)). See [shock instabilities](shock-instabilities.md) and Track 2.2–2.3.
 
 ### Dissipation in practice: the double cone {#double-cone-comparison}
 

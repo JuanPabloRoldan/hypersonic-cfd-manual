@@ -5,7 +5,7 @@ status: draft
 # Reconstruction and limiters
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.3 reconstruction · **Depth:** [deep] · **Taught in:** [Lesson 0.3](../../course/track-0/0-3-reconstruction.md) (pending; basics previewed in Lesson 0.1)
+**Slot:** Track 0.3 reconstruction · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -96,7 +96,7 @@ The lesson for aeroheating runs: report the limiter alongside the flux function,
 
 ### Extremum clipping and the stagnation point
 
-Because every TVD limiter returns zero slope at a local extremum, it clips genuine smooth peaks too. In a reentry flow, stagnation-point quantities (pressure, temperature behind the shock) sit at smooth extrema, so the limiter locally drops to first order exactly where heating is evaluated. This is one reason heat-flux accuracy is so sensitive to limiter choice and grid alignment ([Track 2.4](../../course/track-2.md)).
+Because every TVD limiter returns zero slope at a local extremum, it clips genuine smooth peaks too. In a reentry flow, stagnation-point quantities (pressure, temperature behind the shock) sit at smooth extrema, so the limiter locally drops to first order exactly where heating is evaluated. This is one reason heat-flux accuracy is so sensitive to limiter choice and grid alignment.
 
 ### Which variables to reconstruct
 
@@ -116,7 +116,7 @@ Reconstruction may act on conservative, primitive or characteristic variables. T
 
 ### First order
 
-Face states equal cell averages. Robust, very dissipative. Standard as a **startup** strategy: run first order until the shock is established, then switch to second order ([Track 3.5](../../course/track-3.md)).
+Face states equal cell averages. Robust, very dissipative. Standard as a **startup** strategy: run first order until the shock is established, then switch to second order.
 
 ### MUSCL with limiters
 
@@ -184,7 +184,7 @@ Knobs: spatial order, limiter type, the variable set limited, and sometimes a li
 US3D: MUSCL with TVD limiting of species densities, velocity, pressure and specific internal energy; on unstructured grids the Darwish–Moukalled virtual-point stencil; QUICK-type third order and unbiased higher-order KEC fluxes as options (Candler et al. 2015; Candler, Subbareddy & Nompelis 2015). MFC reconstructs primitive (optionally characteristic) variables with WENO.
 
 !!! warning "Calibration"
-    Limiter defaults for DPLR, LAURA and US3D, and DPLR's variable set, are still to be filled in from their user manuals during Lesson 0.3. The US3D details above are from the 2015 papers and may have changed since.
+    Limiter defaults for DPLR, LAURA and US3D, and DPLR's variable set, are still to be filled in from their user manuals. The US3D details above are from the 2015 papers and may have changed since.
 
 ## See also
 

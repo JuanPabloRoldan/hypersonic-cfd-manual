@@ -5,7 +5,7 @@ status: draft
 # Point and line relaxation
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.5 time advancement; Track 3.3–3.4 · **Depth:** [deep] · **Taught in:** [Track 3](../../course/track-3.md) (pending; previewed in Lesson 0.1)
+**Slot:** Track 0.5 time advancement; Track 3.3–3.4 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -149,7 +149,7 @@ Line solves in the extruded wall layers, FMPR elsewhere ([above](#unstructured-l
 
 ### LU-SGS
 
-Lower–upper symmetric Gauss–Seidel (Yoon & Jameson): approximate factorization with forward and backward sweeps and a scalar diagonal, so no block inversions are needed. Cheap per iteration, but it converges more and more slowly as the grid is stretched. *(Track 3.4.)*
+Lower–upper symmetric Gauss–Seidel (Yoon & Jameson): approximate factorization with forward and backward sweeps and a scalar diagonal, so no block inversions are needed. Cheap per iteration, but it converges more and more slowly as the grid is stretched.
 
 ### Decoupled DPLR
 

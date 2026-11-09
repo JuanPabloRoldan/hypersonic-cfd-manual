@@ -20,9 +20,9 @@ This appendix answers one question: which choice does each code make in each sol
 
 ## Supporting tools {#supporting-tools}
 
-<a id="radiation-solvers"></a>**Radiation**: NEQAIR (NASA Ames; line-by-line, post-processed on CFD solutions, usually along lines of sight), HARA (NASA Langley; band model, coupled inside LAURA), NERO (radiation in the Ares framework). To be expanded in [Track 6](../course/track-6.md).
+<a id="radiation-solvers"></a>**Radiation**: NEQAIR (NASA Ames; line-by-line, post-processed on CFD solutions, usually along lines of sight), HARA (NASA Langley; band model, coupled inside LAURA), NERO (radiation in the Ares framework).
 
-<a id="material-response-tools"></a>**Material response**: FIAT (1D implicit ablation and thermal response with B′ tables; the design workhorse), CHAR (multi-D finite element), Icarus (Ares framework), PATO (open, OpenFOAM-based porous-medium model with Darcy flow and Mutation++), PuMA (microstructure to effective properties). To be expanded in [Track 7](../course/track-7.md).
+<a id="material-response-tools"></a>**Material response**: FIAT (1D implicit ablation and thermal response with B′ tables; the design workhorse), CHAR (multi-D finite element), Icarus (Ares framework), PATO (open, OpenFOAM-based porous-medium model with Darcy flow and Mutation++), PuMA (microstructure to effective properties).
 
 <a id="mutationpp"></a>**Mutation++**: open VKI library for thermodynamics, transport (including Stefan–Maxwell diffusion), kinetics and gas–surface interaction, shared by SU2-NEMO, PATO and others; see [closing the system](../reference/foundations/closing-the-system.md).
 

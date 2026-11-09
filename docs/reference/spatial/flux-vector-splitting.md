@@ -5,7 +5,7 @@ status: draft
 # Flux-vector splitting
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.4 flux functions · **Depth:** [deep] · **Taught in:** [Lesson 0.4](../../course/track-0/0-4-flux-functions.md) (pending); reentry use in [Track 2.3](../../course/track-2.md)
+**Slot:** Track 0.4 flux functions · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -102,7 +102,7 @@ Splits the flux with polynomials in the local Mach number, chosen so $\mathbf F^
 
 ### AUSM family
 
-Liou's Advection Upstream Splitting Method splits the flux into a convective part (a mass flux upwinded with an interface Mach number) and a pressure part (split separately). Variants (AUSM+, AUSM+-up, AUSMPW+, ...) add low-dissipation behaviour in boundary layers, all-speed preconditioning and shock-stability fixes. Contacts are resolved well. Widely used in SU2 and commercial codes. *(Details to be written in Lesson 0.4.)*
+Liou's Advection Upstream Splitting Method splits the flux into a convective part (a mass flux upwinded with an interface Mach number) and a pressure part (split separately). Variants (AUSM+, AUSM+-up, AUSMPW+, ...) add low-dissipation behaviour in boundary layers, all-speed preconditioning and shock-stability fixes. Contacts are resolved well. Widely used in SU2 and commercial codes. *(Details to be written.)*
 
 ### Flux splitting for finite-difference WENO
 

@@ -5,7 +5,7 @@ status: draft
 # Discretization families
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.2 spatial discretization · **Depth:** [deep] · **Taught in:** [Lesson 0.2](../../course/track-0/0-2-spatial-discretization.md) (pending)
+**Slot:** Track 0.2 spatial discretization · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -18,7 +18,7 @@ Each family makes different trade-offs between conservation, geometric flexibili
 
 ## How it works
 
-*(Outline, to be written in Lesson 0.2.)*
+*(Outline, to be written.)*
 
 ## Variants
 

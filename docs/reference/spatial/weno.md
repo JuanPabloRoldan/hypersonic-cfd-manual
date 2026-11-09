@@ -5,7 +5,7 @@ status: draft
 # ENO, WENO and TENO reconstruction
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.3 reconstruction; Track 2.7 · **Depth:** [deep] · **Taught in:** [Lesson 0.3](../../course/track-0/0-3-reconstruction.md) (pending)
+**Slot:** Track 0.3 reconstruction; Track 2.7 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -126,7 +126,7 @@ Knobs: scheme and order, weight variant, $\varepsilon$ or $C_T$, reconstructed v
 
 ## Which codes
 
-MFC uses WENO (several orders, with JS/M/Z-type variants) on primitive variables, with HLLC fluxes and explicit SSP-RK time stepping. [ALPACA](../../codes/index.md#alpaca) and JAX-Fluids (TU Munich) offer WENO, WENO-Z, WENO-CU6, WENO-AO and TENO variants. US3D and other research codes use high-order or low-dissipation options for DNS of transition; production aeroheating codes (DPLR, LAURA) stay second order. Why they stay there is a [Track 2.7](../../course/track-2.md) topic.
+MFC uses WENO (several orders, with JS/M/Z-type variants) on primitive variables, with HLLC fluxes and explicit SSP-RK time stepping. [ALPACA](../../codes/index.md#alpaca) and JAX-Fluids (TU Munich) offer WENO, WENO-Z, WENO-CU6, WENO-AO and TENO variants. US3D and other research codes use high-order or low-dissipation options for DNS of transition; production aeroheating codes (DPLR, LAURA) stay second order. Why they stay there is a Track 2.7 topic.
 
 !!! warning "Calibration"
     Option lists change between code versions; check current documentation.

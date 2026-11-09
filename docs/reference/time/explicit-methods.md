@@ -5,7 +5,7 @@ status: outline
 # Explicit methods
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.5 time advancement; Track 3.1 · **Depth:** [deep] · **Taught in:** [Lesson 0.5](../../course/track-0/0-5-time-advancement.md) (pending)
+**Slot:** Track 0.5 time advancement; Track 3.1 · **Depth:** [deep]
 </div>
 
 ## What it is

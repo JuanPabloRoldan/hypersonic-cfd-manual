@@ -1,7 +1,7 @@
 # Viscous fluxes and gradients
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.2/0.4, the viscous part of the residual · **Depth:** [deep] · **Taught in:** [Lesson 0.1](../../course/track-0/0-1-governing-equations.md) (overview); details in Lesson 0.2
+**Slot:** Track 0.2/0.4, the viscous part of the residual · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -57,7 +57,7 @@ $$
 Re_\Delta = \frac{\rho\,a\,\Delta n}{\mu} \lesssim 1\ \text{(order of magnitude)},
 $$
 
-an accepted practice supported by grid studies in the aeroheating literature rather than a theorem ([Track 2.4](../../course/track-2.md)). Those thin cells are also why the [viscous time-step limit](../time/time-step-limits.md) binds for explicit schemes.
+an accepted practice supported by grid studies in the aeroheating literature rather than a theorem. Those thin cells are also why the [viscous time-step limit](../time/time-step-limits.md) binds for explicit schemes.
 
 ## Variants
 
@@ -67,7 +67,7 @@ Keep only viscous derivatives normal to the wall. Cheaper; appropriate for attac
 
 ### Discontinuous Galerkin viscous treatments
 
-DG needs special viscous discretizations (BR2, interior penalty, LDG), but these are still symmetric, not upwinded. *(Track 2.7.)*
+DG needs special viscous discretizations (BR2, interior penalty, LDG), but these are still symmetric, not upwinded.
 
 ## Implications
 

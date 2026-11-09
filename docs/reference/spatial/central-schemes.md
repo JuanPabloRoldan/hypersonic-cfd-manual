@@ -5,7 +5,7 @@ status: draft
 # Central schemes and dissipation
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.4 flux functions; Track 2.5–2.6 · **Depth:** [deep] · **Taught in:** [Lesson 0.4](../../course/track-0/0-4-flux-functions.md), [Track 2](../../course/track-2.md) (pending)
+**Slot:** Track 0.4 flux functions; Track 2.5–2.6 · **Depth:** [deep]
 </div>
 
 ## What it is

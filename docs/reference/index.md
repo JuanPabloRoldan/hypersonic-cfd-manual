@@ -1,6 +1,6 @@
 # Theory manual
 
-The theory manual is ordered the way a solver is built: first the equations being solved and the physical models that close them, then how the equations are discretized in space, how the fluxes and sources are evaluated, and how the discrete system is advanced to a solution. Every page follows the same template (what it is, the problem it solves, how it works, variants, implications, in a run, which codes; see [how to use this manual](../how-to-use.md#page-anatomy)) and can be read cold. The [course](../course/index.md) teaches the same material in a different order and links into these pages.
+The theory manual is ordered the way a solver is built: first the equations being solved and the physical models that close them, then how the equations are discretized in space, how the fluxes and sources are evaluated, and how the discrete system is advanced to a solution. Every page follows the same template (what it is, the problem it solves, how it works, variants, typical values, trade-offs, effects on stability, implications, in a run, which codes; see [how to use this manual](../how-to-use.md#page-anatomy)) and can be read cold.
 
 Pages marked with a hollow circle in the sidebar are outlines; half-filled circles are drafts.
 
@@ -68,4 +68,4 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 
 ## Chapters still to come
 
-Shock-layer radiation, material response and ablation, and the physics topics of Track 1 (stagnation heating, entropy layers, SWBLI, shock–shock interactions, transition, rarefaction) will become chapters as they are taught. Their outlines are in the [course tracks](../course/index.md).
+Shock-layer radiation, material response and ablation, and further entry-flow physics (stagnation heating, entropy layers, SWBLI, shock–shock interactions, transition, rarefaction) will be added as chapters in this order.

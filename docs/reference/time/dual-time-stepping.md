@@ -5,7 +5,7 @@ status: outline
 # Dual time stepping
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.5; Track 3.6 · **Depth:** [deep] · **Taught in:** [Track 3](../../course/track-3.md) (pending)
+**Slot:** Track 0.5; Track 3.6 · **Depth:** [deep]
 </div>
 
 ## What it is

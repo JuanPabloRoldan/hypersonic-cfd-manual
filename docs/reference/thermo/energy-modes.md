@@ -5,7 +5,7 @@ status: draft
 # Energy modes and thermodynamics
 
 <div class="page-meta" markdown>
-**Slot:** Track 4.1 · **Depth:** [deep] · **Taught in:** [Track 4](../../course/track-4.md) (pending; previewed in Lesson 0.1 follow-ups)
+**Slot:** Track 4.1 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -68,7 +68,7 @@ Each species carries a heat of formation $h_s^0$ (zero for N₂ and O₂ by conv
 
 ### Partition functions and polynomial fits
 
-*(Outline, Track 4.1.)* All of the above follow from the partition function of each mode. Production codes often use NASA polynomial fits for $c_p(T)$, $h(T)$ and $s(T)$ instead of explicit mode sums, which is simpler in a one-temperature model but needs care in multi-temperature models where modes have different temperatures.
+*(Outline.)* All of the above follow from the partition function of each mode. Production codes often use NASA polynomial fits for $c_p(T)$, $h(T)$ and $s(T)$ instead of explicit mode sums, which is simpler in a one-temperature model but needs care in multi-temperature models where modes have different temperatures.
 
 ## Implications
 

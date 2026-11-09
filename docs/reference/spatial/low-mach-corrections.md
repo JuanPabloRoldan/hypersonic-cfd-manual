@@ -5,7 +5,7 @@ status: draft
 # Low-Mach corrections
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.4 flux functions (sometimes 0.3 reconstruction); Track 2.2 and 2.4 · **Depth:** [deep] · **Taught in:** [Lesson 0.4](../../course/track-0/0-4-flux-functions.md), [Track 2](../../course/track-2.md) (pending)
+**Slot:** Track 0.4 flux functions (sometimes 0.3 reconstruction); Track 2.2 and 2.4 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -77,7 +77,7 @@ MFC's `pi_fac` modifies the stiffened-gas $\pi_\infty$ of liquid phases to raise
 
 ### Preconditioning
 
-Low-Mach preconditioning (Turkel; Weiss–Smith) rescales the time derivatives and the dissipation together, so both accuracy and convergence improve at low Mach. It is the standard all-speed approach in commercial density-based solvers. *(To be expanded in Track 3.4.)*
+Low-Mach preconditioning (Turkel; Weiss–Smith) rescales the time derivatives and the dissipation together, so both accuracy and convergence improve at low Mach. It is the standard all-speed approach in commercial density-based solvers. *(To be expanded.)*
 
 ## Implications
 

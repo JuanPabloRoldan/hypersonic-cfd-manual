@@ -145,4 +145,4 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - N. Hoppe et al., ALPACA papers and documentation (TU Munich).
 
 !!! warning "Calibration"
-    Citations for FUN3D, SU2-NEMO, Eilmer and SPARTA documentation, and for the radiation and material-response tools, will be added as those topics are taught.
+    Citations for FUN3D, SU2-NEMO, Eilmer and SPARTA documentation, and for the radiation and material-response tools, will be added as those topics are written up.

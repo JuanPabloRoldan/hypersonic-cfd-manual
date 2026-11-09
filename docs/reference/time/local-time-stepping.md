@@ -1,7 +1,7 @@
 # Local time stepping
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.5 time advancement; Track 3.5–3.6 · **Depth:** [deep] · **Taught in:** [Lesson 0.1](../../course/track-0/0-1-governing-equations.md) (follow-up questions), [Track 3](../../course/track-3.md) (pending)
+**Slot:** Track 0.5 time advancement; Track 3.5–3.6 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -39,7 +39,7 @@ Naive LTS (every cell at its own step, never synchronized) destroys time accurac
 - **Sub-stepped local ODEs**: a cell-local subsystem (stiff chemistry, or a sub-grid bubble's Rayleigh–Plesset/Keller–Miksis equation in a Lagrangian bubble model) is integrated with many adaptive substeps inside one flow step and rejoins the flow at the shared time level. This is time-accurate to the order of the coupling. Adaptive sub-stepping of bubble ODEs in multiphase codes (MFC's bubble models offer this; check its documentation for the current options) is one example, and [operator-split chemistry](../sources/stiff-sources.md#operator-splitting-with-sub-stepped-chemistry) is the reacting-flow version.
 
 !!! warning "Calibration"
-    As far as is known here, production reentry codes rarely use time-accurate LTS for unsteady runs; they rely on implicit [dual time stepping](dual-time-stepping.md) instead. To be checked against code documentation in Track 3.6.
+    As far as is known here, production reentry codes rarely use time-accurate LTS for unsteady runs; they rely on implicit [dual time stepping](dual-time-stepping.md) instead. To be checked against code documentation.
 
 ## Implications
 

@@ -5,7 +5,7 @@ status: outline
 # Surface energy balance
 
 <div class="page-meta" markdown>
-**Slot:** Track 5.2 · **Depth:** [deep] · **Taught in:** [Track 5](../../course/track-5.md) (pending)
+**Slot:** Track 5.2 · **Depth:** [deep]
 </div>
 
 ## What it is

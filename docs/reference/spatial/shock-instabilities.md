@@ -5,7 +5,7 @@ status: draft
 # Shock instabilities: the carbuncle
 
 <div class="page-meta" markdown>
-**Slot:** Track 2.2 · **Depth:** [deep] · **Taught in:** [Track 2](../../course/track-2.md) (pending)
+**Slot:** Track 2.2 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -41,7 +41,7 @@ Contact-resolving solvers, [Roe](riemann-solvers.md#roe) and [HLLC](riemann-solv
 - **Shock-stable HLLC variants**: HLLCM (Shen et al., smearing shear velocities across the contact; too dissipative for boundary layers alone), pressure-dissipation HLLC (Xie et al.), HLLC-ADC and HLLC-SWM (Simon & Mandal, controlling the anti-diffusive part near shocks).
 - **Eigenvalue limiting** in upwind fluxes: keep the convective eigenvalue $u'$ in the dissipation from reaching zero at the stagnation point, $\sqrt{\lambda^2 + \varepsilon^2}$ with $\varepsilon = \varepsilon_0 a$, $0.1\le\varepsilon_0\le0.3$. This is the production fix in Candler's group's codes, paired with grid alignment, and is applied when the shock-normal Mach number exceeds about 6. It must be switched off in boundary layers. See [modified Steger–Warming](flux-vector-splitting.md#eigenvalue-limiting).
 - **Pressure-weighted Jacobians** for modified Steger–Warming: revert smoothly to the original, dissipative Steger–Warming flux across strong pressure jumps ([pressure weighting](flux-vector-splitting.md#pressure-weighting)).
-- **Shock-aligned or shock-fitted grids** reduce the trigger: DPLR, LAURA and US3D all have shock-tailoring utilities ([shock alignment](discretization-families.md#shock-alignment)); see also [Track 2.1](../../course/track-2.md).
+- **Shock-aligned or shock-fitted grids** reduce the trigger: DPLR, LAURA and US3D all have shock-tailoring utilities ([shock alignment](discretization-families.md#shock-alignment)).
 
 !!! note "A related but different error: tetrahedra at the shock"
     A strong shock crossing tetrahedra generates spurious vorticity from an imbalance of momentum flux on the element faces, even with a first-order flux. It is not a carbuncle (no instability needs to grow), and added dissipation does not remove it once created. The cure is hexahedral, shock-aligned cells at the bow shock. See [element types at strong shocks](discretization-families.md#element-types-at-strong-shocks).
@@ -70,7 +70,7 @@ A capsule or cylinder solution whose bow shock develops a nose or a bulge on the
 
 ## Which codes
 
-DPLR and US3D rely on [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming), which inherits FVS robustness at shocks; LAURA uses Roe with an entropy fix and shock-aligned grids; ALPACA offers HLLC-LM. *(To be verified per code in Track 2.2.)*
+DPLR and US3D rely on [modified Steger–Warming](flux-vector-splitting.md#modified-steger-warming), which inherits FVS robustness at shocks; LAURA uses Roe with an entropy fix and shock-aligned grids; ALPACA offers HLLC-LM. *(To be verified per code.)*
 
 ## See also
 

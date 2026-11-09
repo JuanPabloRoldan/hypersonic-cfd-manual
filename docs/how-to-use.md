@@ -1,14 +1,8 @@
 # How to use this manual
 
-## Theory manual vs course
+## What this is
 
-The **theory manual** is ordered like a solver's theory guide: numbered chapters from the governing equations through physical models, discretization, fluxes, sources and time integration. Each page covers one method or model family and can be read cold.
-
-The **course** is a teaching sequence. Lessons build on each other, tell a story, contrast choices, and end in checkpoint questions. Read them in order.
-
-When a lesson mentions a Riemann solver, a limiter or a relaxation method, it links to the reference page, and the theory page links back to the lesson where it was taught.
-
-The rule of thumb: the lesson is where you learn *why*; the theory manual is where you come back for *what exactly*.
+A theory manual ordered like a solver's theory guide: numbered chapters from the governing equations through physical models, discretization, fluxes, sources and time integration. Each page covers one method or model family and can be read cold. It is written alongside a self-study course on entry aerothermodynamics; the **Slot** line at the top of each page names the place in that course's outline (Track 0 is the anatomy of a solver, later tracks the physics and numerics built on it).
 
 ## Depth tags
 
@@ -41,14 +35,15 @@ Theory pages follow a fixed template, so you always know where to look:
 2. **The problem it solves**: why the method exists.
 3. **How it works**: equations, with derivations where they carry the understanding.
 4. **Variants**: one section per variant, each with its own anchor so other pages can link straight to it.
-5. **Implications**: the six-lens table.
-6. **In a run**: the input knob that selects it, and the symptoms it produces.
-7. **Which codes**: who uses it and how they differ.
-8. **See also** and **References**.
+5. **Typical values**, **Trade-offs** and **Effects on stability and robustness**: explicit lists of parameter ranges, measured costs and convergence numbers, physical values, and what each choice gains and costs, each number with its source.
+6. **Implications**: the six-lens table.
+7. **In a run**: the input knob that selects it, and the symptoms it produces.
+8. **Which codes**: who uses it and how they differ.
+9. **See also** and **References**.
 
 ## Status icons
 
-In the sidebar, an **outline** page (hollow circle) has headings and pointers only. A **draft** page (half-filled circle) has key formulas and facts in place, but its lesson hasn't been taught yet. Pages without an icon are written.
+In the sidebar, an **outline** page (hollow circle) has headings and pointers only. A **draft** page (half-filled circle) has key formulas and facts in place, with some sections still to be written. Pages without an icon are written.
 
 ## Calibration notes
 

@@ -5,7 +5,7 @@ status: draft
 # Space marching: thin-layer and parabolized Navier–Stokes
 
 <div class="page-meta" markdown>
-**Slot:** Track 2.10 (governing-equation reductions) · **Depth:** [feel], with the math · **Taught in:** [Lesson 0.1](../../course/track-0/0-1-governing-equations.md) (follow-ups), [Track 2](../../course/track-2.md)
+**Slot:** Track 2.10 (governing-equation reductions) · **Depth:** [feel], with the math
 </div>
 
 ## What it is
@@ -88,7 +88,7 @@ Knobs: starting plane, marching step, Vigneron safety factor. Symptoms: departur
 ## Which codes
 
 !!! warning "Calibration"
-    PNS codes were prominent in NASA and industry for slender vehicles (e.g. UPS at Langley); some general codes offer thin-layer options. Specific current availability to be checked in Track 2.10.
+    PNS codes were prominent in NASA and industry for slender vehicles (e.g. UPS at Langley); some general codes offer thin-layer options. Specific current availability to be checked.
 
 ## See also
 

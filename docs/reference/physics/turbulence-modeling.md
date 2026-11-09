@@ -5,7 +5,7 @@ status: draft
 # Turbulence modeling for hypersonic boundary layers
 
 <div class="page-meta" markdown>
-**Slot:** Track 1.7 (closures for the Reynolds-averaged equations) · **Depth:** [feel] · **Taught in:** [Track 1](../../course/track-1.md) (pending)
+**Slot:** Track 1.7 (closures for the Reynolds-averaged equations) · **Depth:** [feel]
 </div>
 
 ## What it is
@@ -47,7 +47,7 @@ The Huang et al. DNS reproduce CUBRC's Mach 11.1 flat-plate experiment (wall she
 
 ## Variants
 
-*(Track 1.7: Spalart–Allmaras, SST and $k$–$\omega$ variants used in reentry codes; wall functions and why they fail with strong wall heat transfer; LES/DNS for transition and SWBLI.)*
+*(To be written: Spalart–Allmaras, SST and $k$–$\omega$ variants used in reentry codes; wall functions and why they fail with strong wall heat transfer; LES/DNS for transition and SWBLI.)*
 
 ## Implications
 
@@ -66,7 +66,7 @@ Knobs: turbulence model, compressibility correction, $Pr_t$ or heat-flux model, 
 
 ## Which codes
 
-*(To be filled in Track 1.7.)* Production reentry codes use one- and two-equation RANS models (Baldwin–Lomax historically, SA and SST more recently) with constant $Pr_t$ by default.
+*(To be written.)* Production reentry codes use one- and two-equation RANS models (Baldwin–Lomax historically, SA and SST more recently) with constant $Pr_t$ by default.
 
 ## See also
 

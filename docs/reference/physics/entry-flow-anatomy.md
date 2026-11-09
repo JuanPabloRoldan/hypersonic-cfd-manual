@@ -5,7 +5,7 @@ status: draft
 # Entry flow anatomy
 
 <div class="page-meta" markdown>
-**Slot:** Track 1.1 · **Depth:** [deep] · **Taught in:** [Track 1](../../course/track-1.md) (pending; the density and standoff section was covered in Lesson 0.1 follow-ups)
+**Slot:** Track 1.1 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -23,7 +23,7 @@ Every aerothermal quantity is tied to one of these regions, and each region stre
 <figcaption>Bow shock, standoff, subsonic stagnation pocket and supersonic shock layer around a sphere at M = 20 (Billig's perfect-gas shock-shape correlation; sonic line schematic).</figcaption>
 </figure>
 
-*(The full anatomy, region by region, is written in Track 1.1.)*
+*(The full anatomy, region by region, is still to be written.)*
 
 ### Post-shock density and standoff
 
@@ -49,11 +49,11 @@ In **nonequilibrium**, the composition right behind the shock is still frozen, s
 
 ## Variants
 
-*(Outline, Track 1.1: stagnation region, sonic line, shock layer, boundary layer, shoulder expansion, wake and backshell.)*
+*(Outline: stagnation region, sonic line, shock layer, boundary layer, shoulder expansion, wake and backshell.)*
 
 ## Implications
 
-*(To be filled in Track 1.1.)*
+*(To be written.)*
 
 ## In a run
 

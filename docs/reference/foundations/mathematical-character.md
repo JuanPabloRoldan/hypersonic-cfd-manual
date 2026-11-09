@@ -1,7 +1,7 @@
 # Mathematical character: hyperbolic, parabolic, elliptic
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.1 governing equations · **Depth:** [deep] · **Taught in:** [Lesson 0.1](../../course/track-0/0-1-governing-equations.md)
+**Slot:** Track 0.1 governing equations · **Depth:** [deep]
 </div>
 
 ## What it is

@@ -1,6 +1,6 @@
 # Implications matrix
 
-Every method covered so far, judged on the six lenses side by side. Each row links to its reference page, where the full table and the reasoning live. Rows are added as the course covers new methods.
+Every method covered so far, judged on the six lenses side by side. Each row links to its reference page, where the full table and the reasoning live. Rows are added as new methods are written up.
 
 **Legend:** ✓ strength · ✗ weakness · ~ depends or mixed. Short phrases, not verdicts; read the reference page before relying on a cell.
 

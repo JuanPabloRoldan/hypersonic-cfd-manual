@@ -1,7 +1,7 @@
 # Gas models
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.1 closures; Track 4 · **Depth:** [deep] for the structure · **Taught in:** [Lesson 0.1](../../course/track-0/0-1-governing-equations.md), deepened in [Track 4](../../course/track-4.md)
+**Slot:** Track 0.1 closures; Track 4 · **Depth:** [deep] for the structure
 </div>
 
 ## What it is

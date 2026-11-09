@@ -1,7 +1,7 @@
 # Time-step limits
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.5 time advancement; Track 3.1 · **Depth:** [deep] · **Taught in:** [Lesson 0.1](../../course/track-0/0-1-governing-equations.md) (preview), [Track 3](../../course/track-3.md)
+**Slot:** Track 0.5 time advancement; Track 3.1 · **Depth:** [deep]
 </div>
 
 ## What it is

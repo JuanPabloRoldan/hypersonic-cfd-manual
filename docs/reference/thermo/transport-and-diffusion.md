@@ -5,7 +5,7 @@ status: draft
 # Transport and diffusion
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.1 closures; Track 4.6 · **Depth:** [feel], with the diffusion hierarchy at [deep] · **Taught in:** [Track 4](../../course/track-4.md) (pending; previewed in Lesson 0.1 follow-ups)
+**Slot:** Track 0.1 closures; Track 4.6 · **Depth:** [feel], with the diffusion hierarchy at [deep]
 </div>
 
 ## What it is
@@ -53,7 +53,7 @@ which requires solving an $n_s\times n_s$ linear system per cell, $O(n_s^3)$. Wh
 Cross-diffusion matters when molecular masses differ a lot: H₂/He atmospheres (gas giants), ablation products (H, C and their compounds) mixing with air, and ionized flows with light electrons. For neutral air, where N, O, N₂ and O₂ have similar masses, SCEBD is usually close to Stefan–Maxwell.
 
 !!! warning "Calibration"
-    The size of the heat-flux difference between diffusion models for catalytic walls in air is generally reported as modest, but should be quoted only from a specific study (Track 4.6 / 5.1).
+    The size of the heat-flux difference between diffusion models for catalytic walls in air is generally reported as modest, but should be quoted only from a specific study.
 
 ### Ambipolar diffusion {#ambipolar-diffusion}
 
@@ -82,7 +82,7 @@ Knobs: transport model, diffusion model, Lewis/Schmidt numbers if constant. Symp
 
 ## Which codes
 
-*(To be filled in Track 4.6.)*
+*(To be written.)*
 
 ## See also
 

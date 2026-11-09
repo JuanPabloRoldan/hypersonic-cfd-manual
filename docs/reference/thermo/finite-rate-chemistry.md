@@ -1,7 +1,7 @@
 # Finite-rate chemistry
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.1 closures; Track 4.3 · **Depth:** [deep] · **Taught in:** [Lesson 0.1](../../course/track-0/0-1-governing-equations.md) (follow-ups), [Track 4](../../course/track-4.md)
+**Slot:** Track 0.1 closures; Track 4.3 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -82,7 +82,7 @@ Electrons are a species with a tiny molar mass. Many codes don't solve an equati
 
 ### Mechanisms
 
-Park's air mechanisms (5- and 11-species), Dunn–Kang, and newer QCT-informed rates; CO₂–N₂ mechanisms for Mars; N₂–CH₄ for Titan. *(Track 4.3.)*
+Park's air mechanisms (5- and 11-species), Dunn–Kang, and newer QCT-informed rates; CO₂–N₂ mechanisms for Mars; N₂–CH₄ for Titan.
 
 ## Implications
 
@@ -90,7 +90,7 @@ Park's air mechanisms (5- and 11-species), Dunn–Kang, and newer QCT-informed r
 |---|---|
 | Time step and cost | $O(n_r)$ rate evaluations with `exp` and powers per cell; source Jacobians for implicit treatment; stiffness. |
 | Steady vs unsteady | Stiff in both; needs [implicit or split treatment](../sources/stiff-sources.md). |
-| Accuracy | Rate uncertainty is one of the main aeroheating uncertainty sources ([Track 8.2](../../course/track-8.md)); composition at the wall controls catalytic heating. |
+| Accuracy | Rate uncertainty is one of the main aeroheating uncertainty sources; composition at the wall controls catalytic heating. |
 | Robustness | Negative species densities, explosive overshoot with explicit treatment, startup failures. |
 | Physics captured or lost | Chemical lag, recombination freezing in expansions and wakes, ionization (11-species). |
 | Hardware / parallel fit | Pointwise and parallel; transcendental functions and branching cost GPU efficiency. |

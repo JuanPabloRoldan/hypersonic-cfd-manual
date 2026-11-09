@@ -1,7 +1,7 @@
 # Implicit methods and Jacobians
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.5 time advancement; Track 3 · **Depth:** [deep] · **Taught in:** [Lesson 0.1](../../course/track-0/0-1-governing-equations.md) (preview), [Lesson 0.5](../../course/track-0/0-5-time-advancement.md) (pending)
+**Slot:** Track 0.5 time advancement; Track 3 · **Depth:** [deep]
 </div>
 
 ## What it is
@@ -84,7 +84,7 @@ Treat only the sources implicitly and the fluxes explicitly. See [stiff source t
 
 ### Newton–Krylov and JFNK
 
-Krylov solvers that need only Jacobian–vector products, which can be approximated by finite differences of the residual (Jacobian-free). *(Track 3.4.)*
+Krylov solvers that need only Jacobian–vector products, which can be approximated by finite differences of the residual (Jacobian-free).
 
 ## Implications
 
@@ -95,7 +95,7 @@ Krylov solvers that need only Jacobian–vector products, which can be approxima
 | Accuracy | Converged steady solutions don't depend on the left-hand-side approximation; time-accurate runs need subiteration convergence. |
 | Robustness | Large steps can drive the solution through unphysical states early on; CFL ramping and startup strategies matter. |
 | Physics captured or lost | Large time steps filter out fast transients by design; fine for steady flow, wrong for wave-resolving physics. |
-| Hardware / parallel fit | Global coupling and recursive solves (Gauss–Seidel, line solves) are harder on GPUs than explicit updates. See [Track 3.8](../../course/track-3.md). |
+| Hardware / parallel fit | Global coupling and recursive solves (Gauss–Seidel, line solves) are harder on GPUs than explicit updates. |
 
 ## In a run
 

@@ -1,17 +1,14 @@
 # Hypersonic CFD Manual
 
-A course and a lookup manual for atmospheric entry: hypersonic flow physics, the numerical methods behind production aeroheating codes, high-temperature thermochemistry, gas–surface interaction, radiation and thermal protection system (TPS) analysis.
+A theory manual for atmospheric entry: hypersonic flow physics, the numerical methods behind production aeroheating codes, high-temperature thermochemistry, gas–surface interaction, radiation and thermal protection system (TPS) analysis.
 
 **Site:** https://juanpabloroldan.github.io/hypersonic-cfd-manual/
 
-The site has two halves that link into each other:
-
-- **Theory manual**: eleven numbered chapters in the order a solver is built (equations, physical models, spatial discretization, flux functions, sources, time integration, verification), with one page per method or model family (Riemann solvers, limiters, relaxation methods, gas models, ...), each with the same structure: what it is, the problem it solves, how it works, variants, implications for a run, which codes use it.
-- **Course**: Tracks 0–9, taught in order, each lesson ending in checkpoint questions. Track 0 (anatomy of a solver) comes first.
+- **Theory manual**: eleven numbered chapters in the order a solver is built (equations, physical models, spatial discretization, flux functions, sources, time integration, verification), with one page per method or model family (Riemann solvers, limiters, relaxation methods, gas models, ...), each with the same structure: what it is, the problem it solves, how it works, variants, typical values and trade-offs, implications for a run, which codes use it.
 
 Plus an appendix comparing the production codes slot by slot, a glossary and a bibliography.
 
-The manual grows as the course is taught; pages marked *outline* in the sidebar are planned but not yet written.
+The manual is growing; pages marked *outline* in the sidebar are planned but not yet written. It is written alongside a self-study course whose lessons and checkpoints are kept separately.
 
 ## Building
 

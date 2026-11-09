@@ -1,13 +1,10 @@
 # Authoring conventions for this repository
 
-This repo is a MkDocs (Material) site that serves two purposes at once:
+This repo is a MkDocs (Material) site holding **a theory manual and nothing else**: one page per method or model family in `docs/reference/`, written so it can be read cold, organized like a commercial code's theory guide (the STAR-CCM+ theory guide is the model). Chapters are numbered in the order a solver is built: 1 fundamental equations, 2 entry flow physics, 3 gas models and thermochemistry, 4 turbulence, 5 boundary conditions and walls, 6 spatial discretization, 7 inviscid flux functions, 8 source terms, 9 time integration and solvers, 10 reduced equations, 11 verification and diagnosis, then appendices. Numbers live in the `nav` labels in `mkdocs.yml` (and in `docs/reference/index.md`), not in file names, so URLs stay stable. New chapters (radiation, material response, entry-flow physics topics) are inserted where they belong in that order and the later numbers shifted.
 
-1. **A theory manual** (`docs/reference/`, shown as the "Theory manual" tab): one page per method or model family, written so it can be read cold, organized like a commercial code's theory guide (the STAR-CCM+ theory guide is the model). Chapters are numbered in the order a solver is built: 1 fundamental equations, 2 entry flow physics, 3 gas models and thermochemistry, 4 turbulence, 5 boundary conditions and walls, 6 spatial discretization, 7 inviscid flux functions, 8 source terms, 9 time integration and solvers, 10 reduced equations, 11 verification and diagnosis, then appendices. Numbers live in the `nav` labels in `mkdocs.yml` (and in `docs/reference/index.md`), not in file names, so URLs stay stable. New chapters (radiation, material response, Track 1 physics topics) are inserted where they belong in that order and the later numbers shifted.
-2. **A course** (`docs/course/`): the teaching sequence, Tracks 0–9, with lessons that explain, connect and end in checkpoint questions.
+Plus `docs/glossary.md`, `docs/references.md`, the implications matrix, and one appendix page, `docs/codes/index.md` ("Codes at a glance"), which compares the production codes slot by slot and lists their primary sources.
 
-Plus `docs/glossary.md`, `docs/references.md`, and one appendix page, `docs/codes/index.md` ("Codes at a glance"), which compares the production codes slot by slot and lists their primary sources.
-
-Lessons teach and link out. Theory pages hold the durable explanation. When a lesson explains something at length, the theory page should hold the full version and the lesson should summarize it and link to it.
+**The course is not in this repo.** Lessons, checkpoint questions, answers, outcomes and the session log live privately in the owner's Claude project ("Reentry Numerics": `main.md`, `course/track-*.md`, `course/manual-review.md`). Don't add lesson pages, checkpoint outcomes, "taught in" links, learner progress or personal information to the site. When teaching produces a durable explanation, it goes into the theory page for that method. The `Slot:` line in each page's `page-meta` block names the course-outline slot (Track 0.x etc.) as a plain label, not a link.
 
 **Codes are not organized as separate pages.** What a code does is recorded on the method pages, in each page's "Which codes" section, and summarized in the appendix table. Research and contrast codes (MFC, ALPACA/JAX-Fluids) appear only as alternatives or sources of extra numerics on method pages, not as subjects of their own. Link to a code with `codes/index.md#<code>` (anchors: `dplr`, `laura`, `us3d`, `fun3d`, `su2-nemo`, `eilmer`, `sparta`, `star-ccm`, `radiation-solvers`, `material-response-tools`, `mutationpp`, `mfc`, `alpaca`).
 
@@ -23,15 +20,17 @@ If the target page doesn't exist yet, create it as an outline stub (front matter
 
 Set in front matter and shown as an icon in the sidebar:
 
-- no status: written and taught.
-- `status: draft`: partly written (formulas or key facts in place), lesson still pending.
+- no status: written.
+- `status: draft`: key formulas and facts in place, some sections still to be written.
 - `status: outline`: section headings and pointers only.
+
+Whether the owner has reviewed a page is tracked in the project's `course/manual-review.md`, not on the site.
 
 Every reference page starts with a `page-meta` block:
 
 ```markdown
 <div class="page-meta" markdown>
-**Slot:** Track 0.4 flux functions · **Depth:** [deep] · **Taught in:** [Lesson 0.4](../../course/track-0/0-4-flux-functions.md)
+**Slot:** Track 0.4 flux functions · **Depth:** [deep]
 </div>
 ```
 
@@ -67,10 +66,6 @@ The six-lens implications table:
 | Physics captured or lost | |
 | Hardware / parallel fit | |
 
-## Lesson template
-
-Lessons live in `docs/course/`. Each has: the slot it anchors to, the narrative explanation (prose, with equations), links into reference pages, a contrast with MFC where it clarifies a choice, and **Checkpoint** questions. Model answers go inside collapsed `??? success "Model answer"` blocks so the page works for self-testing. Record the learner's checkpoint outcome in `docs/course/session-log.md`.
-
 ## Calibration
 
 Separate settled results from active debate or one group's preference. Many production codes (DPLR, LAURA, US3D, FIAT) are not open, so code-specific claims get a `!!! warning "Calibration"` admonition unless backed by a cited primary source (NTRS papers, AIAA/JCP papers, user manuals). Never state a code detail more confidently than the source allows.
@@ -92,7 +87,7 @@ When writing Markdown from Python, use raw strings (`r"""..."""`) so LaTeX such 
 
 ## Glossary
 
-`docs/glossary.md` uses this entry format, alphabetical. Entries whose checkpoint is still open are marked *provisional*.
+`docs/glossary.md` uses this entry format, alphabetical.
 
 ```
 ### <Term> (also: <aliases>)
