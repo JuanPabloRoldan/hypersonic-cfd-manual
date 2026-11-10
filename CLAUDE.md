@@ -4,7 +4,7 @@ This repo is a MkDocs (Material) site holding **a theory manual and nothing else
 
 Plus `docs/glossary.md`, `docs/references.md`, the implications matrix, and one appendix page, `docs/codes/index.md` ("Codes at a glance"), which compares the production codes slot by slot and lists their primary sources.
 
-**The course is not in this repo.** Lessons, checkpoint questions, answers, outcomes and the session log live privately in the owner's Claude project ("Reentry Numerics": `main.md`, `course/track-*.md`, `course/manual-review.md`). Don't add lesson pages, checkpoint outcomes, "taught in" links, learner progress or personal information to the site. When teaching produces a durable explanation, it goes into the theory page for that method. The `Slot:` line in each page's `page-meta` block names the course-outline slot (Track 0.x etc.) as a plain label, not a link.
+**The course is not in this repo.** Lessons, checkpoint questions, answers, outcomes and the session log live privately in the owner's Claude project ("Reentry Numerics": `main.md`, `course/track-*.md`, `course/manual-review.md`). Don't add lesson pages, checkpoint outcomes, "taught in" links, learner progress or personal information to the site. When teaching produces a durable explanation, it goes into the theory page for that method. Don't reference course tracks ("Track 6" etc.) anywhere on the site; point to manual pages, or say "planned chapter".
 
 **Codes are not organized as separate pages.** What a code does is recorded on the method pages, in each page's "Which codes" section, and summarized in the appendix table. Research and contrast codes (MFC, ALPACA/JAX-Fluids) appear only as alternatives or sources of extra numerics on method pages, not as subjects of their own. Link to a code with `codes/index.md#<code>` (anchors: `dplr`, `laura`, `us3d`, `fun3d`, `su2-nemo`, `eilmer`, `sparta`, `star-ccm`, `radiation-solvers`, `material-response-tools`, `mutationpp`, `mfc`, `alpaca`).
 
@@ -30,7 +30,7 @@ Every reference page starts with a `page-meta` block:
 
 ```markdown
 <div class="page-meta" markdown>
-**Slot:** Track 0.4 flux functions · **Depth:** [deep]
+**Chapter:** 7 Inviscid flux functions · **Depth:** [deep]
 </div>
 ```
 
@@ -92,7 +92,7 @@ When writing Markdown from Python, use raw strings (`r"""..."""`) so LaTeX such 
 ```
 ### <Term> (also: <aliases>)
 Depth: [deep] or [feel]
-Slot: <Track 0 slot, physics topic, or pipeline stage>
+Topic: <physics topic or pipeline stage>
 What it is:
 Problem it solves:
 Implications:

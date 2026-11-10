@@ -5,7 +5,7 @@ status: draft
 # ENO, WENO and TENO reconstruction
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.3 reconstruction; Track 2.7 · **Depth:** [deep]
+**Chapter:** 6 Spatial discretization · **Depth:** [deep]
 </div>
 
 ## What it is

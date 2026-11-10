@@ -5,7 +5,7 @@ status: draft
 # Riemann solvers
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.4 flux functions · **Depth:** [deep]
+**Chapter:** 7 Inviscid flux functions · **Depth:** [deep]
 </div>
 
 ## What it is

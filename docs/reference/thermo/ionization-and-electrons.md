@@ -5,7 +5,7 @@ status: draft
 # Ionization, electrons and plasma
 
 <div class="page-meta" markdown>
-**Slot:** Track 4.5 (ionization and electrons) · **Depth:** [deep] for the energy bookkeeping and numerics, [feel] for blackout
+**Chapter:** 3 Gas models and thermochemistry · **Depth:** [deep] for the energy bookkeeping and numerics, [feel] for blackout
 </div>
 
 ## What it is

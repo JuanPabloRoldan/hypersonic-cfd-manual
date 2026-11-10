@@ -5,7 +5,7 @@ status: draft
 # Discretization families
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.2 spatial discretization · **Depth:** [deep]
+**Chapter:** 6 Spatial discretization · **Depth:** [deep]
 </div>
 
 ## What it is

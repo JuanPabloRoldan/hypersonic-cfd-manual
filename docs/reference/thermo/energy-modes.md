@@ -5,7 +5,7 @@ status: draft
 # Energy modes and thermodynamics
 
 <div class="page-meta" markdown>
-**Slot:** Track 4.1 · **Depth:** [deep]
+**Chapter:** 3 Gas models and thermochemistry · **Depth:** [deep]
 </div>
 
 ## What it is

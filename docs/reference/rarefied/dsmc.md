@@ -5,7 +5,7 @@ status: draft
 # Direct simulation Monte Carlo (DSMC)
 
 <div class="page-meta" markdown>
-**Slot:** Track 1.9; Track 0.2 (particles as a discretization family) · **Depth:** [feel], toward [deep] for the numerical parameters
+**Chapter:** 11 Rarefied flow and particle methods · **Depth:** [feel], toward [deep] for the numerical parameters
 </div>
 
 ## What it is

@@ -2,7 +2,7 @@
 
 ## What this is
 
-A theory manual ordered like a solver's theory guide: numbered chapters from the governing equations through physical models, discretization, fluxes, sources and time integration. Each page covers one method or model family and can be read cold. It is written alongside a self-study course on entry aerothermodynamics; the **Slot** line at the top of each page names the place in that course's outline (Track 0 is the anatomy of a solver, later tracks the physics and numerics built on it).
+A theory manual ordered like a solver's theory guide: numbered chapters from the governing equations through physical models, discretization, fluxes, sources and time integration. Each page covers one method or model family and can be read cold. The **Chapter** line at the top of each page names the chapter it belongs to, and the **Depth** tag says how far the page goes (below).
 
 ## Depth tags
 

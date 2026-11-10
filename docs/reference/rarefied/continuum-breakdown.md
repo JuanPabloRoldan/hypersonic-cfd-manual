@@ -5,7 +5,7 @@ status: draft
 # Rarefaction and continuum breakdown
 
 <div class="page-meta" markdown>
-**Slot:** Track 1.9 · **Depth:** [feel], with the criteria
+**Chapter:** 11 Rarefied flow and particle methods · **Depth:** [feel], with the criteria
 </div>
 
 ## What it is

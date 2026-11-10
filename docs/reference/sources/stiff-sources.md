@@ -5,7 +5,7 @@ status: draft
 # Stiff source terms
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.6 sources and stiffness; Track 4.4 · **Depth:** [deep]
+**Chapter:** 8 Source terms · **Depth:** [deep]
 </div>
 
 ## What it is

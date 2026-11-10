@@ -5,7 +5,7 @@ status: draft
 # Shock instabilities: the carbuncle
 
 <div class="page-meta" markdown>
-**Slot:** Track 2.2 · **Depth:** [deep]
+**Chapter:** 7 Inviscid flux functions · **Depth:** [deep]
 </div>
 
 ## What it is

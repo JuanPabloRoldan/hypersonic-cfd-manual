@@ -5,7 +5,7 @@ status: outline
 # Wall boundary conditions
 
 <div class="page-meta" markdown>
-**Slot:** Track 5.1 (boundary conditions, Track 0.7) · **Depth:** [deep]
+**Chapter:** 5 Boundary conditions and walls · **Depth:** [deep]
 </div>
 
 ## What it is

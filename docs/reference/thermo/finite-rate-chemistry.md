@@ -1,7 +1,7 @@
 # Finite-rate chemistry
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.1 closures; Track 4.3 · **Depth:** [deep]
+**Chapter:** 3 Gas models and thermochemistry · **Depth:** [deep]
 </div>
 
 ## What it is

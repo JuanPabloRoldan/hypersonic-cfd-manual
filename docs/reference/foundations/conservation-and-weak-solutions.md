@@ -1,7 +1,7 @@
 # Conservation form and weak solutions
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.1 governing equations · **Depth:** [deep]
+**Chapter:** 1 Fundamental equations · **Depth:** [deep]
 </div>
 
 ## What it is

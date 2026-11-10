@@ -5,7 +5,7 @@ status: draft
 # Entry flow anatomy
 
 <div class="page-meta" markdown>
-**Slot:** Track 1.1 · **Depth:** [deep]
+**Chapter:** 2 Entry flow physics · **Depth:** [deep]
 </div>
 
 ## What it is

@@ -5,7 +5,7 @@ status: draft
 # Reconstruction and limiters
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.3 reconstruction · **Depth:** [deep]
+**Chapter:** 6 Spatial discretization · **Depth:** [deep]
 </div>
 
 ## What it is

@@ -5,7 +5,7 @@ status: draft
 # Central schemes and dissipation
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.4 flux functions; Track 2.5–2.6 · **Depth:** [deep]
+**Chapter:** 7 Inviscid flux functions · **Depth:** [deep]
 </div>
 
 ## What it is

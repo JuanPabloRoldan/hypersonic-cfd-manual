@@ -5,7 +5,7 @@ status: draft
 # Low-Mach corrections
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.4 flux functions (sometimes 0.3 reconstruction); Track 2.2 and 2.4 · **Depth:** [deep]
+**Chapter:** 7 Inviscid flux functions · **Depth:** [deep]
 </div>
 
 ## What it is

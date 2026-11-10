@@ -5,7 +5,7 @@ status: outline
 # Convergence diagnostics
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.8; Track 3.7 · **Depth:** [deep]
+**Chapter:** 12 Verification and diagnosis · **Depth:** [deep]
 </div>
 
 ## What it is

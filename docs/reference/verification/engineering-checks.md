@@ -5,7 +5,7 @@ status: draft
 # Engineering checks on a solution
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.8 (verification and diagnosis) · **Depth:** [deep]
+**Chapter:** 12 Verification and diagnosis · **Depth:** [deep]
 </div>
 
 ## What it is

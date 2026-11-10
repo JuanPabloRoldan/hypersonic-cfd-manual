@@ -5,7 +5,7 @@ status: outline
 # Dual time stepping
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.5; Track 3.6 · **Depth:** [deep]
+**Chapter:** 9 Time integration and solvers · **Depth:** [deep]
 </div>
 
 ## What it is

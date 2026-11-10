@@ -5,7 +5,7 @@ status: draft
 # Transport and diffusion
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.1 closures; Track 4.6 · **Depth:** [feel], with the diffusion hierarchy at [deep]
+**Chapter:** 3 Gas models and thermochemistry · **Depth:** [feel], with the diffusion hierarchy at [deep]
 </div>
 
 ## What it is

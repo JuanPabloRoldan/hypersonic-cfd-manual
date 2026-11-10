@@ -5,7 +5,7 @@ status: draft
 # Hypersonic shock relations and Newtonian theory
 
 <div class="page-meta" markdown>
-**Slot:** Track 1 (inviscid hypersonic theory) · **Depth:** [feel], with the formulas
+**Chapter:** 2 Entry flow physics · **Depth:** [feel], with the formulas
 </div>
 
 ## What it is

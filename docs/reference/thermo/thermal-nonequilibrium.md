@@ -5,7 +5,7 @@ status: draft
 # Thermal nonequilibrium models
 
 <div class="page-meta" markdown>
-**Slot:** Track 4.2 · **Depth:** [deep]
+**Chapter:** 3 Gas models and thermochemistry · **Depth:** [deep]
 </div>
 
 ## What it is

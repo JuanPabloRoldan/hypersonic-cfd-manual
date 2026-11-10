@@ -1,7 +1,7 @@
 # Gas models
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.1 closures; Track 4 · **Depth:** [deep] for the structure
+**Chapter:** 3 Gas models and thermochemistry · **Depth:** [deep] for the structure
 </div>
 
 ## What it is

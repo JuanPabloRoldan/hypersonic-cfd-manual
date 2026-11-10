@@ -5,7 +5,7 @@ status: draft
 # Approximate and engineering methods
 
 <div class="page-meta" markdown>
-**Slot:** Track 1 (inviscid hypersonic theory) and Track 9 (engineering tools) · **Depth:** [feel]
+**Chapter:** 10 Reduced equations and engineering methods · **Depth:** [feel]
 </div>
 
 ## What it is

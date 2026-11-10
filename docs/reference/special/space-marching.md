@@ -5,7 +5,7 @@ status: draft
 # Space marching: thin-layer and parabolized Navier–Stokes
 
 <div class="page-meta" markdown>
-**Slot:** Track 2.10 (governing-equation reductions) · **Depth:** [feel], with the math
+**Chapter:** 10 Reduced equations and engineering methods · **Depth:** [feel], with the math
 </div>
 
 ## What it is

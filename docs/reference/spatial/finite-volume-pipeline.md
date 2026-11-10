@@ -1,7 +1,7 @@
 # The finite-volume pipeline
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.2–0.5, the whole residual evaluation · **Depth:** [deep]
+**Chapter:** 6 Spatial discretization · **Depth:** [deep]
 </div>
 
 ## What it is

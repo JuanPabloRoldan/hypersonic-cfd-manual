@@ -5,7 +5,7 @@ status: draft
 # Turbulence modeling for hypersonic boundary layers
 
 <div class="page-meta" markdown>
-**Slot:** Track 1.7 (closures for the Reynolds-averaged equations) · **Depth:** [feel]
+**Chapter:** 4 Turbulence · **Depth:** [feel]
 </div>
 
 ## What it is

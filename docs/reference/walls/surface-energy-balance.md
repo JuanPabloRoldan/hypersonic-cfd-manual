@@ -5,7 +5,7 @@ status: outline
 # Surface energy balance
 
 <div class="page-meta" markdown>
-**Slot:** Track 5.2 · **Depth:** [deep]
+**Chapter:** 5 Boundary conditions and walls · **Depth:** [deep]
 </div>
 
 ## What it is

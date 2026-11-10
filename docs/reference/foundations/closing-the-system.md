@@ -1,7 +1,7 @@
 # Closing the system
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.1 governing equations · **Depth:** [deep] for the structure, details in Track 4
+**Chapter:** 1 Fundamental equations · **Depth:** [deep] for the structure, details in chapter 3
 </div>
 
 ## What it is

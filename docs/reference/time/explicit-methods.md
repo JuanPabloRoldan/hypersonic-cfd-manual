@@ -5,7 +5,7 @@ status: outline
 # Explicit methods
 
 <div class="page-meta" markdown>
-**Slot:** Track 0.5 time advancement; Track 3.1 · **Depth:** [deep]
+**Chapter:** 9 Time integration and solvers · **Depth:** [deep]
 </div>
 
 ## What it is

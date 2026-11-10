@@ -5,7 +5,7 @@ status: draft
 # Free-molecular flow
 
 <div class="page-meta" markdown>
-**Slot:** Track 1.9 · **Depth:** [feel]
+**Chapter:** 11 Rarefied flow and particle methods · **Depth:** [feel]
 </div>
 
 ## What it is

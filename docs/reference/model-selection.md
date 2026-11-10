@@ -5,7 +5,7 @@ status: draft
 # Choosing physical models: when you need what
 
 <div class="page-meta" markdown>
-**Slot:** cross-cutting (gas models, nonequilibrium, ionization, radiation, rarefaction) · **Depth:** [feel], rules of thumb
+**Chapter:** Appendix · **Depth:** [feel], rules of thumb
 </div>
 
 ## What it is
