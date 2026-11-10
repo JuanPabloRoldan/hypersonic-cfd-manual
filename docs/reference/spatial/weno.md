@@ -36,6 +36,13 @@ $$
 
 The **linear (optimal) weights** $d_0 = \tfrac1{10}$, $d_1 = \tfrac6{10}$, $d_2 = \tfrac3{10}$ combine them into the fifth-order upwind-biased value on the full 5-cell stencil. The right state at the same face is the mirror image.
 
+Each candidate is the value at the face of the unique parabola whose cell averages match the three cells of its stencil. $q^{(0)}$ extrapolates from cells entirely on the upwind side, $q^{(1)}$ is centred, and $q^{(2)}$ reaches one cell downwind.
+
+<figure markdown>
+![WENO5 stencils and nonlinear weights](../../assets/figures/weno_stencils.svg)
+<figcaption markdown="span">Left: the three candidate stencils for the left state at face $i+\tfrac12$, with their ideal weights. Right: the nonlinear weights $\omega_k$ computed with the Jiang–Shu formula for a smooth wave with a jump in the middle (grey steps, right axis). Away from the jump the weights sit near their ideal values (dotted lines). In the cells next to the jump, any stencil that crosses it gets a weight of essentially zero and the scheme falls back to the stencils on the smooth side.</figcaption>
+</figure>
+
 ### Smoothness indicators
 
 $$
@@ -45,6 +52,10 @@ $$
 \beta_2 &= \tfrac{13}{12}(q_i - 2q_{i+1} + q_{i+2})^2 + \tfrac14(3q_i - 4q_{i+1} + q_{i+2})^2.
 \end{aligned}
 $$
+
+A smoothness indicator measures how much the candidate parabola varies across the cell: it is the sum of the squared, scaled first and second derivatives of that parabola, integrated over cell $i$. The first term in each $\beta_k$ is the squared second difference (curvature) and the second is a squared first difference (slope). On smooth data all three are small and nearly equal. If a stencil contains a jump of size $\Delta$, its $\beta_k$ is of order $\Delta^2$, while a stencil on the smooth side has $\beta_k$ of order $\Delta x^2$.
+
+A worked example. Take the cell values 1, 1, 1, 0, 0 in cells $i-2$ to $i+2$: a unit jump between cells $i$ and $i+1$. Then $\beta_0 = 0$ (all three cells equal), $\beta_1 = \tfrac{13}{12} + \tfrac14 = 1.33$ and $\beta_2 = \tfrac{13}{12} + \tfrac94 = 3.33$. With $\varepsilon = 10^{-6}$ the Jiang–Shu weights below give $\omega_0 \approx 1$ and $\omega_1, \omega_2$ of order $10^{-12}$ or smaller. The face value is $q^{(0)} = \tfrac16(2 - 7 + 11) = 1$: the scheme has used only the smooth upwind stencil and produced no overshoot.
 
 ### ENO
 
@@ -108,6 +119,28 @@ Research schemes replace the smoothness-indicator formula with a neural network 
 ### Other named variants
 
 Codes expose many more (ALPACA lists, among others, WENOF3+, WENO5-AER, WENO5-IS, WENO5-NU6+, WENO7, WENO9). They are refinements of the same weight-design problem; they are not described individually here.
+
+## Typical values
+
+- Order: $2r - 1$ from $r$ candidates of $r$ cells each; 5 for the standard scheme, on a 5-cell stencil per side (6 cells per face, 3 ghost layers).
+- Ideal weights (fifth order): 0.1, 0.6, 0.3.
+- $\varepsilon$ in the Jiang–Shu weights: $10^{-6}$ in the original paper; smaller values (down to $10^{-40}$) or values scaled with $\Delta x^2$ are used to keep the scheme scale-independent.
+- TENO cutoff $C_T$: $10^{-5}$–$10^{-7}$ (Fu, Hu & Adams 2016); smaller means less dissipation and less robustness.
+- Cost: roughly two to three times a MUSCL reconstruction per face in component form, more with characteristic projection.
+
+## Trade-offs
+
+- **WENO-JS vs WENO-Z vs TENO.** Each step is less dissipative in smooth flow and less forgiving at strong shocks.
+- **Component-wise vs characteristic-wise.** Characteristic projection removes most post-shock oscillations but needs an eigenvector multiply per stencil cell per face.
+- **Higher order.** Better resolution per cell of smooth waves; wider halos, more cost, and no gain at a captured shock, where every scheme is first order.
+- **Against second-order MUSCL for heating.** At the wall and at the shock the benefit is small; in between it matters only if there are waves or eddies to preserve.
+
+## Effects on stability and robustness
+
+- Not positivity-preserving: a fifth-order face value near a strong shock can have negative density or pressure. Codes add a positivity limiter or fall back to low order in the offending cell.
+- The weights are non-smooth functions of the data (TENO's cutoff especially), so implicit steady solvers stall with them ([convergence diagnostics](../time/convergence-diagnostics.md#stalls-and-limit-cycles)).
+- Lower dissipation makes the [carbuncle](shock-instabilities.md) more likely with contact-resolving fluxes.
+- Component-wise reconstruction of conserved variables at Mach 20 and above is the least robust combination; primitive or characteristic variables are the usual choice.
 
 ## Implications
 

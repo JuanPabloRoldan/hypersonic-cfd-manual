@@ -18,14 +18,53 @@ Each family makes different trade-offs between conservation, geometric flexibili
 
 ## How it works
 
-*(Outline, to be written.)*
+Every family answers three questions, and the answers are what distinguish them.
+
+1. **Where do the unknowns live, and what do they mean?** A point value at a grid node, an average over a cell, or the coefficients of a polynomial inside an element.
+2. **Is conservation built in?** A scheme is conservative when whatever leaves one control volume enters its neighbour, so that the update is a [flux difference](../foundations/conservation-and-weak-solutions.md). Without that, captured shocks sit in the wrong place.
+3. **How is the order of accuracy raised?** By widening the stencil (more neighbours), or by adding unknowns inside each element.
+
+<figure markdown>
+![Cell-centred and vertex-based control volumes, and a hybrid grid](../../assets/figures/discretization_families.svg)
+<figcaption markdown="span">Left: a cell-centred scheme stores one state per mesh cell, and the cell is the control volume. Middle: a vertex-based scheme stores one state per node, and its control volume is the **dual cell** built around the node from the centroids and edge midpoints of the surrounding cells. Right: a hybrid grid, with layers extruded from the wall that give clean wall-normal stencils and lines for an implicit solver, and unstructured cells outside. Schematic, 2-D.</figcaption>
+</figure>
+
+| Family | Unknowns | Conservative? | Order raised by | Grids | Use in entry CFD |
+|---|---|---|---|---|---|
+| Finite difference | point values at nodes | yes, if written as flux differences | wider 1-D stencils | smooth structured only | DNS of transition on simple shapes |
+| Finite volume, cell-centred | cell averages | yes, by construction | wider reconstruction stencil | any | the production standard (DPLR, LAURA, US3D) |
+| Finite volume, vertex-based | averages over dual cells | yes, by construction | wider reconstruction stencil | any, usually unstructured | FUN3D, SU2 |
+| Discontinuous Galerkin | polynomial coefficients per element | yes | more coefficients per element | any | research |
+| Particles (DSMC) | simulated molecules | yes (particles carry mass, momentum, energy) | more particles, smaller cells | Cartesian or unstructured | rarefied flow |
 
 ## Variants
 
 ### Finite difference
+
+The unknowns are point values on a grid whose lines can be followed in each index direction. Derivatives are approximated by differencing along those lines, one direction at a time. On a curved body the grid is mapped to a uniform computational box and the equations are differenced there, which requires the mapping, and so the grid, to be smooth.
+
+High order is cheap, because each derivative needs only a one-dimensional stencil. Conservation holds if the scheme differences numerical fluxes defined at half-points (the Shu–Osher form) instead of differencing the variables. The limitations are geometric: grid singularities, abrupt changes in spacing and complex shapes all degrade it.
+
 ### Finite volume, cell-centred
+
+Integrate the conservation law over each mesh cell. The time rate of change of the cell average equals the net flux through its faces, exactly; the only approximation is how the face fluxes are computed. Each interior face is shared by two cells and its flux is computed once, so conservation is automatic on cells of any shape. This is the method described step by step in the [finite-volume pipeline](finite-volume-pipeline.md).
+
+Second order is standard: a linear reconstruction in each cell and one flux evaluation at each face centre. Going higher on general grids needs multidimensional reconstruction and several quadrature points per face, which is why production codes stop at second order.
+
 ### Finite volume, vertex-based (dual mesh)
+
+The unknowns sit at the mesh nodes. The control volume of a node is its dual cell, and each piece of the dual cell's boundary is associated with one mesh **edge**, so the solver loops over edges, computing one flux per edge between the two nodes it joins.
+
+The difference from cell-centred shows up in the counts. A tetrahedral mesh has about 5.5 cells and 7 edges per node. On the same mesh a vertex-based code therefore has about one-fifth as many unknowns as a cell-centred one, but each unknown exchanges fluxes with about 14 neighbours instead of 4. Per unknown it does more work and gets a better-supported gradient. With one million nodes: one million unknowns and 7 million edge fluxes vertex-based, against 5.5 million unknowns and 11 million face fluxes cell-centred.
+
+At a wall the node lies on the surface. An isothermal wall temperature can be set directly on the unknown, whereas a cell-centred code holds its nearest unknown half a cell away and imposes the wall value through the face ([wall boundary conditions](../walls/wall-boundary-conditions.md#numerical-implementation)).
+
 ### Finite element and discontinuous Galerkin
+
+Represent the solution inside each element by a polynomial of degree $p$. In **discontinuous Galerkin** (DG) the polynomials of neighbouring elements are not required to match at the shared face. The jump there is resolved with a numerical flux, exactly as in finite volumes, and a finite-volume scheme is DG with $p = 0$.
+
+The order is raised by adding coefficients inside the element rather than reaching for more neighbours, so the stencil stays compact (face neighbours only) on any mesh. The costs: a tetrahedron at $p = 2$ carries 10 coefficients per equation, so 160 unknowns per element for 16 equations, and an implicit block of $160\times160$; the explicit time-step limit shrinks roughly as $1/(2p+1)$; and a shock inside an element makes the polynomial oscillate, so shock capturing (limiting, or added artificial viscosity) is needed inside elements and is the method's weak point in hypersonic flow.
+
 ### Structured multiblock vs unstructured grids {#structured-vs-unstructured}
 
 For decades aeroheating codes (DPLR, LAURA) used structured multiblock grids, and the reasons are numerical rather than historical. Three things favour ordered hexahedral cells near the vehicle:
@@ -83,14 +122,29 @@ A more general approach under development in 2015 deforms the grid gradually unt
 
 ### Particle methods (DSMC)
 
-*(Outline.)*
+Not a discretization of the Navier–Stokes equations at all. Simulated molecules are moved and collided, and the flow fields are averages over them. The grid only serves to find collision partners and to sample. Used where the gas is too rarefied for the continuum equations to hold: see [continuum breakdown](../rarefied/continuum-breakdown.md) and [DSMC](../rarefied/dsmc.md).
 
-## Typical values and trade-offs
+## Typical values
 
-- **Hexahedra vs tetrahedra at the shock:** hexahedra (shock-aligned) give a smooth entropy layer and correct heat flux; tetrahedra generate vorticity that no dissipation removes.
-- **Hybrid line/point convergence:** about 2× slower than pure line relaxation on a fully hexahedral grid, much faster than pure point relaxation (Nompelis et al. 2004).
-- **Gridding time vs solve time:** structured grids for complex shapes can take longer to build than the run; hybrid grids cut that, at a modest convergence cost.
-- **Shock tailoring:** typically one or two rounds of align-and-reconverge.
+- Tetrahedral mesh counts: about 5.5 cells, 7 edges and 11 faces per node (standard mesh statistics; see Blazek).
+- DG unknowns per element and equation on tetrahedra: 4 ($p = 1$), 10 ($p = 2$), 20 ($p = 3$).
+- Hybrid line/point convergence: about 2× slower than pure line relaxation on a fully hexahedral grid, much faster than pure point relaxation (Nompelis et al. 2004).
+- Shock tailoring: typically one or two rounds of align-and-reconverge (Candler et al. 2015).
+- Machine-zero convergence on the all-hexahedral cylinder grid: about 800 iterations with line relaxation (Nompelis et al. 2004, table above).
+
+## Trade-offs
+
+- **Structured vs unstructured.** Structured grids give the best stencils, natural implicit lines and the lowest memory traffic, but can take longer to generate for a complex shape than the solution takes to run. Hybrid unstructured grids cut gridding time at a modest convergence cost.
+- **Hexahedra vs tetrahedra at the shock.** Shock-aligned hexahedra give a smooth entropy layer and correct heat flux; tetrahedra generate vorticity that no dissipation removes.
+- **Cell-centred vs vertex-based.** Cell-centred has more unknowns on the same mesh and simple face-based fluxes; vertex-based has fewer unknowns with richer stencils and unknowns on the wall.
+- **Second-order FV vs high-order FD or DG.** High order pays off for smooth, wave-dominated problems (transition, turbulence). For steady heating with strong shocks, a well-aligned second-order grid is cheaper and more robust.
+
+## Effects on stability and robustness
+
+- A shock crossing tetrahedra keeps the residual oscillating; aligned hexahedra let it converge to machine zero (Nompelis et al. 2004).
+- Finite differences on a non-smooth grid lose both accuracy and stability at the kinks.
+- DG without shock capturing fails at strong shocks; with it, the result depends on the capturing parameters.
+- Cells collapsing at a grid pole or axis give vanishing volumes and time steps ([boundary conditions](boundary-conditions.md#axis-of-an-axisymmetric-flow)).
 
 ## Implications
 

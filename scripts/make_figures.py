@@ -1219,6 +1219,445 @@ def convergence_histories():
     save(fig, "convergence_histories")
 
 
+# ---------------------------------------------------------------------------
+# Finite-volume pipeline in 1-D: cell averages, limited reconstruction, the two
+# states at a face and the single flux they produce.
+# ---------------------------------------------------------------------------
+def fv_stencil():
+    q = np.array([1.0, 1.2, 2.0, 4.0, 4.4, 4.5])
+    n = len(q)
+    fig, ax = plt.subplots(figsize=(9.5, 3.9))
+    slopes = np.zeros(n)
+    for i in range(1, n - 1):
+        slopes[i] = minmod(q[i] - q[i - 1], q[i + 1] - q[i])
+    for i in range(n):
+        ax.plot([i, i + 1], [q[i], q[i]], color=GREY, lw=1, ls=":")
+        ax.plot([i, i + 1], [q[i] - 0.5 * slopes[i], q[i] + 0.5 * slopes[i]], color=C0, lw=2.2)
+        ax.plot(i + 0.5, q[i], "o", color="k", ms=4)
+        ax.axvline(i, color=GREY, lw=0.6)
+    ax.axvline(n, color=GREY, lw=0.6)
+    f = 3  # face between cells 2 and 3
+    qL = q[f - 1] + 0.5 * slopes[f - 1]
+    qR = q[f] - 0.5 * slopes[f]
+    ax.axvline(f, color=C1, lw=1.6)
+    ax.plot(f, qL, "s", color=C1, ms=7)
+    ax.plot(f, qR, "s", color=C1, ms=7)
+    ax.annotate(rf"$q_L = {qL:.1f}$", (f, qL), textcoords="offset points", xytext=(-12, 8), ha="right", color=C1)
+    ax.annotate(rf"$q_R = {qR:.1f}$", (f, qR), textcoords="offset points", xytext=(12, -16), ha="left", color=C1)
+    ax.annotate("", xy=(f + 0.45, 0.45), xytext=(f - 0.45, 0.45), arrowprops=dict(arrowstyle="-|>", color=C1, lw=2))
+    ax.text(f, 0.15, r"one flux $\hat F(q_L, q_R)$: leaves cell $i$, enters cell $i{+}1$", ha="center", color=C1, fontsize=9)
+    names = [r"$i-2$", r"$i-1$", r"$i$", r"$i+1$", r"$i+2$", r"$i+3$"]
+    for i in range(n):
+        ax.text(i + 0.5, 5.15, names[i], ha="center", fontsize=9)
+    ax.text(f + 0.06, 4.75, r"face $i+\frac{1}{2}$", ha="left", color=C1, fontsize=9)
+    ax.plot([], [], "o", color="k", ms=4, label="cell average (what is stored)")
+    ax.plot([], [], color=C0, lw=2.2, label="limited linear reconstruction (minmod)")
+    ax.plot([], [], "s", color=C1, ms=7, label="left and right states at the face")
+    ax.legend(frameon=False, fontsize=8, loc="upper left", bbox_to_anchor=(0.0, 0.9))
+    ax.set_xlim(0, n)
+    ax.set_ylim(0, 5.5)
+    ax.set_xticks([])
+    ax.set_ylabel("a primitive variable $q$")
+    ax.grid(False)
+    save(fig, "fv_stencil")
+
+
+# ---------------------------------------------------------------------------
+# Discretization families: cell-centred vs vertex-based control volumes, and a
+# hybrid grid with extruded wall layers (schematic).
+# ---------------------------------------------------------------------------
+def discretization_families():
+    import matplotlib.tri as mtri
+    from matplotlib.patches import Polygon
+
+    rng = np.random.default_rng(4)
+    xs, ys = np.meshgrid(np.arange(5.0), np.arange(5.0))
+    xs = xs + 0.5 * (np.arange(5)[:, None] % 2)
+    pts = np.c_[xs.ravel(), ys.ravel() * 0.87]
+    pts += rng.normal(0, 0.06, pts.shape)
+    tri = mtri.Triangulation(pts[:, 0], pts[:, 1])
+    cent = pts[tri.triangles].mean(axis=1)
+
+    fig, axes = plt.subplots(1, 3, figsize=(12, 3.9))
+    for ax, title in zip(axes[:2], ("Cell-centred: the cell is the control volume", "Vertex-based: a dual cell around each node")):
+        ax.triplot(tri, color=GREY, lw=0.8)
+        ax.set_aspect("equal")
+        ax.axis("off")
+        ax.set_title(title, fontsize=10)
+        ax.set_xlim(0.6, 4.0)
+        ax.set_ylim(0.0, 3.1)
+    ax = axes[0]
+    target = np.argmin(np.hypot(cent[:, 0] - 2.4, cent[:, 1] - 1.6))
+    ax.add_patch(Polygon(pts[tri.triangles[target]], fc=C0, alpha=0.3, ec=C0, lw=2))
+    ax.plot(cent[:, 0], cent[:, 1], "o", color=C0, ms=4)
+    ax.text(2.3, 0.12, "unknowns at cell centroids\none flux per mesh face", ha="center", fontsize=9, color=C0, bbox=dict(fc="white", ec="none", pad=3))
+    ax = axes[1]
+    node = np.argmin(np.hypot(pts[:, 0] - 2.4, pts[:, 1] - 1.75))
+    around = [t for t in range(len(tri.triangles)) if node in tri.triangles[t]]
+    ang = np.arctan2(cent[around, 1] - pts[node, 1], cent[around, 0] - pts[node, 0])
+    around = [around[k] for k in np.argsort(ang)]
+    poly = []
+    for a, b in zip(around, around[1:] + around[:1]):
+        poly.append(cent[a])
+        shared = (set(tri.triangles[a]) & set(tri.triangles[b])) - {node}
+        if shared:
+            other = shared.pop()
+            poly.append(0.5 * (pts[node] + pts[other]))
+    ax.add_patch(Polygon(np.array(poly), fc=C1, alpha=0.3, ec=C1, lw=2))
+    ax.plot(pts[:, 0], pts[:, 1], "o", color=C1, ms=4)
+    ax.text(2.3, 0.12, "unknowns at nodes\none flux per mesh edge", ha="center", fontsize=9, color=C1, bbox=dict(fc="white", ec="none", pad=3))
+
+    ax = axes[2]
+    xw = np.linspace(0, 4, 13)
+    wall = 0.25 * np.sin(xw * 0.8)
+    heights = np.cumsum(0.07 * 1.45 ** np.arange(7))
+    for h in np.r_[0, heights]:
+        ax.plot(xw, wall + h, color=C0, lw=0.8)
+    for k in range(len(xw)):
+        ax.plot([xw[k], xw[k]], [wall[k], wall[k] + heights[-1]], color=C0, lw=0.8)
+    ax.plot([xw[6], xw[6]], [wall[6], wall[6] + heights[-1]], color=C1, lw=2.6)
+    ax.text(xw[6] + 0.08, wall[6] + heights[-1] * 0.5, "implicit line", color=C1, fontsize=9, rotation=90, va="center")
+    top = np.c_[xw, wall + heights[-1]]
+    outer = np.c_[np.linspace(0, 4, 9), np.full(9, 2.9)]
+    mid = np.c_[np.linspace(0.2, 3.8, 8), np.full(8, 2.25) + rng.normal(0, 0.05, 8)]
+    allp = np.vstack([top, mid, outer])
+    t2 = mtri.Triangulation(allp[:, 0], allp[:, 1])
+    mask = allp[t2.triangles][:, :, 1].mean(axis=1) < (0.25 * np.sin(allp[t2.triangles][:, :, 0].mean(axis=1) * 0.8) + heights[-1])
+    t2.set_mask(mask)
+    ax.triplot(t2, color=GREY, lw=0.8)
+    ax.fill_between(xw, wall - 0.3, wall, color="#bcaaa4")
+    ax.text(2, -0.42, "wall", ha="center", fontsize=9)
+    ax.set_xlim(0, 4)
+    ax.set_ylim(-0.6, 2.95)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_title("Hybrid grid: extruded layers at the wall,\ntetrahedra (triangles here) away from it", fontsize=10)
+    fig.text(0.5, 0.0, "schematic, 2-D", ha="center", fontsize=8, color=GREY)
+    save(fig, "discretization_families")
+
+
+# ---------------------------------------------------------------------------
+# Viscous face gradient on a skewed cell pair: direct difference along the
+# centroid line plus the tangential part of the averaged gradient (schematic).
+# ---------------------------------------------------------------------------
+def viscous_face_gradient():
+    from matplotlib.patches import Polygon
+
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 3.7), gridspec_kw={"width_ratios": [1.25, 1]})
+    ax = axes[0]
+    Lc = np.array([[0, 0], [2.0, 0.2], [2.3, 1.5], [0.2, 1.3]])
+    Rc = np.array([[2.0, 0.2], [4.3, 0.7], [4.5, 2.1], [2.3, 1.5]])
+    ax.add_patch(Polygon(Lc, fc=C0, alpha=0.12, ec=GREY))
+    ax.add_patch(Polygon(Rc, fc=C2, alpha=0.12, ec=GREY))
+    cL, cR = Lc.mean(axis=0), Rc.mean(axis=0)
+    fm = 0.5 * (Lc[1] + Lc[2])
+    tvec = (Lc[2] - Lc[1]) / np.linalg.norm(Lc[2] - Lc[1])
+    nvec = np.array([tvec[1], -tvec[0]])
+    ax.plot(*np.c_[Lc[1], Lc[2]], color="k", lw=2.5)
+    ax.plot(*cL, "o", color=C0)
+    ax.plot(*cR, "o", color=C2)
+    ax.text(cL[0] - 0.1, cL[1] - 0.22, r"$\phi_L$", color=C0, ha="right")
+    ax.text(cR[0] + 0.1, cR[1] + 0.12, r"$\phi_R$", color=C2)
+    ax.annotate("", xy=cR, xytext=cL, arrowprops=dict(arrowstyle="-|>", color=C1, lw=2))
+    ax.text(0.5 * (cL[0] + cR[0]) - 0.75, 0.5 * (cL[1] + cR[1]) + 0.12, r"$\hat{\mathbf{e}}$, length $\Delta\ell$", color=C1)
+    ax.annotate("", xy=fm + 0.9 * nvec, xytext=fm, arrowprops=dict(arrowstyle="-|>", color="k", lw=2))
+    ax.text(*(fm + 0.98 * nvec + [0.0, -0.18]), r"$\hat{\mathbf{n}}$")
+    ax.annotate("", xy=fm + 0.7 * tvec, xytext=fm, arrowprops=dict(arrowstyle="-|>", color=C3, lw=2))
+    ax.text(*(fm + 0.75 * tvec + [0.08, 0.0]), "tangential part:\nfrom averaged\ncell gradients", color=C3, fontsize=8, va="center")
+    ax.text(1.2, -0.35, r"normal part: direct difference $(\phi_R - \phi_L)/\Delta\ell$", color=C1, fontsize=9, ha="left")
+    ax.set_xlim(-0.2, 5.4)
+    ax.set_ylim(-0.6, 2.5)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_title("Face gradient on a skewed cell pair (schematic)", fontsize=10)
+
+    ax = axes[1]
+    y = np.linspace(0, 1, 300)
+    T = 300 + 5700 * (1 - np.exp(-y / 0.12))
+    ax.plot(T, y, color=C0)
+    for dn, col, lab in ((0.30, C1, "coarse first cell"), (0.04, C2, "fine first cell")):
+        Tc = 300 + 5700 * (1 - np.exp(-(dn / 2) / 0.12))
+        ax.plot([300, Tc], [0, dn / 2], "o-", color=col, ms=4, label=f"{lab}: slope {((Tc - 300) / (dn / 2)) / (5700 / 0.12):.2f} of exact")
+        ax.axhline(dn, color=col, lw=0.6, ls=":")
+    ax.axhline(0, color="k", lw=3)
+    ax.set_xlabel("temperature (K)")
+    ax.set_ylabel("distance from wall / boundary-layer thickness")
+    ax.set_ylim(-0.01, 0.45)
+    ax.set_title("One-sided wall gradient vs first-cell height\n(illustrative exponential profile)", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="lower right")
+    save(fig, "viscous_face_gradient")
+
+
+# ---------------------------------------------------------------------------
+# WENO5: the three candidate stencils for one face, and the nonlinear weights
+# near a discontinuity (computed with the Jiang-Shu weights).
+# ---------------------------------------------------------------------------
+def weno_stencils():
+    fig, axes = plt.subplots(1, 2, figsize=(11, 3.8), gridspec_kw={"width_ratios": [1, 1.15]})
+    ax = axes[0]
+    names = [r"$i-2$", r"$i-1$", r"$i$", r"$i+1$", r"$i+2$"]
+    for k, nm in enumerate(names):
+        ax.add_patch(plt.Rectangle((k, 0), 1, 0.5, fc="white", ec=GREY))
+        ax.text(k + 0.5, 0.25, nm, ha="center", va="center", fontsize=9)
+    ax.axvline(3, ymin=0.0, ymax=0.95, color=C1, lw=2)
+    ax.text(3.1, 2.55, r"face $i+\frac{1}{2}$", ha="left", color=C1, fontsize=9)
+    for s, (a, b), col, d in zip(range(3), ((0, 3), (1, 4), (2, 5)), (C0, C2, C3), ("0.1", "0.6", "0.3")):
+        yb = 0.8 + 0.5 * s
+        ax.plot([a + 0.1, b - 0.1], [yb, yb], color=col, lw=6, solid_capstyle="butt", alpha=0.8)
+        ax.text(b + 0.05 if b < 5 else a - 0.05, yb, rf"$S_{s}$, ideal weight {d}", color=col, va="center", ha="left" if b < 5 else "right", fontsize=9)
+    ax.set_xlim(-2.2, 6.6)
+    ax.set_ylim(-0.1, 2.8)
+    ax.axis("off")
+    ax.set_title("Three 3-cell stencils, each giving a value at the face", fontsize=10)
+
+    ax = axes[1]
+    N = 24
+    x = np.arange(N) + 0.5
+    q = np.where(x < 12, 1.0, 0.0) + 0.15 * np.sin(2 * np.pi * x / N)
+    eps = 1e-6
+    d = np.array([0.1, 0.6, 0.3])
+    W = np.full((N, 3), np.nan)
+    for i in range(2, N - 2):
+        a, b, c, dd, e = q[i - 2 : i + 3]
+        beta = np.array([
+            13 / 12 * (a - 2 * b + c) ** 2 + 0.25 * (a - 4 * b + 3 * c) ** 2,
+            13 / 12 * (b - 2 * c + dd) ** 2 + 0.25 * (b - dd) ** 2,
+            13 / 12 * (c - 2 * dd + e) ** 2 + 0.25 * (3 * c - 4 * dd + e) ** 2,
+        ])
+        al = d / (eps + beta) ** 2
+        W[i] = al / al.sum()
+    for s, col in zip(range(3), (C0, C2, C3)):
+        ax.plot(x, W[:, s], "o-", color=col, ms=3.5, label=rf"$\omega_{s}$")
+        ax.axhline(d[s], color=col, lw=0.7, ls=":")
+    ax2 = ax.twinx()
+    ax2.step(np.arange(N + 1), np.r_[q, q[-1]], where="post", color=GREY, lw=1)
+    ax2.set_ylabel("cell averages", color=GREY)
+    ax2.grid(False)
+    ax2.spines["right"].set_visible(True)
+    ax.set_xlabel("cell index")
+    ax.set_ylabel("nonlinear weight")
+    ax.set_ylim(-0.03, 1.03)
+    ax.set_title("Weights go to the ideal values in smooth data and\ndrop stencils that cross the jump (computed, WENO-JS)", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="center left")
+    save(fig, "weno_stencils")
+
+
+# ---------------------------------------------------------------------------
+# Central schemes: the JST pressure sensor on a 1-D profile, and the Ducros
+# sensor as a function of vorticity over dilatation (both computed).
+# ---------------------------------------------------------------------------
+def jst_ducros_sensors():
+    fig, axes = plt.subplots(1, 2, figsize=(11, 3.7))
+    ax = axes[0]
+    N = 80
+    x = (np.arange(N) + 0.5) / N
+    p = 1 + 0.08 * np.sin(2 * np.pi * x * 3) * (x < 0.55) + 4.0 * 0.5 * (1 + np.tanh((x - 0.7) / 0.012))
+    nu = np.zeros(N)
+    nu[1:-1] = np.abs(p[2:] - 2 * p[1:-1] + p[:-2]) / (p[2:] + 2 * p[1:-1] + p[:-2])
+    k2, k4 = 0.5, 1 / 64
+    numax = np.maximum(nu, np.maximum(np.roll(nu, 1), np.roll(nu, -1)))
+    e2 = k2 * numax
+    e4 = np.maximum(0, k4 - e2)
+    ax.plot(x, p, color=GREY, lw=1.2)
+    ax.set_ylabel("pressure (arbitrary units)", color=GREY)
+    ax.set_xlabel("x")
+    ax2 = ax.twinx()
+    ax2.spines["right"].set_visible(True)
+    ax2.semilogy(x, np.maximum(e2, 1e-5), color=C1, label=r"$\varepsilon^{(2)}$ (second difference)")
+    ax2.semilogy(x, np.maximum(e4, 1e-5), color=C0, label=r"$\varepsilon^{(4)}$ (fourth difference)")
+    ax2.set_ylim(1e-5, 1)
+    ax2.set_ylabel("dissipation coefficient")
+    ax2.grid(False)
+    ax2.legend(frameon=False, fontsize=8, loc="upper left")
+    ax.set_title(r"JST switch, $k^{(2)} = 1/2$, $k^{(4)} = 1/64$ (computed)", fontsize=10)
+
+    ax = axes[1]
+    r = np.logspace(-2, 2, 300)
+    ax.semilogx(r, 1 / (1 + r**2), color=C0)
+    ax.axvspan(1e-2, 0.2, color=C1, alpha=0.08)
+    ax.axvspan(5, 1e2, color=C2, alpha=0.08)
+    ax.text(0.045, 0.45, "shock:\ndilatation\ndominates,\ndissipation on", ha="center", fontsize=9, color=C1)
+    ax.text(22, 0.45, "vortex or\nshear layer:\ndissipation off", ha="center", fontsize=9, color=C2)
+    ax.set_xlabel(r"vorticity / dilatation, $|\nabla\times\mathbf{u}|\,/\,|\nabla\cdot\mathbf{u}|$")
+    ax.set_ylabel(r"Ducros sensor $\alpha_{diss}$")
+    ax.set_title("Ducros sensor (computed from its definition)", fontsize=10)
+    fig.tight_layout()
+    save(fig, "jst_ducros_sensors")
+
+
+# ---------------------------------------------------------------------------
+# Low-Mach corrections: the factor each correction applies to the acoustic
+# dissipation, against local face-normal Mach number (computed).
+# ---------------------------------------------------------------------------
+def low_mach_scaling():
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 3.7))
+    M = np.logspace(-3, 0.3, 400)
+    ax = axes[0]
+    ax.loglog(M, 1 / M, color=GREY, label="uncorrected upwind flux")
+    ax.loglog(M, np.minimum(5.0, 1 / M), color=C0, label=r"Roe-M, $\phi = 5$")
+    ax.set_xlabel("local face-normal Mach number")
+    ax.set_ylabel("acoustic dissipation / advective dissipation")
+    ax.set_title(r"The imbalance: $c/|u| = 1/M$", fontsize=10)
+    ax.legend(frameon=False, fontsize=8)
+
+    ax = axes[1]
+    ax.semilogx(M, np.ones_like(M), color=GREY, label="uncorrected")
+    ax.semilogx(M, np.minimum(5 * M, 1), color=C0, label=r"Roe-M: $\min(\phi M, 1)$, $\phi = 5$")
+    ax.semilogx(M, np.sin(np.minimum(1, M / 0.1) * np.pi / 2), color=C1, label=r"HLLC-LM: $\sin(\min(1, M/0.1)\,\pi/2)$")
+    ax.semilogx(M, np.minimum(M, 1), color=C2, label=r"Thornber: $z = \min(M, 1)$")
+    ax.set_xlabel("local face-normal Mach number")
+    ax.set_ylabel("factor on the acoustic dissipation")
+    ax.set_title("What each correction does to it", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="center left")
+    save(fig, "low_mach_scaling")
+
+
+# ---------------------------------------------------------------------------
+# The carbuncle (schematic).
+# ---------------------------------------------------------------------------
+def carbuncle_schematic():
+    fig, axes = plt.subplots(1, 2, figsize=(9.5, 4.0))
+    th = np.linspace(-np.pi / 2, np.pi / 2, 200)
+    for ax, bad in zip(axes, (False, True)):
+        ax.fill(np.cos(np.pi - th) * 1.0, np.sin(np.pi - th) * 1.0, color="#bcaaa4")
+        ax.fill_betweenx([-1, 1], 0, 0.8, color="#bcaaa4")
+        y = np.linspace(-1.9, 1.9, 400)
+        xs = -1.38 - 0.0 * y + 0.33 * y**2
+        if bad:
+            xs = xs - 0.55 * np.exp(-((y / 0.22) ** 2))
+        ax.plot(xs, y, color=C0, lw=2.2)
+        for yy in np.linspace(-1.7, 1.7, 9):
+            ax.annotate("", xy=(-2.25, yy), xytext=(-2.9, yy), arrowprops=dict(arrowstyle="->", color=GREY, lw=1))
+        ax.plot([-2.9, -1.0], [0, 0], color=GREY, lw=0.8, ls=":")
+        if bad:
+            t = np.linspace(0, 2 * np.pi, 60)
+            for s in (1, -1):
+                ax.plot(-1.45 + 0.2 * np.cos(t), s * 0.17 + 0.11 * np.sin(t), color=C1, lw=1)
+            ax.annotate("spurious protrusion\non the stagnation line", xy=(-1.9, 0.05), xytext=(-2.9, 1.25),
+                        arrowprops=dict(arrowstyle="->", color=C1), color=C1, fontsize=9)
+            ax.text(-1.45, -0.5, "spurious\nrecirculation", color=C1, fontsize=8, ha="center", va="top")
+            ax.set_title("Carbuncle: converged, plausible, wrong", fontsize=10)
+        else:
+            ax.text(-2.1, 1.75, "bow shock", color=C0, fontsize=9)
+            ax.set_title("Correct solution", fontsize=10)
+        ax.set_xlim(-3.0, 0.6)
+        ax.set_ylim(-2, 2)
+        ax.set_aspect("equal")
+        ax.axis("off")
+    fig.text(0.5, 0.02, "schematic, not to scale", ha="center", fontsize=8, color=GREY)
+    save(fig, "carbuncle_schematic")
+
+
+# ---------------------------------------------------------------------------
+# Stiff sources: explicit vs implicit Euler on a relaxation equation (computed).
+# ---------------------------------------------------------------------------
+def stiff_relaxation():
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 3.7))
+    ax = axes[0]
+    t = np.linspace(0, 8, 400)
+    ax.plot(t, np.exp(-t), color="k", lw=1.2, label="exact")
+    for r, col in ((0.5, C2), (1.5, C0), (2.5, C1)):
+        n = int(8 / r) + 1
+        tt = np.arange(n + 1) * r
+        y = (1 - r) ** np.arange(n + 1)
+        ax.plot(tt, y, "o-", color=col, ms=3.5, label=rf"explicit, $\Delta t/\tau = {r}$")
+    ax.set_ylim(-3, 3)
+    ax.set_xlim(0, 8)
+    ax.set_xlabel(r"time / $\tau$")
+    ax.set_ylabel(r"$(y - y_{eq})/(y_0 - y_{eq})$")
+    ax.set_title("Explicit Euler: oscillates above 1, diverges above 2", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="lower left")
+
+    ax = axes[1]
+    ax.plot(t, np.exp(-t), color="k", lw=1.2, label="exact")
+    for r, col in ((0.5, C2), (2.5, C1), (8.0, C3)):
+        n = int(8 / r) + 1
+        tt = np.arange(n + 1) * r
+        y = (1 / (1 + r)) ** np.arange(n + 1)
+        ax.plot(tt, y, "o-", color=col, ms=3.5, label=rf"implicit, $\Delta t/\tau = {r}$")
+    ax.set_ylim(-0.1, 1.05)
+    ax.set_xlim(0, 8)
+    ax.set_xlabel(r"time / $\tau$")
+    ax.set_title("Implicit Euler: stable at any step, relaxes to equilibrium", fontsize=10)
+    ax.legend(frameon=False, fontsize=8)
+    fig.suptitle(r"Model source term $dy/dt = -(y - y_{eq})/\tau$ (computed)", fontsize=10, y=1.02)
+    save(fig, "stiff_relaxation")
+
+
+# ---------------------------------------------------------------------------
+# Implicit methods: block sparsity of the Jacobian on a small structured grid,
+# ordered along wall-normal lines (computed pattern).
+# ---------------------------------------------------------------------------
+def implicit_sparsity():
+    ni, nj = 5, 6  # i along the wall, j wall-normal; unknown index = i*nj + j
+    n = ni * nj
+    A = np.zeros((n, n))
+    for i in range(ni):
+        for j in range(nj):
+            k = i * nj + j
+            A[k, k] = 3
+            if j > 0:
+                A[k, k - 1] = 2
+            if j < nj - 1:
+                A[k, k + 1] = 2
+            if i > 0:
+                A[k, k - nj] = 1
+            if i < ni - 1:
+                A[k, k + nj] = 1
+    from matplotlib.colors import ListedColormap
+
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.3), gridspec_kw={"width_ratios": [1.15, 1]})
+    ax = axes[0]
+    ax.imshow(A, cmap=ListedColormap(["white", C2, C0, "k"]), interpolation="nearest")
+    for i in range(1, ni):
+        ax.axhline(i * nj - 0.5, color=GREY, lw=0.5)
+        ax.axvline(i * nj - 0.5, color=GREY, lw=0.5)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.grid(False)
+    ax.set_title(f"Jacobian of a {ni}×{nj} grid: each square is an $n_e\\times n_e$ block", fontsize=10)
+    ax.plot([], [], "s", color="k", label="diagonal block (cell itself, sources)")
+    ax.plot([], [], "s", color=C0, label="wall-normal neighbours: kept by line relaxation")
+    ax.plot([], [], "s", color=C2, label="neighbouring lines: moved to the right-hand side")
+    ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.02))
+
+    ax = axes[1]
+    ne = np.arange(5, 21)
+    ax.plot(ne, (ne / 5.0) ** 2, "o-", color=C0, ms=3.5, label=r"storage per block, $n_e^2$")
+    ax.plot(ne, (ne / 5.0) ** 3, "o-", color=C1, ms=3.5, label=r"block factorization, $n_e^3$")
+    ax.plot(ne, ne / 5.0, "o-", color=GREY, ms=3.5, label=r"explicit residual, $\sim n_e$")
+    ax.axvline(16, color=GREY, ls=":")
+    ax.text(16.2, 48, "11-species\n2T air", fontsize=8, color=GREY)
+    ax.annotate("33×", (16, (16 / 5) ** 3), textcoords="offset points", xytext=(-26, 2), color=C1, fontsize=9)
+    ax.annotate("10×", (16, (16 / 5) ** 2), textcoords="offset points", xytext=(-26, 2), color=C0, fontsize=9)
+    ax.set_xlabel(r"equations per cell, $n_e$")
+    ax.set_ylabel("cost relative to a 5-equation perfect gas")
+    ax.set_title("Cost growth with the gas model (computed)", fontsize=10)
+    ax.legend(frameon=False, fontsize=8)
+    save(fig, "implicit_sparsity")
+
+
+# ---------------------------------------------------------------------------
+# Local time stepping: the local step across a stretched wall-normal grid.
+# ---------------------------------------------------------------------------
+def local_time_steps():
+    fig, ax = plt.subplots(figsize=(7.2, 3.8))
+    n = 60
+    dy = 1e-6 * 1.2 ** np.arange(n)
+    y = np.cumsum(dy) - dy / 2
+    a, nu = 1.0e3, 3.0e-3  # illustrative |u|+a and kinematic viscosity
+    dt = 1.0 / (a / dy + 2 * nu / dy**2)
+    ax.loglog(y, dt, color=C0, label="local time step of each cell")
+    ax.axhline(dt.min(), color=C1, ls="--", label="global step = smallest local step")
+    ax.fill_between(y, dt.min(), dt, color=C0, alpha=0.08)
+    ax.annotate(f"ratio {dt.max() / dt.min():.0e}", (y[-1], dt[-1]), textcoords="offset points", xytext=(-70, -6), fontsize=9, color=C0)
+    ax.set_xlabel("distance from wall (m)")
+    ax.set_ylabel("allowed explicit time step (s)")
+    ax.set_title("Wall-normal line of 60 cells, first cell 1 µm, growth 1.2\n(illustrative shock-layer values)", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    save(fig, "local_time_steps")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -1250,3 +1689,13 @@ if __name__ == "__main__":
     rk_stability_regions()
     dual_time_stepping()
     convergence_histories()
+    fv_stencil()
+    discretization_families()
+    viscous_face_gradient()
+    weno_stencils()
+    jst_ducros_sensors()
+    low_mach_scaling()
+    carbuncle_schematic()
+    stiff_relaxation()
+    implicit_sparsity()
+    local_time_steps()

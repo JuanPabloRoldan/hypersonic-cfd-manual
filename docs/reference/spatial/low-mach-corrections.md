@@ -26,6 +26,11 @@ That would be a footnote for entry flows, except for three places where low loca
 
 ## How it works
 
+<figure markdown>
+![Low-Mach dissipation imbalance and corrections](../../assets/figures/low_mach_scaling.svg)
+<figcaption markdown="span">Left: the ratio of acoustic to advective dissipation in an upwind flux is $c/|u| = 1/M$, so at a face-normal Mach number of 0.01 the acoustic part is a hundred times too large; Roe-M caps the ratio at $\phi$. Right: the factor each correction on this page applies to the acoustic dissipation, as a function of local Mach number. All return to one, and so to the unmodified scheme, by Mach 1 or earlier. Computed from the formulas below.</figcaption>
+</figure>
+
 There are two families: scale the acoustic eigenvalues (or wave speeds) in the dissipation term, or scale the velocity jump that the dissipation acts on. In each case a Mach-dependent factor $z$ or $\phi$ goes to 1 at moderate Mach numbers, so the original scheme, and its shock-capturing behaviour, is recovered.
 
 ### Roe-M (Hu and Adams; Fleischmann et al.) {#roe-m}
@@ -77,7 +82,33 @@ MFC's `pi_fac` modifies the stiffened-gas $\pi_\infty$ of liquid phases to raise
 
 ### Preconditioning
 
-Low-Mach preconditioning (Turkel; Weiss–Smith) rescales the time derivatives and the dissipation together, so both accuracy and convergence improve at low Mach. It is the standard all-speed approach in commercial density-based solvers. *(To be expanded.)*
+The corrections above change only the flux. **Preconditioning** (Turkel; Weiss & Smith) changes the time derivative as well. The system is written as $\boldsymbol\Gamma\,\partial\mathbf Q/\partial t + \nabla\cdot\mathbf F = 0$ with a matrix $\boldsymbol\Gamma$ chosen so that the acoustic wave speeds $u \pm c$ are replaced by speeds of the same order as $u$ when the Mach number is low. Two things follow:
+
+- **Convergence.** At low Mach number the unmodified system is stiff because acoustic waves are far faster than convection (condition number about $1/M$). With all wave speeds of order $u$ the condition number is of order one and a time-marching solver converges at a rate independent of Mach number.
+- **Accuracy.** The flux dissipation is rebuilt from the preconditioned eigenvalues, which gives the same rebalancing of acoustic and advective dissipation as the corrections above.
+
+The cost is that $\boldsymbol\Gamma$ distorts time, so the transient is no longer physical. For unsteady flow it is applied only to the pseudo-time derivative of [dual time stepping](../time/dual-time-stepping.md). It is the standard all-speed approach in commercial density-based solvers; the [STAR-CCM+](../../codes/index.md#star-ccm) coupled solver uses a Weiss–Smith preconditioned Roe flux. The preconditioning switches itself off above Mach 1, so in an entry flow it acts only in the boundary layer, stagnation region and wake.
+
+## Typical values
+
+- HLLC-LM limit Mach number: $M_{\text{lim}} = 0.1$ (Fleischmann, Adami & Adams 2020).
+- Roe-M and LLF-M constant: $\phi = 5$ (Fleischmann et al. 2020).
+- Size of the imbalance: acoustic over advective dissipation is $1/M$, so 10 at a face-normal Mach number of 0.1 and 1000 at 0.001.
+- Pressure-fluctuation scaling of an uncorrected Godunov-type scheme: order $M$ instead of the physical $M^2$ (Guillard & Viozat 1999).
+- Cost: one Mach number and one scaling factor per face.
+
+## Trade-offs
+
+- **Scaling wave speeds (Roe-M, HLLC-LM) vs scaling the velocity jump (Thornber, Chen).** The first acts inside the flux and is active only below a small Mach number; the second acts over the whole subsonic range and may need a shock sensor to stay off near strong shocks.
+- **Flux correction vs preconditioning.** A flux correction fixes accuracy only and keeps time accuracy; preconditioning also fixes convergence but distorts time.
+- **Against the classical carbuncle cures.** These remove dissipation instead of adding it, so boundary layers and contacts are not smeared; they are newer and less tested on production entry cases than eigenvalue limiting.
+
+## Effects on stability and robustness
+
+- HLLC-LM and Roe-M stabilize grid-aligned strong shocks that plain HLLC and Roe can't hold, including in 3-D and at high order (Fleischmann et al. 2020).
+- A hard switch in the Mach-dependent factor can cause steady-state convergence to chatter; HLLC-LM's sine ramp is smooth for that reason.
+- Reducing dissipation in the subsonic stagnation region removes a safety margin there; on poor grids the result can be noisier wall quantities.
+- Preconditioning with too small a reference velocity near stagnation points is unstable, which is why codes impose a floor on it.
 
 ## Implications
 

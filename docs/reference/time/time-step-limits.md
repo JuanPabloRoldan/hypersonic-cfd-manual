@@ -75,6 +75,34 @@ Explicit treatment of chemistry or vibrational relaxation also requires $\Delta 
 
 In 2D and 3D the convective limit uses the sum of the directional wave-speed-to-spacing ratios, and the viscous limit the sum of $\nu/\Delta x_k^2$ terms. On high-aspect-ratio wall cells the wall-normal direction dominates both.
 
+## Variants
+
+The same analysis applies to each kind of term, giving one limit per physical process:
+
+| Limit | Form | Scales with | Binds where |
+|---|---|---|---|
+| Convective (CFL) | $\Delta x/(\lvert u\rvert + a)$ | $\Delta x$ | coarse cells, inviscid regions |
+| Viscous (Fourier) | $\Delta x^2/(2\nu)$ | $\Delta x^2$ | thin wall cells, $Re_\Delta \lesssim 2$ |
+| Source | of order the fastest chemical or relaxation time | independent of the grid | behind the shock |
+
+## Typical values
+
+- Crossover between the two flow limits: cell Reynolds number $Re_\Delta = 2$.
+- Wall cell on a heating grid (illustrative): $\Delta y \sim 10^{-6}$ m gives $\Delta t_{\text{visc}} \approx 2\times10^{-10}$ s.
+- Shock-layer cell (illustrative): $\Delta x = 1$ mm and $\lvert u\rvert + a = 5000$ m/s give $\Delta t_{\text{conv}} = 2\times10^{-7}$ s.
+- Maximum CFL of explicit Runge–Kutta schemes: of order one ([explicit methods](explicit-methods.md#why-there-is-a-step-limit-at-all)).
+
+## Trade-offs
+
+- A finer wall grid improves heat flux and costs explicit time step quadratically. Halving the wall spacing quarters the viscous limit.
+- Implicit methods remove the limits at a fixed cost per step; whether that pays depends on how large a step the physics allows ([explicit vs implicit](explicit-vs-implicit.md)).
+
+## Effects on stability and robustness
+
+- The limits are sharp. Just inside, the scheme is stable; just outside, the shortest-wavelength mode grows exponentially.
+- The binding cell can change during a run: the shock moves, chemistry switches on, the boundary layer thins.
+- In several dimensions the limits combine (the inverse steps add), so a cell that is thin in one direction and coarse in the others is still bound by its thin direction.
+
 ## Implications
 
 | Lens | Effect |

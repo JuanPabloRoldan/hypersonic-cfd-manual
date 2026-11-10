@@ -47,6 +47,13 @@ $$
 
 With $q = 1, 2, 4$ in cells $i-1, i, i+1$: $\Delta^- = 1$, $\Delta^+ = 2$, so $\sigma_i = 1$ and $q^L_{i+1/2} = 2.5$ (an unlimited central slope would give 2.75). At an extremum, $q = 1, 3, 2$, the slopes have opposite signs, $\sigma_i = 0$, and the cell goes flat (locally first order).
 
+<figure markdown>
+![Cell averages, reconstruction and the face flux](../../assets/figures/fv_stencil.svg)
+<figcaption markdown="span">Steps 2 and 3 in one dimension. Black dots are the stored cell averages (1, 1.2, 2, 4, 4.4, 4.5). Blue lines are the minmod-limited linear reconstructions inside each cell. At face $i+\tfrac12$ the two reconstructions disagree: the left state is $2 + \tfrac12(0.8) = 2.4$ and the right state is $4 - \tfrac12(0.4) = 3.8$. The flux function turns that pair into a single flux, which is subtracted from cell $i$ and added to cell $i+1$. Computed from the minmod formula above.</figcaption>
+</figure>
+
+The jump between $q_L$ and $q_R$ at a face is not an error to be removed. It is the scheme's measure of how under-resolved the solution is there, and the flux function's dissipation is proportional to it. In smooth, well-resolved flow the two states nearly coincide and every flux function gives nearly the same answer; at a shock they differ by the full jump and the choice of flux function matters most.
+
 ### 3. Inviscid flux
 
 Evaluate a numerical flux function $\hat{\mathbf F}(\mathbf W_L, \mathbf W_R)$ at each face. There is always a flux function; a Riemann solver is one family of them:
@@ -74,6 +81,26 @@ $$
 $$
 
 Explicit: $\bar{\mathbf U}_i \leftarrow \bar{\mathbf U}_i - \frac{\Delta t}{V_i}\mathbf R_i$, with a Runge–Kutta scheme repeating steps 1–5 once per stage ([explicit methods](../time/explicit-methods.md)). Implicit: assemble $(\mathbf I\,V/\Delta t + \partial\mathbf R/\partial\mathbf U)\,\Delta\mathbf U = -\mathbf R$ and solve it approximately ([implicit methods](../time/implicit-methods.md), [relaxation](../time/relaxation-methods.md)). Boundary conditions enter as fluxes or ghost-cell states at boundary faces ([boundary conditions](boundary-conditions.md)).
+
+## Typical values
+
+- Stencil width per face: 2 cells (first order), 4 cells (MUSCL, second order), 6 cells (fifth-order WENO). That is also the number of ghost or halo layers needed on each side: 1, 2, 3.
+- Evaluations per explicit time step: one pass of steps 1–5 per Runge–Kutta stage, so three passes for SSP-RK3.
+- Share of cost: for a perfect gas the inviscid flux and reconstruction dominate. With finite-rate chemistry, the decode (temperature inversion), transport properties and source terms often cost more than the fluxes ([closing the system](../foundations/closing-the-system.md)).
+- Unknowns per cell: 5 for a 3-D perfect gas, 16 for 11-species two-temperature air ([governing equations](../foundations/governing-equations.md)).
+
+## Trade-offs
+
+- **Store conserved, compute with primitives.** Conservation is guaranteed by the flux-difference update; the price is a decode in every cell at every evaluation.
+- **One residual for everything.** Inviscid, viscous and source contributions each get the discretization that suits them, then are summed. The alternative, operator splitting (advance each piece separately), is simpler for stiff chemistry but leaves a splitting error at steady state ([stiff source terms](../sources/stiff-sources.md)).
+- **Higher-order reconstruction.** Less dissipation per cell, but a wider stencil, more work per face and more ways to produce an unphysical face state.
+
+## Effects on stability and robustness
+
+- **Decode** fails when the conserved state is unphysical: negative internal energy after subtracting kinetic energy, or a temperature iteration that doesn't converge. This is the most common place for a run to abort.
+- **Reconstruct** can overshoot to a negative density or pressure at a face even when both cells are fine. Limiters, primitive-variable reconstruction and first-order fallback are the defences ([reconstruction](reconstruction.md#which-variables-to-reconstruct)).
+- **Inviscid flux** decides shock behaviour: too little dissipation and the shock can go unstable ([shock instabilities](shock-instabilities.md)); too much and the boundary layer is smeared.
+- **Sources** bring stiffness, which an explicit update can't handle at a flow-sized time step.
 
 ## Implications
 

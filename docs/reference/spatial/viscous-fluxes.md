@@ -43,6 +43,13 @@ $$
 + \big[\mathbf I - \hat{\mathbf n}\otimes\hat{\mathbf n}\big]\,\tfrac12\big((\nabla\phi)_L + (\nabla\phi)_R\big).
 $$
 
+Reading the formula: the first term is the direct difference along the line joining the centroids, projected onto the face normal. The second term takes the average of the two cell gradients and removes its normal component with the projector $\mathbf I - \hat{\mathbf n}\otimes\hat{\mathbf n}$, leaving only the part tangent to the face. So the normal derivative comes from the two cells that share the face and the tangential derivative from the wider stencil.
+
+<figure markdown>
+![Face gradient decomposition and wall gradient](../../assets/figures/viscous_face_gradient.svg)
+<figcaption markdown="span">Left: the two pieces of the face gradient on a skewed pair of cells (schematic). Right: why the first cell height matters for heat flux. The wall gradient is estimated from the first cell centre and the wall value; for an illustrative exponential temperature profile, a first cell 30% of the boundary-layer thickness recovers 57% of the true wall gradient and a cell of 4% recovers 92%.</figcaption>
+</figure>
+
 This is the form of Nompelis et al. (2004), following Kim, Makarov & Caraeni (2003). The direct difference is compact (it couples the two cells sharing the face, which removes odd–even decoupling) and is accurate in exactly the direction that matters for heat flux on a stretched wall grid. On an ideal orthogonal grid it reduces to the plain difference.
 
 **Typical effect.** US3D and DPLR, run on the same grid for Orion at 9.5 km/s, 18° angle of attack, with matched thermochemistry, agreed within 1% on stagnation-line data and surface pressure but differed by up to 5% in heat flux. Candler et al. (2015) attribute the difference most likely to gradient evaluation: DPLR uses standard finite differences, US3D weighted least squares with deferred correction, which is expected to be more accurate on non-ideal grids. The source was not confirmed.
@@ -68,6 +75,26 @@ Keep only viscous derivatives normal to the wall. Cheaper; appropriate for attac
 ### Discontinuous Galerkin viscous treatments
 
 DG needs special viscous discretizations (BR2, interior penalty, LDG), but these are still symmetric, not upwinded.
+
+## Typical values
+
+- Wall cell Reynolds number for grid-converged heating: of order one or below (accepted practice in the aeroheating literature).
+- US3D against DPLR on the same Orion grid at 9.5 km/s: 1% in pressure, up to 5% in heat flux, attributed most likely to gradient evaluation (Candler et al. 2015).
+- Wall gradient recovered by a one-sided difference on an exponential profile of thickness scale $\delta_T$: 92% with a first cell of $0.33\,\delta_T$, 57% with $2.5\,\delta_T$ (computed; the figure uses a boundary-layer thickness of about $8\,\delta_T$).
+- Cost: a gradient reconstruction costs about as much as an inviscid flux evaluation.
+
+## Trade-offs
+
+- **Green–Gauss vs least squares.** Green–Gauss is cheaper and exact on regular grids; least squares is more accurate on irregular cell clouds but can still be poor in the thin direction of very stretched cells.
+- **With vs without the face-normal correction.** The correction couples adjacent cells and fixes the wall-normal derivative, at the cost of a slightly more complicated Jacobian in an implicit code.
+- **Thin-layer vs full viscous terms.** Thin-layer is cheaper and gives a simpler implicit operator; it drops streamwise diffusion, which is wrong in separated flow.
+- **Arithmetic vs other face averages of transport coefficients.** Arithmetic averaging is standard; across a very large jump in conductivity a harmonic average represents the flux better.
+
+## Effects on stability and robustness
+
+- Averaged cell gradients without the direct-difference term allow odd–even (checkerboard) modes: a sawtooth in temperature produces no restoring diffusion.
+- Central viscous fluxes are unconditionally dissipative, so they never destabilize a scheme by themselves; their stability cost is the explicit $\Delta x^2/(2\nu)$ step limit.
+- On skewed or tetrahedral near-wall cells the tangential part of the gradient contaminates the normal one, which shows up as noisy wall heat flux, not as a crash.
 
 ## Implications
 

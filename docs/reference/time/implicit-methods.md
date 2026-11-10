@@ -38,6 +38,11 @@ $$
 
 As $\Delta t\to\infty$ the left-hand matrix becomes $\partial\mathbf R/\partial\mathbf U$ and the update becomes **Newton's method** for $\mathbf R(\mathbf U) = 0$, which converges quadratically near the solution. That is why steady implicit solvers ramp the CFL number up as the solution settles. The $V/\Delta t$ term keeps early iterations stable while the solution is far from converged.
 
+<figure markdown>
+![Jacobian sparsity and cost growth](../../assets/figures/implicit_sparsity.svg)
+<figcaption markdown="span">Left: the structure of the residual Jacobian for a small 2-D structured grid, with cells numbered along wall-normal lines. Each coloured square is one $n_e\times n_e$ block. The black and blue blocks form a block-tridiagonal system for each line, which [line relaxation](relaxation-methods.md#line-relaxation) solves exactly; the green blocks couple neighbouring lines. Right: how the cost of one block grows with the number of equations, relative to a five-equation perfect gas.</figcaption>
+</figure>
+
 ### Solving it approximately
 
 Nobody solves this system exactly. The left-hand side is usually an approximation (often a first-order, more dissipative Jacobian even when the residual is second order: a **defect-correction** strategy), and the linear system is solved approximately by [point or line relaxation](relaxation-methods.md), LU-SGS, or a Krylov method (GMRES) with preconditioning. Because the right-hand side is the true residual, the converged steady solution is unaffected by these approximations; only the convergence rate is.
@@ -85,6 +90,28 @@ Treat only the sources implicitly and the fluxes explicitly. See [stiff source t
 ### Newton–Krylov and JFNK
 
 Krylov solvers that need only Jacobian–vector products, which can be approximated by finite differences of the residual (Jacobian-free).
+
+## Typical values
+
+- CFL numbers: ramped from order 1–10 at start-up to $10^2$–$10^6$ as the solution settles.
+- Blocks stored per cell for fully coupled line relaxation in 3-D: seven, each $n_e\times n_e$; about 4700 numbers per cell at $n_e = 26$, against 26 for the solution.
+- Cost growth from a perfect gas ($n_e = 5$) to 11-species 2T air ($n_e = 16$): about 10× in block storage, about 33× in block factorization.
+- Decoupled implicit method: about 3× faster than fully coupled for a 20-species model, with a similar memory saving (Candler et al. 2015).
+- Iterations to converge a steady blunt-body case with line relaxation: hundreds to a few thousand ([relaxation methods](relaxation-methods.md)).
+
+## Trade-offs
+
+- **Exact vs approximate Jacobian.** An exact linearization of a second-order scheme gives Newton-like convergence but is large and ill-conditioned; a first-order approximate Jacobian is cheaper and better conditioned, and costs convergence rate but not accuracy.
+- **Stored Jacobian vs Jacobian-free.** Storing blocks costs memory that grows as $n_e^2$; Jacobian-free Krylov methods avoid it but need a good preconditioner, which is usually a stored approximate Jacobian anyway.
+- **Coupled vs decoupled species.** Coupled handles fast chemistry; decoupled makes cost linear in the number of species when chemistry is not much faster than the flow.
+- **Implicit vs explicit.** A large fixed cost per step in exchange for a step size free of stability limits ([explicit vs implicit](explicit-vs-implicit.md)).
+
+## Effects on stability and robustness
+
+- Linear stability is unconditional, but the linearization is only valid near the current state. Too large a step early in a run sends the Newton update outside the physical range, which is why the CFL number is ramped.
+- An approximate linear solve limits the usable CFL number: the stiffer the modes left to the iteration, the lower the limit.
+- Boundary conditions and source terms left out of the Jacobian (lagged) behave explicitly and cap the CFL number.
+- Non-smooth pieces of the residual (limiters, switches) aren't represented in the Jacobian and can stall convergence.
 
 ## Implications
 

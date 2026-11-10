@@ -56,6 +56,29 @@ Explicit cost per step grows roughly linearly with the number of equations $n$ (
 
 MFC's [IGR](../spatial/central-schemes.md#shock-regularization-igr) replaces the shock-capturing machinery (reconstruction plus Riemann solver) with a regularization that allows simple central fluxes and very low memory. It is still explicit and still CFL-limited; it changes the flux slot, not the time-step constraint.
 
+## Variants
+
+The comparison has more than two entries. Between fully explicit and fully implicit sit explicit flow with implicit sources ([stiff source terms](../sources/stiff-sources.md)), implicit–explicit Runge–Kutta, and [dual time stepping](dual-time-stepping.md), each of which removes one stability limit while leaving the others.
+
+## Typical values
+
+- Break-even: implicit wins when wanted step over allowed step exceeds the implicit overhead $C$; $C$ is typically tens to a few hundred explicit-step equivalents, more with many species (order of magnitude).
+- Steady aeroheating: wanted over allowed is effectively unbounded; converged in hundreds to thousands of implicit iterations.
+- Capsule wake at kHz with 100 steps per period: ratio about $10^5$.
+- DNS or shock–interface problems: ratio near 1.
+- Cost growth of the implicit overhead from 5 to 16 equations: about 33× in block factorizations, against about 3× for the explicit residual.
+
+## Trade-offs
+
+- **Explicit:** minimal memory, linear cost in the number of equations, ideal on GPUs; pays in step count.
+- **Implicit:** step size chosen freely; pays in memory ($n_e^2$ per block), in work per step, and in parallel complexity.
+- **The grid decides as much as the method.** A wall-resolved heating grid pushes any time-accurate problem towards implicit; a uniform DNS grid pushes towards explicit.
+
+## Effects on stability and robustness
+
+- Explicit schemes fail abruptly when the step limit is exceeded and are otherwise predictable.
+- Implicit schemes rarely blow up from step size alone, but they fail in subtler ways: stalled convergence, under-converged subiterations, start-up transients that leave the physical range.
+
 ## Implications
 
 | Lens | Effect |

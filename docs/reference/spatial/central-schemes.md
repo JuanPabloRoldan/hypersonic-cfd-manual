@@ -26,13 +26,34 @@ $$
 
 a symmetric (non-dissipative) part, plus a dissipative part $\mathbf D_f$ (typically borrowed from an upwind scheme) multiplied by a **shock sensor** $0 \le \alpha_{\text{diss}} \le 1$ that is near zero in smooth or vortical regions and near one at shocks. Design choices: how the symmetric part is built (plain average, skew-symmetric, kinetic-energy consistent), where the dissipation comes from, and the sensor.
 
-A naive central average is unstable for compressible turbulence even without shocks, because it produces kinetic energy spuriously through aliasing. That is what kinetic-energy-consistent and skew-symmetric forms fix.
+A naive central average is unstable for compressible turbulence even without shocks. The convective terms are products of the variables, and on a grid a product of two resolved waves can create a wave too short for the grid to represent, which then reappears as a longer one (**aliasing**). With a plain central average that mechanism creates kinetic energy from nothing, and with no dissipation to remove it the energy piles up until the run fails. Kinetic-energy-consistent and skew-symmetric forms are built so that the discrete convective terms can't do that.
+
+<figure markdown>
+![JST switch and Ducros sensor](../../assets/figures/jst_ducros_sensors.svg)
+<figcaption markdown="span">Two ways to decide where dissipation acts. Left: the JST coefficients computed for a pressure profile with smooth waves and a captured shock (grey, left axis). The second-difference coefficient $\varepsilon^{(2)}$ rises by orders of magnitude at the shock, and the background fourth-difference coefficient $\varepsilon^{(4)}$ switches off there. Right: the Ducros sensor, which compares compression with rotation; it is near one where dilatation dominates and near zero in vortical flow.</figcaption>
+</figure>
 
 ## Variants
 
 ### JST
 
-Jameson–Schmidt–Turkel (1981): a central flux plus a blend of second-difference dissipation, switched on near shocks by a normalized pressure second-difference sensor, and a small fourth-difference background dissipation that damps odd–even modes. The classic aerospace central scheme, typically paired with explicit Runge–Kutta, local time stepping and multigrid.
+Jameson–Schmidt–Turkel (1981): a central flux plus two kinds of added dissipation. In one dimension the face flux is the central average minus a dissipative flux, $\hat{\mathbf F}_{i+1/2} = \tfrac12(\mathbf F_i + \mathbf F_{i+1}) - \mathbf d_{i+1/2}$, with
+
+$$
+\mathbf d_{i+1/2} = \lambda_{i+1/2}\Big[\varepsilon^{(2)}\,(\mathbf U_{i+1} - \mathbf U_i) \;-\; \varepsilon^{(4)}\,(\mathbf U_{i+2} - 3\mathbf U_{i+1} + 3\mathbf U_i - \mathbf U_{i-1})\Big],
+$$
+
+with $\lambda = |u| + a$ the largest wave speed at the face. The first term is a second difference: it acts like a viscosity and is what captures shocks. The second is a fourth difference: it is tiny in smooth flow, but damps the odd–even (sawtooth) mode that a central scheme can't see. The coefficients come from a pressure sensor,
+
+$$
+\nu_i = \frac{|p_{i+1} - 2p_i + p_{i-1}|}{p_{i+1} + 2p_i + p_{i-1}},\qquad
+\varepsilon^{(2)} = k^{(2)}\max(\nu_i,\nu_{i+1}),\qquad
+\varepsilon^{(4)} = \max\big(0,\ k^{(4)} - \varepsilon^{(2)}\big).
+$$
+
+$\nu_i$ is a normalized second difference of pressure: of order $\Delta x^2$ in smooth flow and of order one across a shock. So $\varepsilon^{(2)}$ is negligible except at shocks, and $\varepsilon^{(4)}$ is turned off exactly there, because a fourth difference across a discontinuity would produce overshoots. $k^{(2)}$ and $k^{(4)}$ are user constants.
+
+This is the classic aerospace central scheme, typically paired with [explicit Runge–Kutta](../time/explicit-methods.md#explicit-steady-state-solvers), local time stepping and multigrid. Its second-difference term is a scalar dissipation (the same coefficient for every wave), which is what makes it too diffusive for boundary layers at high Mach number unless the coefficients are reduced near walls.
 
 ### Kinetic-energy-consistent fluxes
 
@@ -101,13 +122,27 @@ A different route, used in MFC: rather than capturing shocks with limiters and R
 !!! warning "Calibration"
     Summary of the published idea (Cao & Schäfer) and its use in MFC (Wilfong et al.); check those papers for the exact formulation.
 
-## Typical values and trade-offs
+## Typical values
 
-- **Fully discrete KEC, explicit iteration:** 3–4 iterations per step, CFL ≤ 1, cost comparable to multistage Runge–Kutta.
-- **Implicit KEC (BDF2 + full-matrix point relaxation):** CFL up to $10^5$ for steady runs (Subbareddy & Candler 2009); about 100 for second-order implicit point relaxation in hybrid RANS/LES (Candler et al. 2015).
-- **Order:** 2nd by default, 4th and 6th on smooth hexahedral grids using gradient information.
-- **Large-scale use:** a 216.6-million-element DNS of the HIFiRE-5 elliptic cone in US3D used fourth-order KEC fluxes with third-order explicit Runge–Kutta (Candler et al. 2015).
-- **Trade-off:** far less dissipation than upwind MUSCL (needed for transition, LES and DNS), at the price of depending on a shock sensor; a sensor that misses a discontinuity leaves it unprotected, one that fires too widely makes the scheme as dissipative as upwind.
+- JST constants: $k^{(2)}$ between 1/4 and 1, $k^{(4)}$ between 1/256 and 1/32; 1/2 and 1/64 are common starting values (Jameson, Schmidt & Turkel 1981; Blazek).
+- Fully discrete KEC, explicit iteration: 3–4 iterations per step, CFL ≤ 1, cost comparable to multistage Runge–Kutta (Candler, Subbareddy & Nompelis 2015).
+- Implicit KEC (BDF2 + full-matrix point relaxation): CFL up to $10^5$ for steady runs (Subbareddy & Candler 2009); about 100 for second-order implicit point relaxation in hybrid RANS/LES (Candler et al. 2015).
+- Order: second by default; fourth and sixth on smooth hexahedral grids using gradient information ($a = \tfrac12$, $b = \tfrac18$ for fourth order).
+- Large-scale use: a 216.6-million-element DNS of the HIFiRE-5 elliptic cone in US3D used fourth-order KEC fluxes with third-order explicit Runge–Kutta (Candler et al. 2015).
+
+## Trade-offs
+
+- **Central with switched dissipation vs upwind.** Far less dissipation in smooth and vortical flow, which transition, LES and DNS need. The price is dependence on a shock sensor.
+- **Sensor too weak vs too strong.** A sensor that misses a discontinuity leaves it unprotected and the solution oscillates; one that fires too widely makes the scheme as dissipative as the upwind flux it borrowed from.
+- **Scalar (JST) vs matrix dissipation.** Scalar dissipation is cheap and robust but damps every wave at the fastest wave's rate; matrix dissipation (the upwind term used with KEC) damps each wave at its own speed and preserves boundary layers.
+- **For steady aeroheating.** With the sensor on everywhere the scheme reduces to its upwind parent, so nothing is gained; the method earns its cost only when there is unsteady small-scale motion to preserve.
+
+## Effects on stability and robustness
+
+- With dissipation switched off, stability rests entirely on the symmetric flux not producing kinetic energy. A plain average fails this; KEC and skew-symmetric forms pass it.
+- Sensor misfires are the main risk: a density jump with little dilatation (cold light gas into a hot heavy stream) isn't flagged by the Ducros sensor.
+- Forward Euler and two-stage Runge–Kutta are unstable with dissipation-free central fluxes at any time step ([explicit methods](../time/explicit-methods.md#why-there-is-a-step-limit-at-all)); three or more stages, or an implicit scheme, are needed.
+- In an implicit solver, building the Jacobian with full dissipation while the residual uses switched dissipation helps convergence but leaves extra damping unless subiterations are converged.
 
 ## Implications
 

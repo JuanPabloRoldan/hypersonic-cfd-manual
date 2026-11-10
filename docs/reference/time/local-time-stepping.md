@@ -24,6 +24,11 @@ $$
 
 its own local stability limit. This is standard in essentially every steady solver, explicit or implicit.
 
+<figure markdown>
+![Local time step across a wall-normal line](../../assets/figures/local_time_steps.svg)
+<figcaption markdown="span">The explicit step each cell could take along one wall-normal grid line (60 cells, first cell 1 µm, growth ratio 1.2, illustrative shock-layer values of wave speed and viscosity), computed from the combined convective and viscous limit. The outermost cell could take a step $3\times10^5$ times larger than the wall cell. A global step forces every cell down to the dashed line; local time stepping lets each use its own.</figcaption>
+</figure>
+
 ### Why it doesn't remove the stiffness
 
 LTS removes the "smallest cell sets the global step" problem, but not the conditioning problem. A wall cell might have aspect ratio $\Delta x/\Delta y \sim 10^3$–$10^4$, and its local step is set by its small dimension $\Delta y$. A signal travelling along the wall then needs thousands of iterations to cross that one cell in the streamwise direction. In linear-algebra terms the discrete system is badly conditioned: the fastest and slowest error modes differ by orders of magnitude, and explicit iterations damp the slow ones very slowly. Stiff chemistry adds its own fast scales on top.
@@ -40,6 +45,30 @@ Naive LTS (every cell at its own step, never synchronized) destroys time accurac
 
 !!! warning "Calibration"
     As far as is known here, production reentry codes rarely use time-accurate LTS for unsteady runs; they rely on implicit [dual time stepping](dual-time-stepping.md) instead. To be checked against code documentation.
+
+## Variants
+
+- **Steady local time stepping:** each cell at its own pseudo-time step; no time accuracy.
+- **Local pseudo-time steps inside dual time stepping:** the same device used in the inner iteration of a time-accurate implicit method ([dual time stepping](dual-time-stepping.md)).
+- **Time-accurate subcycling:** AMR levels, multirate schemes and sub-stepped local ODEs, as above.
+
+## Typical values
+
+- Spread of local steps on a heating grid: five to six orders of magnitude between the wall cell and the outer shock layer (figure; illustrative values).
+- Wall-cell aspect ratios: $10^3$–$10^4$ and higher, which is the number of local steps a signal needs to cross one cell along the wall.
+- AMR subcycling ratio: usually equal to the refinement ratio, 2 or 4 fine steps per coarse step.
+
+## Trade-offs
+
+- **Gain:** removes the global-minimum step for steady problems at no cost, and is trivially parallel.
+- **Pay:** the transient is meaningless, and stiffness from cell aspect ratio remains.
+- **Time-accurate versions:** save work when only a small part of the domain needs small steps, in exchange for synchronization, conservative flux corrections at level boundaries and uneven load.
+
+## Effects on stability and robustness
+
+- Each cell is exactly as stable as it would be at its own CFL number; nothing new is introduced.
+- Neighbouring cells with very different local steps exchange fluxes computed at inconsistent pseudo-times. That is harmless at convergence but can cause start-up transients at sharp jumps in cell size.
+- Naive local stepping applied to an unsteady problem doesn't fail visibly. It gives a smooth, wrong time history.
 
 ## Implications
 
