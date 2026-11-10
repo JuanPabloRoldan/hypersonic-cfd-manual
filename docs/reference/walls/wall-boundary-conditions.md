@@ -117,11 +117,51 @@ with $\Delta n$ the height of the first cell. This is a first-order one-sided gr
 
 ## Variants
 
-- **Thermal:** isothermal, adiabatic, radiative equilibrium, coupled surface energy balance.
-- **Catalytic:** non-, partially, fully, equilibrium and super-catalytic; finite-rate surface chemistry models with several surface reactions (oxidation and nitridation of carbon as well as recombination) generalize the single $\gamma$.
-- **Velocity:** no-slip; Maxwell slip with temperature jump.
-- **Vibrational temperature:** $T_v = T_w$ (full accommodation, the usual choice) or $\partial T_v/\partial n = 0$.
-- **Blowing and ablating walls:** a wall-normal mass flux of pyrolysis and ablation products enters the species and energy conditions ([surface energy balance](surface-energy-balance.md#blowing)).
+Each wall condition makes three independent choices: what the wall does to the temperature(s), to the composition, and to the velocity. Blowing adds a fourth when the wall is ablating. The tables below give, for each option, the condition imposed at the wall, what it means physically, and what it does to the solution. The sections above have the derivations.
+
+### Thermal
+
+| Condition | Imposed at the wall | Physical meaning | Consequence |
+|---|---|---|---|
+| Isothermal | $T = T_w$ (given) | The wall is a heat sink that holds its temperature, like a short tunnel test or a thick metal model | Highest heat flux of the thermal options; the conservative choice for design |
+| Adiabatic | $q_w = 0$ (for a non-reacting gas, $\partial T/\partial n = 0$) | The wall takes no heat at all | $T_w$ rises to the recovery temperature, many thousands of kelvin at entry; useful for forces only, never for heating |
+| Radiative equilibrium | $q_w(T_w) = \varepsilon\sigma T_w^4$ | Everything the wall receives it radiates away; nothing conducts inward | Realistic surface temperature for a reusable surface; heat flux a few percent below the cold-wall value; upper bound on $T_w$ for a passive material |
+| Coupled surface energy balance | $q_w + \alpha q_{rad} = \varepsilon\sigma T_w^4 + q_{cond} + \text{blowing terms}$, with $T_w$ from a material code | Part of the heat soaks into the material, part is reradiated, part leaves with ablation gases | Correct $T_w$ for an ablator; costs a coupled calculation ([surface energy balance](surface-energy-balance.md)) |
+
+### Catalytic
+
+These only matter when atoms reach the wall, which means a chemically frozen or nonequilibrium boundary layer. In an equilibrium boundary layer the atoms have already recombined in the gas and all five give nearly the same heat flux.
+
+| Condition | Imposed at the wall | Physical meaning | Consequence |
+|---|---|---|---|
+| Non-catalytic | $\partial Y_s/\partial n = 0$ ($\gamma = 0$) | Atoms hit the wall and leave as atoms; their dissociation energy is never released there | Lowest heat flux, up to about half the fully catalytic value; **unsafe** as a design assumption |
+| Partially catalytic | $\rho D_a\,\partial Y_a/\partial n = \gamma\,\rho_{a,w}\sqrt{R_aT_w/2\pi}$ | A fraction $\gamma$ of atoms striking the wall recombine; $\gamma$ is a measured property of the material and depends on $T_w$ | Heat flux between the bounds; as good as the measured $\gamma$ |
+| Fully catalytic | $\gamma = 1$ | Every atom striking the wall recombines; the only limit is how fast atoms diffuse to it | Upper bound set by diffusion through the boundary layer |
+| Equilibrium catalytic | $Y_{s,w} = Y_s^{eq}(p_w, T_w)$ | The gas at the wall is in chemical equilibrium at the wall temperature; for a cold wall in air that means fully recombined N₂ and O₂ | Close to fully catalytic for cold walls in air; differs for hot walls |
+| Super-catalytic | $Y_{s,w} = Y_{s,\infty}$ | The wall returns the gas to free-stream composition, whether or not surface kinetics could do it | Conservative upper bound used in design, notably for Mars, where it also forces CO₂ to reform |
+| Finite-rate surface chemistry | wall species flux $= \sum_r \dot w_{s,r}$ over several surface reactions | Recombination plus reactions that consume the wall itself, e.g. oxidation $\mathrm{C(s) + O \to CO}$ and nitridation $\mathrm{C(s) + N \to CN}$ | Adds surface recession and carbon species in the boundary layer; needs rate data for each reaction |
+
+### Velocity and temperature jump
+
+| Condition | Imposed at the wall | Physical meaning | Consequence |
+|---|---|---|---|
+| No-slip | $\mathbf u = 0$, $T = T_w$ | Collisions with the wall are frequent enough that the adjacent gas takes on the wall's velocity and temperature | Standard continuum condition, valid for $Kn \lesssim 10^{-3}$ |
+| Maxwell slip with Smoluchowski jump | $u_s \propto \lambda\,\partial u/\partial n$, $T_s - T_w \propto \lambda\,\partial T/\partial n$ | The gas next to the wall has had too few wall collisions to equilibrate, so it slides and stays hotter than the wall | Lower skin friction and heat flux, by an amount growing with $Kn$; needed for $10^{-3} \lesssim Kn \lesssim 10^{-1}$ ([slip section](#slip-and-temperature-jump-walls-rarefied-flow)) |
+
+### Vibrational temperature
+
+In a two-temperature model the vibrational energy needs its own wall condition, and it sets the vibrational conduction term $k_v\,\partial T_v/\partial n$ in the [wall heat flux](#what-the-wall-heat-flux-is-made-of).
+
+| Condition | Imposed at the wall | Physical meaning | Consequence |
+|---|---|---|---|
+| Full accommodation | $T_v = T_w$ | Molecules leave the wall with their vibration equilibrated to the wall temperature | Vibrational energy conducts into a cold wall; the usual choice |
+| Non-accommodating | $\partial T_v/\partial n = 0$ | The wall exchanges no vibrational energy with the gas | Drops the $k_v$ term from $q_w$, so heat flux is somewhat lower; the vibrational counterpart of a non-catalytic wall |
+
+### Blowing and ablating walls
+
+| Imposed at the wall | Physical meaning | Consequence |
+|---|---|---|
+| A wall-normal mass flux $\dot m = \rho_w v_w$ of pyrolysis and ablation gases; tangential velocity still zero; each species' convective plus diffusive flux equals what the surface injects, $\rho_w v_w Y_{s,w} - \rho D_s\,\partial Y_s/\partial n = \dot m_s$; energy from the [surface energy balance](surface-energy-balance.md) | The heat shield is decomposing and the gases it releases push out into the boundary layer | Thickens the boundary layer and lowers the convective heat flux (blockage: 0.58 of the unblown value at $B'_0 = 1$, laminar); fills the boundary layer with carbon and hydrogen species, which can absorb shock-layer radiation ([blowing](surface-energy-balance.md#blowing)) |
 
 ## Typical values
 
