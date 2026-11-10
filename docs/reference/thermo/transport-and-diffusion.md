@@ -26,7 +26,7 @@ The last term is chemical enthalpy carried to the wall by diffusing atoms, which
 
 ### Viscosity and conductivity
 
-Species properties come from collision integrals (Chapman–Enskog kinetic theory) or curve fits; mixture values from mixing rules such as Wilke's, or from the Gupta–Yos formulation. Mixing rules need pairwise interaction terms, so they cost $O(n_s^2)$ per cell.
+Species properties come from collision integrals (Chapman–Enskog kinetic theory) or curve fits. Chapman–Enskog theory is also where the Navier–Stokes form itself comes from: it is the first-order correction to an equilibrium (Maxwellian) velocity distribution in powers of the Knudsen number, which is why these transport models and the Navier–Stokes equations fail together when the gas becomes rarefied ([continuum breakdown](../rarefied/continuum-breakdown.md#why-navier-stokes-fails-chapman-enskog)). Mixture values come from mixing rules such as Wilke's, or from the Gupta–Yos formulation. Mixing rules need pairwise interaction terms, so they cost $O(n_s^2)$ per cell.
 
 ### The diffusion hierarchy
 

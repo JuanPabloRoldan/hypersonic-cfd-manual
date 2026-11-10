@@ -65,6 +65,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Which codes:** a concept, not an option.
 - **See also:** [stiff source terms](reference/sources/stiff-sources.md), [gas models](reference/thermo/gas-models.md).
 
+### Direct simulation Monte Carlo (also: DSMC)
+
+- **Depth:** [feel] · **Slot:** rarefied flow; discretization families (particles)
+- **What it is:** Bird's particle method for the Boltzmann equation: simulator particles move ballistically, then collide in cells with probabilities set by a collision model (VHS/VSS, Larsen–Borgnakke for internal energy).
+- **Problem it solves:** transitional and rarefied flow ($Kn \gtrsim 0.1$), where Navier–Stokes is invalid.
+- **Implications:** cells smaller than the mean free path and time steps smaller than the collision time, so cost grows steeply with density; outputs are statistically noisy, heat flux most.
+- **In a run:** check cell size vs $\lambda$, time step vs collision time, particles per cell.
+- **Which codes:** SPARTA (Kokkos GPU), DAC, MONACO.
+- **See also:** [DSMC](reference/rarefied/dsmc.md), [continuum breakdown](reference/rarefied/continuum-breakdown.md).
+
 ### Entropy condition
 
 
@@ -106,6 +116,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Which codes:** all reacting codes.
 - **See also:** [frozen and equilibrium sound speed](reference/foundations/mathematical-character.md#frozen-and-equilibrium-sound-speed).
 
+### Knudsen number (also: $Kn$, gradient-length Knudsen number)
+
+- **Depth:** [feel] · **Slot:** rarefied flow
+- **What it is:** $Kn = \lambda/L$, mean free path over a flow length scale; the local version $Kn_{GL} = (\lambda/Q)|\nabla Q|$ uses the gradient length of a flow quantity.
+- **Problem it solves:** says when the continuum (Navier–Stokes) model is valid: continuum below about $10^{-3}$, slip to about $10^{-1}$, transitional to about 10, free-molecular above; locally, continuum fails where $Kn_{GL} \gtrsim 0.05$ (Boyd, Chen & Candler 1995).
+- **Implications:** decides between no-slip CFD, slip walls, and DSMC.
+- **In a run:** post-process $Kn_{GL}$ from high-altitude solutions.
+- **Which codes:** a criterion, not an option.
+- **See also:** [continuum breakdown](reference/rarefied/continuum-breakdown.md).
+
 ### Lax–Wendroff theorem
 
 - **Depth:** [deep] · **Slot:** governing equations
@@ -135,6 +155,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **In a run:** "local time stepping" switch, CFL.
 - **Which codes:** essentially all steady solvers; subcycling in AMR codes.
 - **See also:** [local time stepping](reference/time/local-time-stepping.md).
+
+### Modified Newtonian theory (also: Lees' modified Newtonian, Newtonian flow)
+
+- **Depth:** [feel] · **Slot:** inviscid hypersonic theory; engineering checks
+- **What it is:** $C_p = C_{p,\max}\sin^2\theta$ on surfaces facing the flow, with $C_{p,\max}$ the stagnation value behind a normal shock (1.839 for $\gamma = 1.4$ at high Mach); Newton's original has 2 in place of $C_{p,\max}$.
+- **Problem it solves:** closed-form forebody pressure on blunt bodies, within a few percent.
+- **Implications:** poor at shoulders and on shadowed surfaces; exact for free-molecular flow with diffuse cold walls (factor 2).
+- **In a run:** check CFD forebody $C_p$ and stagnation pressure against it.
+- **Which codes:** engineering aerodynamic tools.
+- **See also:** [hypersonic shock relations and Newtonian theory](reference/physics/hypersonic-shock-relations.md), [engineering checks](reference/verification/engineering-checks.md).
 
 ### Numerical flux function
 

@@ -806,6 +806,86 @@ def capsule_anatomy():
     save(fig, "capsule_anatomy")
 
 
+# ---------------------------------------------------------------------------
+# 20. Sutton-Graves stagnation heating, Earth: q = k sqrt(rho/R_n) V^3,
+#     k = 1.7415e-4 (SI). Computed from the correlation.
+# ---------------------------------------------------------------------------
+def sutton_graves_map():
+    k = 1.7415e-4
+    V = np.linspace(4e3, 13e3, 200)
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.5, 3.9))
+    for rho, c in zip([1e-4, 3e-4, 1e-3], [C0, C1, C2]):
+        a1.plot(V / 1e3, k * np.sqrt(rho / 1.0) * V ** 3 / 1e4, color=c, lw=2, label=rf"$\rho_\infty$ = {rho:g} kg/m³")
+    a1.set(yscale="log", xlabel="entry velocity $V_\\infty$ (km/s)", ylabel="$q_s$ (W/cm²)",
+           title="Sutton–Graves convective stagnation heating, Earth\n$R_n$ = 1 m")
+    a1.legend(fontsize=8)
+    Rn = np.logspace(-2, 1, 200)
+    for Vk, c in zip([7.5, 11.0], [C0, C1]):
+        a2.plot(Rn, k * np.sqrt(3e-4 / Rn) * (Vk * 1e3) ** 3 / 1e4, color=c, lw=2, label=f"V = {Vk} km/s")
+    a2.set(xscale="log", yscale="log", xlabel="nose radius $R_n$ (m)", ylabel="$q_s$ (W/cm²)",
+           title="Effect of nose radius ($\\rho_\\infty$ = 3×10⁻⁴ kg/m³)\nslope −1/2: blunter is cooler (convective only)")
+    a2.legend(fontsize=8)
+    save(fig, "sutton_graves_map")
+
+
+# ---------------------------------------------------------------------------
+# 21. Hypersonic shock limits and Newtonian pressure. Computed from the
+#     perfect-gas relations, gamma = 1.4.
+# ---------------------------------------------------------------------------
+def shock_limits_newtonian():
+    g = 1.4
+    M = np.linspace(1.01, 25, 400)
+    rr = (g + 1) * M ** 2 / ((g - 1) * M ** 2 + 2)
+    pr = 1 + 2 * g / (g + 1) * (M ** 2 - 1)
+    def cpmax(M):
+        a = ((g + 1) ** 2 * M ** 2 / (4 * g * M ** 2 - 2 * (g - 1))) ** (g / (g - 1))
+        b = (1 - g + 2 * g * M ** 2) / (g + 1)
+        return 2 / (g * M ** 2) * (a * b - 1)
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.5, 3.9))
+    a1.plot(M, rr, color=C0, lw=2, label=r"$\rho_2/\rho_1$")
+    a1.axhline((g + 1) / (g - 1), color=C0, ls=":", lw=1)
+    a1.text(14, 6.15, r"limit $(\gamma+1)/(\gamma-1) = 6$", color=C0, fontsize=8.5)
+    a1.plot(M, cpmax(M), color=C1, lw=2, label=r"$C_{p,\max}$ (stagnation, behind normal shock)")
+    a1.axhline(1.839, color=C1, ls=":", lw=1)
+    a1.text(14, 2.05, r"limit 1.839", color=C1, fontsize=8.5)
+    a1.plot(M, pr / M ** 2, color=C2, lw=1.6, ls="--", label=r"$(p_2/p_1)/M_1^2$, limit $2\gamma/(\gamma+1) = 1.17$")
+    a1.set(xlabel=r"$M_1$", ylim=(0, 7), title="Normal shock, perfect gas γ = 1.4:\nratios freeze as M grows (Mach-number independence)")
+    a1.legend(fontsize=8, loc="center right")
+    phi = np.linspace(0, 90, 200)
+    for Mi, c in zip([5, 20], [C0, C1]):
+        a2.plot(phi, cpmax(Mi) * np.cos(np.radians(phi)) ** 2, color=c, lw=2, label=f"modified Newtonian, M = {Mi}")
+    a2.plot(phi, 2 * np.cos(np.radians(phi)) ** 2, color=GREY, ls="--", lw=1.4, label="Newtonian, $C_p = 2\\sin^2\\theta$")
+    a2.set(xlabel=r"angle from stagnation point on a sphere, $\phi$ (deg)", ylabel=r"$C_p$",
+           title="Newtonian pressure on a sphere:\n" + r"$C_p = C_{p,\max}\cos^2\phi$ (computed)")
+    a2.legend(fontsize=8)
+    save(fig, "shock_limits_newtonian")
+
+
+# ---------------------------------------------------------------------------
+# 22. Rarefaction regimes vs Knudsen number. Schematic (indicative bounds).
+# ---------------------------------------------------------------------------
+def knudsen_regimes():
+    fig, ax = plt.subplots(figsize=(9.5, 3.2))
+    rows = [("Euler", 1e-6, 1e-3, C0), ("Navier–Stokes (no slip)", 1e-6, 1e-3, C0),
+            ("Navier–Stokes + slip / jump walls", 1e-3, 1e-1, C2),
+            ("DSMC / Boltzmann", 1e-3, 1e3, C1), ("Free-molecular (collisionless)", 10, 1e3, C3)]
+    for i, (lab, a, b, c) in enumerate(rows):
+        ax.barh(i, np.log10(b) - np.log10(a), left=np.log10(a), color=c, alpha=0.75, height=0.6)
+        ax.text(np.log10(a) + 0.08, i, lab, va="center", fontsize=8.5, color="k")
+    for x in [-3, -1, 1]:
+        ax.axvline(x, color=GREY, lw=0.8, ls=":")
+    for xc, t in [(-4.5, "continuum"), (-2, "slip"), (0, "transitional"), (2, "free-molecular")]:
+        ax.text(xc, len(rows) - 0.3, t, ha="center", fontsize=9, color=GREY)
+    ax.set_yticks([])
+    ax.set_xticks(range(-6, 4))
+    ax.set_xticklabels([f"$10^{{{k}}}$" for k in range(-6, 4)])
+    ax.set(xlim=(-6, 3), ylim=(-0.6, len(rows) + 0.1), xlabel=r"Knudsen number $Kn = \lambda/L$",
+           title="Where each model is valid (schematic; bounds are indicative, after Bird 1994)")
+    ax.invert_yaxis()
+    ax.grid(False)
+    save(fig, "knudsen_regimes")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -826,3 +906,6 @@ if __name__ == "__main__":
     riemann_fans_compare()
     entropy_fix_burgers()
     capsule_anatomy()
+    sutton_graves_map()
+    shock_limits_newtonian()
+    knudsen_regimes()

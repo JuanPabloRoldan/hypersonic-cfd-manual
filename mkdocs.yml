@@ -109,6 +109,8 @@ nav:
           - "1.4 Closing the system": reference/foundations/closing-the-system.md
       - "2 Entry flow physics":
           - "2.1 Entry flow anatomy": reference/physics/entry-flow-anatomy.md
+          - "2.2 Hypersonic shock relations and Newtonian theory": reference/physics/hypersonic-shock-relations.md
+          - "2.3 Stagnation-point heating": reference/physics/stagnation-point-heating.md
       - "3 Gas models and thermochemistry":
           - "3.1 Gas models": reference/thermo/gas-models.md
           - "3.2 Energy modes and thermodynamics": reference/thermo/energy-modes.md
@@ -143,10 +145,16 @@ nav:
           - "9.5 Local time stepping": reference/time/local-time-stepping.md
           - "9.6 Dual time stepping": reference/time/dual-time-stepping.md
           - "9.7 Explicit vs implicit": reference/time/explicit-vs-implicit.md
-      - "10 Reduced equations":
+      - "10 Reduced equations and engineering methods":
           - "10.1 Space marching (PNS)": reference/special/space-marching.md
-      - "11 Verification and diagnosis":
-          - "11.1 Convergence diagnostics": reference/time/convergence-diagnostics.md
+          - "10.2 Approximate and engineering methods": reference/special/engineering-methods.md
+      - "11 Rarefied flow and particle methods":
+          - "11.1 Rarefaction and continuum breakdown": reference/rarefied/continuum-breakdown.md
+          - "11.2 DSMC": reference/rarefied/dsmc.md
+          - "11.3 Free-molecular flow": reference/rarefied/free-molecular-flow.md
+      - "12 Verification and diagnosis":
+          - "12.1 Convergence diagnostics": reference/time/convergence-diagnostics.md
+          - "12.2 Engineering checks on a solution": reference/verification/engineering-checks.md
       - "Appendix":
           - "A Codes at a glance": codes/index.md
   - Glossary: glossary.md

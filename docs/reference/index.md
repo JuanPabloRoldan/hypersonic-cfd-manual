@@ -15,7 +15,9 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 [1.4 Closing the system](foundations/closing-the-system.md)
 
 **2 Entry flow physics.** The flows the equations describe.
-[2.1 Entry flow anatomy](physics/entry-flow-anatomy.md)
+[2.1 Entry flow anatomy](physics/entry-flow-anatomy.md) ·
+[2.2 Hypersonic shock relations and Newtonian theory](physics/hypersonic-shock-relations.md) ·
+[2.3 Stagnation-point heating](physics/stagnation-point-heating.md)
 
 **3 Gas models and thermochemistry.** The closures that make it a reentry code.
 [3.1 Gas models](thermo/gas-models.md) ·
@@ -58,14 +60,21 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 [9.6 Dual time stepping](time/dual-time-stepping.md) ·
 [9.7 Explicit vs implicit](time/explicit-vs-implicit.md)
 
-**10 Reduced equations.**
-[10.1 Space marching (PNS)](special/space-marching.md)
+**10 Reduced equations and engineering methods.**
+[10.1 Space marching (PNS)](special/space-marching.md) ·
+[10.2 Approximate and engineering methods](special/engineering-methods.md)
 
-**11 Verification and diagnosis.**
-[11.1 Convergence diagnostics](time/convergence-diagnostics.md)
+**11 Rarefied flow and particle methods.** Where the continuum model ends.
+[11.1 Rarefaction and continuum breakdown](rarefied/continuum-breakdown.md) ·
+[11.2 DSMC](rarefied/dsmc.md) ·
+[11.3 Free-molecular flow](rarefied/free-molecular-flow.md)
+
+**12 Verification and diagnosis.**
+[12.1 Convergence diagnostics](time/convergence-diagnostics.md) ·
+[12.2 Engineering checks on a solution](verification/engineering-checks.md)
 
 **Appendix.** [A Codes at a glance](../codes/index.md): each production code's choice in each slot, with primary sources.
 
 ## Chapters still to come
 
-Shock-layer radiation, material response and ablation, and further entry-flow physics (stagnation heating, entropy layers, SWBLI, shock–shock interactions, transition, rarefaction) will be added as chapters in this order.
+Shock-layer radiation, material response and ablation, and further entry-flow physics (entropy layers and viscous interaction, SWBLI, shock–shock interactions, transition, wake flow) will be added as chapters in this order.

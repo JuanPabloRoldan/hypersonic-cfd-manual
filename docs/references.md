@@ -126,8 +126,27 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 
 ## Physics
 
+- L. Lees, "Hypersonic flow," *Proc. 5th International Aeronautical Conference*, Los Angeles, Institute of the Aeronautical Sciences (1955). (Modified Newtonian theory.)
+- J. A. Fay & F. R. Riddell, "Theory of stagnation point heat transfer in dissociated air," *J. Aeronaut. Sci.* 25 (1958).
+- H. J. Allen & A. J. Eggers, "A study of the motion and aerodynamic heating of ballistic missiles entering the Earth's atmosphere at high supersonic speeds," NACA Report 1381 (1958).
+- E. R. G. Eckert, "Engineering relations for friction and heat transfer to surfaces in high velocity flow," *J. Aeronaut. Sci.* 22 (1955).
+- K. Sutton & R. A. Graves, "A general stagnation-point convective-heating equation for arbitrary gas mixtures," NASA TR R-376 (1971).
+- M. E. Tauber & K. Sutton, "Stagnation-point radiative heating relations for Earth and Mars entries," *J. Spacecraft Rockets* 28 (1991).
+- G. Moretti & M. Abbett, "A time-dependent computational method for blunt body flows," *AIAA J.* 4 (1966).
 - B. Edney, "Anomalous heat transfer and pressure distributions on blunt bodies at hypersonic speeds in the presence of an impinging shock," FFA Report 115, Aeronautical Research Institute of Sweden (1968).
 - F. S. Billig, "Shock-wave shapes around spherical- and cylindrical-nosed bodies," *J. Spacecraft Rockets* 4 (1967).
+
+## Rarefied flow
+
+- J. C. Maxwell, "On stresses in rarified gases arising from inequalities of temperature," *Phil. Trans. R. Soc.* 170 (1879). (Velocity slip.)
+- M. von Smoluchowski, "Ueber Wärmeleitung in verdünnten Gasen," *Ann. Phys.* 64 (1898). (Temperature jump.)
+- S. Chapman & T. G. Cowling, *The Mathematical Theory of Non-Uniform Gases*, 3rd ed., Cambridge University Press, 1970.
+- S. A. Schaaf & P. L. Chambré, *Flow of Rarefied Gases*, Princeton University Press, 1958.
+- G. A. Bird, "Monte-Carlo simulation in an engineering context," *Prog. Astronaut. Aeronaut.* 74 (1981). (VHS model.)
+- C. Borgnakke & P. S. Larsen, "Statistical collision model for Monte Carlo simulation of polyatomic gas mixture," *J. Comput. Phys.* 18 (1975).
+- I. D. Boyd, G. Chen & G. V. Candler, "Predicting failure of the continuum fluid equations in transitional hypersonic flows," *Phys. Fluids* 7 (1995).
+- T. Gökçen & R. W. MacCormack, "Nonequilibrium effects for hypersonic transitional flows using continuum approach," AIAA Paper 89-0461 (1989).
+- I. D. Boyd & T. E. Schwartzentruber, *Nonequilibrium Gas Dynamics and Molecular Simulation*, Cambridge University Press, 2017.
 
 ## Turbulence modeling
 

@@ -47,3 +47,6 @@
 *[1T]: One-temperature (thermal equilibrium) model
 *[2T]: Two-temperature model (Park): T for translation–rotation, Tv for vibration–electronic–electron
 *[3T]: Three-temperature model: adds a separate electron temperature
+*[VHS]: Variable hard sphere (DSMC collision model)
+*[VSS]: Variable soft sphere (DSMC collision model)
+*[NTC]: No-time-counter (DSMC collision-pair selection)
