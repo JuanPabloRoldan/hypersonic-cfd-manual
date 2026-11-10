@@ -196,16 +196,6 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Which codes:** dedicated PNS codes.
 - **See also:** [space marching](reference/special/space-marching.md).
 
-### Primitive variables
-
-- **Depth:** [deep] · **Slot:** governing equations; reconstruction
-- **What it is:** $(\rho_s, \mathbf u, p, T, T_v)$: the variables the physics, fluxes and boundary conditions are written in.
-- **Problem it solves:** easier positivity control and clean contacts when reconstructed.
-- **Implications:** a derived view recomputed every evaluation; never the stored state, never the update.
-- **In a run:** the "reconstruction variables" choice.
-- **Which codes:** common choice in reentry codes and in MFC.
-- **See also:** [the finite-volume pipeline](reference/spatial/finite-volume-pipeline.md#1-decode).
-
 ### Plasma frequency (also: communications blackout, critical electron density)
 
 - **Depth:** [feel] · **Slot:** ionization and electrons
@@ -215,6 +205,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **In a run:** post-process $n_e$; validate against RAM-C II.
 - **Which codes:** any code with ionized species.
 - **See also:** [communications blackout](reference/thermo/ionization-and-electrons.md#communications-blackout).
+
+### Primitive variables
+
+- **Depth:** [deep] · **Slot:** governing equations; reconstruction
+- **What it is:** $(\rho_s, \mathbf u, p, T, T_v)$: the variables the physics, fluxes and boundary conditions are written in.
+- **Problem it solves:** easier positivity control and clean contacts when reconstructed.
+- **Implications:** a derived view recomputed every evaluation; never the stored state, never the update.
+- **In a run:** the "reconstruction variables" choice.
+- **Which codes:** common choice in reentry codes and in MFC.
+- **See also:** [the finite-volume pipeline](reference/spatial/finite-volume-pipeline.md#1-decode).
 
 ### Rankine–Hugoniot conditions
 
