@@ -65,7 +65,7 @@ It doesn't decide. Every reaction runs forward and backward all the time, at rat
 
 <figure markdown>
 ![Arrhenius switch](../../assets/figures/arrhenius_switch.svg)
-<figcaption>The Arrhenius factor for three air reactions. For N<sub>2</sub> dissociation, $e^{-\theta/T}$ is about $10^{-164}$ at 300 K and about $10^{-5}$ at 10,000 K: behind the shock the rate rises by well over 100 orders of magnitude.</figcaption>
+<figcaption markdown="span">The Arrhenius factor for three air reactions. For N<sub>2</sub> dissociation, $e^{-\theta/T}$ is about $10^{-164}$ at 300 K and about $10^{-5}$ at 10,000 K: behind the shock the rate rises by well over 100 orders of magnitude.</figcaption>
 </figure>
 
 Equilibrium is simply forward rate equal to backward rate. Whether a region is frozen, in nonequilibrium or in equilibrium depends on the Damköhler number $Da = \tau_{\text{flow}}/\tau_{\text{chem}}$. The enormous range of rates across one domain is also exactly what makes these sources [stiff](../sources/stiff-sources.md).

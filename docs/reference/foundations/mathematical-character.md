@@ -24,15 +24,65 @@ $$
 
 two acoustic waves and one entropy (contact) wave. Information at a point comes only from inside the region bounded by the fastest characteristics (the domain of dependence).
 
-For a reacting multi-temperature mixture, each species equation and the vibrational-energy equation add another copy of $\lambda = u$. These quantities are passively convected, so the wave structure is unchanged: two acoustic waves plus a contact, with species and $e_v$ riding the contact. This is good news. The system stays hyperbolic, the CFL limit is unchanged, and solvers like [HLLC](../spatial/riemann-solvers.md#hllc) extend trivially.
+### Adding species and vibrational energy {#adding-species-and-vibrational-energy}
 
-The sound speed in these eigenvalues is the **frozen** sound speed: on acoustic time scales, chemistry and any modes not equilibrated with $T$ can't respond. For a two-temperature model,
+For a reacting multi-temperature mixture, each species equation and the vibrational-energy equation add another eigenvalue $\lambda = u$, and the acoustic speeds don't change. The cleanest way to see it is to write the 1D inviscid equations in **primitive variables**, $\mathbf W = (\rho, u, p, Y_s, e_v)^T$ (one species shown; each extra species adds an identical row). Away from the source terms, each of these quantities obeys a simple transport law:
 
 $$
-a_f^2 = \gamma_f\,\frac{p}{\rho},\qquad \gamma_f = 1 + \frac{R_{mix}}{c_{v,tr}},
+\frac{D\rho}{Dt} = -\rho\,\frac{\partial u}{\partial x},\qquad
+\frac{Du}{Dt} = -\frac1\rho\frac{\partial p}{\partial x},\qquad
+\frac{Dp}{Dt} = -\rho a_f^2\,\frac{\partial u}{\partial x},\qquad
+\frac{DY_s}{Dt} = 0,\qquad
+\frac{De_v}{Dt} = 0,
 $$
 
-with $c_{v,tr}$ the translational–rotational heat capacity per unit mass (in a one-temperature model the vibrational heat capacity is included). The equilibrium sound speed, relevant only when relaxation is much faster than the wave, is lower.
+with $D/Dt = \partial_t + u\,\partial_x$. Written as $\partial_t\mathbf W + \mathbf A_W\,\partial_x\mathbf W = 0$,
+
+$$
+\mathbf A_W =
+\begin{bmatrix}
+u & \rho & 0 & 0 & 0\\
+0 & u & 1/\rho & 0 & 0\\
+0 & \rho a_f^2 & u & 0 & 0\\
+0 & 0 & 0 & u & 0\\
+0 & 0 & 0 & 0 & u
+\end{bmatrix}.
+$$
+
+The matrix is block diagonal. The upper $3\times3$ block is the ordinary Euler block, with eigenvalues $u - a_f$, $u$, $u + a_f$. The lower block is already diagonal: each species and $e_v$ contributes one more $\lambda = u$, with an eigenvector that is a unit vector (a jump in $Y_s$ or $e_v$ alone, with $\rho$, $u$, $p$ unchanged). The conservative Jacobian $\partial\mathbf F/\partial\mathbf U$ is the same operator in different variables ($\mathbf A_U = \mathbf M\mathbf A_W\mathbf M^{-1}$ with $\mathbf M = \partial\mathbf U/\partial\mathbf W$), so it has the same eigenvalues.
+
+Why the pressure row has no $Y_s$ or $e_v$ entries: pressure does depend on composition and on $e_v$ through the equation of state, but in inviscid flow without sources a fluid parcel keeps its $Y_s$ and $e_v$, so the only way its pressure can change is through compression. Following a parcel,
+
+$$
+\frac{Dp}{Dt} = \underbrace{\left[\left(\frac{\partial p}{\partial\rho}\right)_{e,Y,e_v} + \frac{p}{\rho^2}\left(\frac{\partial p}{\partial e}\right)_{\rho,Y,e_v}\right]}_{a_f^2}\frac{D\rho}{Dt}
++ \sum_s\left(\frac{\partial p}{\partial Y_s}\right)\underbrace{\frac{DY_s}{Dt}}_{0}
++ \left(\frac{\partial p}{\partial e_v}\right)\underbrace{\frac{De_v}{Dt}}_{0},
+$$
+
+using $De/Dt = (p/\rho^2)\,D\rho/Dt$ for adiabatic compression. The bracket *defines* the frozen sound speed. Composition and $e_v$ still change the value of $a_f$, but they don't open new acoustic paths.
+
+**What "passively advected" means here.** $Y_s$ and $e_v$ move with the fluid at speed $u$ and generate no pressure waves of their own. A jump in composition (pure N₂ on one side, partly dissociated air on the other) at equal $p$ and $u$ is just another contact discontinuity: it sits still in the fluid frame, like a temperature jump. That is the sense in which species "ride the contact". They are not passive in the stronger sense of having no effect: they change $R_{mix}$, $a_f$ and the energy, and the source terms couple them to everything.
+
+**Source terms don't change this.** Chemistry and vibrational relaxation enter as a source vector $\mathbf S(\mathbf U)$, not through the flux, so they don't appear in $\mathbf A$. They don't change wave speeds or the CFL limit; they bring their own (stiff) time scales, treated on the [stiff sources](../sources/stiff-sources.md) page.
+
+Consequences: the system stays hyperbolic; the convective CFL limit uses $|u| + a_f$ as before; and every upwind flux extends by carrying the extra variables through the contact. For HLLC this is written out in [HLLC with species and vibrational energy](../spatial/riemann-solvers.md#hllc-with-species-and-vibrational-energy).
+
+### Frozen and equilibrium sound speed {#frozen-and-equilibrium-sound-speed}
+
+A sound wave is a rapid compression followed by expansion. Compressing a gas does work on it, and that energy has to go into some internal mode. How much the **pressure** rises for a given compression, which is what sets the sound speed, depends on *where the energy goes*:
+
+- If the energy can only go into translation and rotation, the translational temperature rises a lot and so does the pressure. The gas is stiff, and the sound speed is high. This is the **frozen** limit: the wave passes before vibration and chemistry can respond.
+- If vibration (and dissociation) can soak up part of that energy during the wave, less goes into translation, the temperature and pressure rise less, and the gas is softer. This is the **equilibrium** limit, and its sound speed $a_e$ is lower. Thermodynamic stability guarantees $a_e \le a_f$.
+
+Which limit applies depends on the ratio of relaxation time to wave period. For a passing acoustic wave in a shock layer, vibration and chemistry are usually too slow to follow, so the frozen speed is the physically relevant one, and for numerics it is the only one: in a finite-rate model, $Y_s$ and $e_v$ change only through source terms, and source terms are absent from the flux Jacobian. The eigenvalues are therefore always $u \pm a_f$. (An **equilibrium-gas** model, in which composition is a function of the local $(\rho, e)$ through the equation of state, has $a_e$ in its eigenvalues instead.)
+
+For a two-temperature thermally perfect mixture, $p = \rho R_{mix} T$ and, at fixed $Y_s$ and $e_v$, $de = c_{v,tr}\,dT$. Evaluating the bracket above gives
+
+$$
+a_f^2 = \gamma_f\,\frac{p}{\rho},\qquad \gamma_f = 1 + \frac{R_{mix}}{c_{v,tr}},\qquad c_{v,tr} = \sum_s Y_s\,c_{v,tr,s},
+$$
+
+where $c_{v,tr,s} = \tfrac32 R_s$ for atoms and $\tfrac52 R_s$ for diatomic molecules (translation plus two rotational degrees of freedom). For pure N₂ this gives $\gamma_f = 1 + 2/5 = 1.4$, at any temperature. In a one-temperature model, vibration is assumed equilibrated with $T$, so $c_v$ includes the vibrational heat capacity: with vibration fully excited, $c_v = \tfrac72 R$ and $\gamma = 9/7 \approx 1.29$, so the sound speed is about 4% lower ($\sqrt{1.4/1.286} \approx 1.04$). Letting dissociation respond too lowers the equilibrium value further; equilibrium air at entry conditions has effective $\gamma$ values well below 1.3 (see the equilibrium property charts in Anderson). Because the dispersion relation of a relaxing gas runs between these two limits, high-frequency disturbances travel at $a_f$ and slow ones at $a_e$.
 
 ### Parabolic
 
@@ -82,4 +132,4 @@ Universal; this is mathematics, not a code choice. What differs between codes is
 
 ## References
 
-Hirsch, *Numerical Computation of Internal and External Flows*; LeVeque, *Finite Volume Methods for Hyperbolic Problems*; Anderson, *Hypersonic and High-Temperature Gas Dynamics*; Moretti & Abbett (1966); Billig (1967). See the [bibliography](../../references.md).
+Hirsch, *Numerical Computation of Internal and External Flows*; Vincenti & Kruger, *Introduction to Physical Gas Dynamics* (frozen and equilibrium sound speeds in relaxing gases); LeVeque, *Finite Volume Methods for Hyperbolic Problems*; Anderson, *Hypersonic and High-Temperature Gas Dynamics*; Moretti & Abbett (1966); Billig (1967). See the [bibliography](../../references.md).

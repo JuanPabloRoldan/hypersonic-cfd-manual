@@ -52,12 +52,25 @@ Burgers' equation $u_t + (u^2/2)_x = 0$ gives a shock speed $s = (u_L + u_R)/2$.
 
 <figure markdown>
 ![Burgers demo](../../assets/figures/burgers_conservative_vs_nonconservative.svg)
-<figcaption>Left: a conservative upwind scheme converges to the correct shock (s = 0.60); a nonconservative upwind scheme for the same equation puts the shock in the wrong place, and the $(u^3/3)_x$ form would put it somewhere else again (s ≈ 0.69). Right: refining the grid shrinks the conservative scheme's shock-position error but leaves the nonconservative error at about 0.12 at every resolution.</figcaption>
+<figcaption markdown="span">Left: a conservative upwind scheme converges to the correct shock (s = 0.60); a nonconservative upwind scheme for the same equation puts the shock in the wrong place, and the $(u^3/3)_x$ form would put it somewhere else again (s ≈ 0.69). Right: refining the grid shrinks the conservative scheme's shock-position error but leaves the nonconservative error at about 0.12 at every resolution.</figcaption>
 </figure>
 
 ### Nonuniqueness and the entropy condition
 
-The weak form admits too many solutions. For example, it allows an expansion shock in which the gas compresses on the way out, violating the second law. An extra **entropy condition** picks the physical weak solution (for gas dynamics: entropy must not decrease across a shock; equivalently, characteristics must run *into* the shock). This is a separate job from choosing the conservation form: the conservation form fixes which jump conditions apply, and the entropy condition picks the physical solution among those the correct form admits. Numerically, it is why [Roe's solver](../spatial/riemann-solvers.md#roe) needs an entropy fix.
+The weak form admits too many solutions. For example, it allows an **expansion shock**: a jump in which the gas expands discontinuously, which would decrease entropy and so violates the second law. For Burgers with $u_L < u_R$, both the jump moving at $s = (u_L + u_R)/2$ and the smooth fan $u = x/t$ satisfy the weak form; only the fan is physical. An extra **entropy condition** picks the physical weak solution (for gas dynamics: entropy must not decrease across a shock; equivalently, Lax's condition that characteristics on both sides run *into* the shock, $\lambda(U_L) > s > \lambda(U_R)$). This is a separate job from choosing the conservation form: the conservation form fixes which jump conditions apply, and the entropy condition picks the physical solution among those the correct form admits.
+
+### Which schemes enforce the entropy condition {#which-schemes-enforce-the-entropy-condition}
+
+The Lax–Wendroff theorem below guarantees a weak solution, not the entropy solution, so whether a scheme picks the physical one is a separate property of the scheme. The short version, with details on the [Riemann solvers page](../spatial/riemann-solvers.md#entropy-fixes-why-roe-needs-one):
+
+- **Monotone schemes converge to the entropy solution** (Crandall & Majda, 1980, for scalar laws). This covers first-order Godunov with the exact solver, HLL with bounding wave speeds, Rusanov and Lax–Friedrichs. Their dissipation never switches off at a sonic point, so an expansion shock cannot sit still in them.
+- **Roe's solver does not.** It replaces every wave, including a rarefaction fan, with a single jump, and its dissipation for that wave is $|\tilde\lambda|$, which is zero when the averaged wave speed is zero. A transonic expansion then looks like a valid stationary jump. It needs an explicit **entropy fix** (Harten's, or eigenvalue limiting).
+- **HLLC** keeps HLL's bounding acoustic speeds, so its acoustic dissipation never vanishes; the only wave it can stop is the contact, which has no entropy condition. No fix is needed.
+- **Flux-vector splitting:** van Leer's splitting is smooth through sonic points and needs nothing; plain Steger–Warming has a kink at $\lambda = 0$ that causes a small "sonic glitch", which eigenvalue limiting removes ([modified Steger–Warming](../spatial/flux-vector-splitting.md#modified-steger-warming)). In the AUSM family the choice of interface sound speed plays the role of the entropy fix.
+- **Central schemes with scalar dissipation** (JST) scale their dissipation by the spectral radius $|u| + a$, which never vanishes; their problem is oscillations at shocks, not expansion shocks.
+- **High order** carries no general guarantee. Schemes designed to satisfy a discrete entropy inequality exactly (**entropy-stable schemes**, Tadmor 1987, 2003; Fjordholm, Mishra & Tadmor 2012) are the systematic answer and are increasingly used in high-order codes.
+
+Blending schemes that mix upwind and central reconstruction (for example STAR-CCM+'s "MUSCL 3rd-order/CD" option with its upwind blending factor) don't change this picture: the blend acts on the [reconstructed face states](../spatial/reconstruction.md), while the jump and entropy behaviour at the shock are set by the flux function that receives those states (Roe or AUSM+ in STAR-CCM+'s coupled solver). See [reconstruction blends are not flux functions](../spatial/riemann-solvers.md#reconstruction-blends-are-not-flux-functions).
 
 ### The Lax–Wendroff theorem {#the-lax-wendroff-theorem}
 
@@ -106,4 +119,4 @@ All finite-volume reentry codes (DPLR, LAURA, US3D, FUN3D, SU2-NEMO, Eilmer) upd
 
 ## References
 
-LeVeque, *Finite Volume Methods for Hyperbolic Problems* (chapters on weak solutions and the Lax–Wendroff theorem); Toro, *Riemann Solvers and Numerical Methods for Fluid Dynamics*; Lax & Wendroff (1960); Hou & LeFloch (1994). See the [bibliography](../../references.md).
+LeVeque, *Finite Volume Methods for Hyperbolic Problems* (chapters on weak solutions, entropy conditions and the Lax–Wendroff theorem); Toro, *Riemann Solvers and Numerical Methods for Fluid Dynamics*; Lax & Wendroff (1960); Crandall & Majda (1980); Hou & LeFloch (1994); Tadmor (2003); Fjordholm, Mishra & Tadmor (2012). See the [bibliography](../../references.md).

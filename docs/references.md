@@ -28,6 +28,10 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 
 - P. D. Lax & B. Wendroff, "Systems of conservation laws," *Comm. Pure Appl. Math.* 13 (1960).
 - T. Y. Hou & P. G. LeFloch, "Why nonconservative schemes converge to wrong solutions: error analysis," *Math. Comp.* 62 (1994).
+- M. G. Crandall & A. Majda, "Monotone difference approximations for scalar conservation laws," *Math. Comp.* 34 (1980).
+- E. Tadmor, "The numerical viscosity of entropy stable schemes for systems of conservation laws. I," *Math. Comp.* 49 (1987).
+- E. Tadmor, "Entropy stability theory for difference approximations of nonlinear conservation laws and related time-dependent problems," *Acta Numerica* 12 (2003).
+- U. S. Fjordholm, S. Mishra & E. Tadmor, "Arbitrarily high-order accurate entropy stable essentially nonoscillatory schemes for systems of conservation laws," *SIAM J. Numer. Anal.* 50 (2012).
 - G. Dal Maso, P. G. LeFloch & F. Murat, "Definition and weak stability of nonconservative products," *J. Math. Pures Appl.* 74 (1995).
 
 ## Reconstruction and flux functions
@@ -35,9 +39,14 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - B. van Leer, "Towards the ultimate conservative difference scheme V," *J. Comput. Phys.* 32 (1979).
 - B. van Leer, "Flux-vector splitting for the Euler equations," *Lecture Notes in Physics* 170 (1982).
 - J. L. Steger & R. F. Warming, "Flux vector splitting of the inviscid gasdynamic equations with application to finite-difference methods," *J. Comput. Phys.* 40 (1981).
+- S. K. Godunov, "A difference method for numerical calculation of discontinuous solutions of the equations of hydrodynamics," *Mat. Sb.* 47 (1959).
 - P. L. Roe, "Approximate Riemann solvers, parameter vectors, and difference schemes," *J. Comput. Phys.* 43 (1981).
 - A. Harten, P. D. Lax & B. van Leer, "On upstream differencing and Godunov-type schemes for hyperbolic conservation laws," *SIAM Rev.* 25 (1983).
+- A. Harten & J. M. Hyman, "Self adjusting grid methods for one-dimensional hyperbolic conservation laws," *J. Comput. Phys.* 50 (1983). (Harten's entropy fix.)
 - B. Einfeldt, "On Godunov-type methods for gas dynamics," *SIAM J. Numer. Anal.* 25 (1988).
+- B. Einfeldt, C. D. Munz, P. L. Roe & B. Sjögreen, "On Godunov-type methods near low densities," *J. Comput. Phys.* 92 (1991).
+- B. Larrouturou, "How to preserve the mass fractions positivity when computing compressible multi-component flows," *J. Comput. Phys.* 95 (1991).
+- J. M. Weiss & W. A. Smith, "Preconditioning applied to variable and constant density flows," *AIAA J.* 33 (1995).
 - E. F. Toro, M. Spruce & W. Speares, "Restoration of the contact surface in the HLL-Riemann solver," *Shock Waves* 4 (1994).
 - J. J. Quirk, "A contribution to the great Riemann solver debate," *Int. J. Numer. Meth. Fluids* 18 (1994).
 - K. Peery & S. Imlay, "Blunt-body flow simulations," AIAA Paper 88-2904 (1988).
@@ -117,6 +126,7 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 
 ## Physics
 
+- B. Edney, "Anomalous heat transfer and pressure distributions on blunt bodies at hypersonic speeds in the presence of an impinging shock," FFA Report 115, Aeronautical Research Institute of Sweden (1968).
 - F. S. Billig, "Shock-wave shapes around spherical- and cylindrical-nosed bodies," *J. Spacecraft Rockets* 4 (1967).
 
 ## Turbulence modeling
@@ -142,6 +152,7 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - K. B. Thompson, A. Mazaheri et al., *LAURA Users Manual: 5.6*, NASA/TM-2020-220566 (2020), NTRS 20200002021.
 - I. Nompelis, T. W. Drayna & G. V. Candler, "Development of a hybrid unstructured implicit solver for the simulation of reacting flows over complex geometries," AIAA Paper 2004-2227 (2004).
 - D. A. Bezgin, A. B. Buhendwa & N. A. Adams, "JAX-Fluids: A fully-differentiable high-order computational fluid dynamics solver for compressible two-phase flows," *Comput. Phys. Commun.* 282 (2023).
+- Siemens Digital Industries Software, *Simcenter STAR-CCM+ User Guide* (sections "Evaluation of Inviscid Fluxes" and "Setting Parameters for the Coupled Approach"); version-dependent.
 - N. Hoppe et al., ALPACA papers and documentation (TU Munich).
 
 !!! warning "Calibration"

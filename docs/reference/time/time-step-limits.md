@@ -58,7 +58,7 @@ so the **viscous limit binds when $Re_\Delta \lesssim 2$**. Wall-resolved aerohe
 
 <figure markdown>
 ![time-step limits](../../assets/figures/timestep_limits.svg)
-<figcaption>Convective and viscous explicit limits against cell size, for illustrative shock-layer values. Large cells are convection-limited; below the crossover the viscous limit takes over and falls as $\Delta y^2$.</figcaption>
+<figcaption markdown="span">Convective and viscous explicit limits against cell size, for illustrative shock-layer values. Large cells are convection-limited; below the crossover the viscous limit takes over and falls as $\Delta y^2$.</figcaption>
 </figure>
 
 ### A rough number

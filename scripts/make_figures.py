@@ -575,6 +575,237 @@ def double_cone_schematic():
     save(fig, "double_cone_schematic")
 
 
+
+# ---------------------------------------------------------------------------
+# 16. The Riemann problem at a face: cells, reconstructed states, x-t wave fan.
+#     Schematic.
+# ---------------------------------------------------------------------------
+def riemann_face_and_fan():
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.5, 3.9), gridspec_kw={"width_ratios": [1.15, 1]})
+    # left: cell averages and piecewise-linear reconstruction
+    xc = np.arange(4) + 0.5
+    ubar = np.array([1.0, 0.92, 0.45, 0.38])
+    slopes = np.array([-0.06, -0.10, -0.08, -0.05])
+    for i, (x0, ub, sl) in enumerate(zip(xc, ubar, slopes)):
+        a1.plot([x0 - 0.5, x0 + 0.5], [ub, ub], color=GREY, lw=1, ls=":")
+        a1.plot([x0 - 0.5, x0 + 0.5], [ub - 0.5 * sl, ub + 0.5 * sl], color=C0, lw=2)
+    for xf in range(5):
+        a1.axvline(xf, color="#bdbdbd", lw=0.8)
+    a1.axvline(2, color=C1, lw=2)
+    uL = ubar[1] + 0.5 * slopes[1]
+    uR = ubar[2] - 0.5 * slopes[2]
+    a1.plot([2], [uL], "o", color=C0)
+    a1.plot([2], [uR], "o", color=C0)
+    a1.annotate(r"$\mathbf{U}_L$ (from cell $i$)", xy=(2, uL), xytext=(0.35, 0.72), fontsize=9,
+                arrowprops=dict(arrowstyle="->", color=C0))
+    a1.annotate(r"$\mathbf{U}_R$ (from cell $i+1$)", xy=(2, uR), xytext=(2.35, 0.72), fontsize=9,
+                arrowprops=dict(arrowstyle="->", color=C0))
+    for i, lab in enumerate(["$i-1$", "$i$", "$i+1$", "$i+2$"]):
+        a1.text(xc[i], 0.22, lab, ha="center", fontsize=9)
+    a1.text(2, 1.12, r"face $i+\frac{1}{2}$", ha="center", color=C1, fontsize=9)
+    a1.set(xlim=(0, 4), ylim=(0.15, 1.2), xticks=[], yticks=[], xlabel="x",
+           title="1. Reconstruct: two states meet at each face\n(dotted: cell averages; solid: reconstructed profile)")
+    a1.grid(False)
+    # right: x-t diagram at that face
+    t = np.linspace(0, 1, 2)
+    for sp in np.linspace(-1.3, -0.75, 6):  # left rarefaction fan
+        a2.plot(sp * t, t, color=C0, lw=1)
+    a2.plot(0.35 * t, t, color=C2, lw=1.8, ls="--")  # contact
+    a2.plot(1.15 * t, t, color=C3, lw=2.2)  # right shock
+    a2.axvline(0, color=C1, lw=2)
+    a2.text(-1.45, 0.25, r"$\mathbf{U}_L$", fontsize=11)
+    a2.text(1.25, 0.25, r"$\mathbf{U}_R$", fontsize=11)
+    a2.text(-0.45, 0.82, r"$\mathbf{U}_{*L}$", fontsize=11)
+    a2.text(0.62, 0.82, r"$\mathbf{U}_{*R}$", fontsize=11)
+    a2.text(-1.55, 1.04, "rarefaction\n(left acoustic, $u-a$)", fontsize=8, color=C0)
+    a2.text(0.12, 1.04, "contact ($u$)", fontsize=8, color=C2)
+    a2.text(0.95, 1.04, "shock\n($u+a$)", fontsize=8, color=C3)
+    a2.annotate("flux is evaluated on this line:\n" + r"$\hat{\mathbf{F}} = \mathbf{F}(\mathbf{U}(x/t = 0))$",
+                xy=(0, 0.5), xytext=(0.25, 0.42), fontsize=8.5, color=C1, arrowprops=dict(arrowstyle="->", color=C1))
+    a2.set(xlim=(-1.6, 1.6), ylim=(0, 1.25), xticks=[0], xticklabels=[r"face"], yticks=[], xlabel="x", ylabel="t",
+           title="2. Solve the Riemann problem there\n(one possible wave pattern; schematic)")
+    a2.grid(False)
+    save(fig, "riemann_face_and_fan")
+
+
+# ---------------------------------------------------------------------------
+# 17. Exact vs HLL vs HLLC wave models in the x-t plane. Schematic.
+# ---------------------------------------------------------------------------
+def riemann_fans_compare():
+    fig, axes = plt.subplots(1, 3, figsize=(11, 3.6), sharey=True)
+    t = np.array([0, 1.0])
+    titles = ["Exact (Godunov)\nall waves, true shapes",
+              "HLL\ntwo waves, one averaged state",
+              "HLLC\nthree waves, two star states"]
+    for ax, ttl in zip(axes, titles):
+        ax.axvline(0, color=C1, lw=1.6)
+        ax.set(xlim=(-1.5, 1.5), ylim=(0, 1.2), xticks=[], yticks=[], title=ttl)
+        ax.grid(False)
+        ax.text(-1.4, 0.15, r"$\mathbf{U}_L$", fontsize=11)
+        ax.text(1.12, 0.15, r"$\mathbf{U}_R$", fontsize=11)
+    a = axes[0]
+    for sp in np.linspace(-1.2, -0.7, 6):
+        a.plot(sp * t, t, color=C0, lw=1)
+    a.plot(0.3 * t, t, color=C2, ls="--", lw=1.8)
+    a.plot(1.05 * t, t, color=C3, lw=2.2)
+    a.text(-0.42, 0.85, r"$\mathbf{U}_{*L}$", fontsize=10)
+    a.text(0.5, 0.85, r"$\mathbf{U}_{*R}$", fontsize=10)
+    a = axes[1]
+    a.plot(-1.25 * t, t, color=C3, lw=2)
+    a.plot(1.15 * t, t, color=C3, lw=2)
+    a.fill([0, -1.25, 1.15], [0, 1, 1], color=C0, alpha=0.10, lw=0)
+    a.text(-0.35, 0.8, r"$\mathbf{U}_{\mathrm{HLL}}$", fontsize=11)
+    a.text(-1.45, 1.03, r"$S_L$", color=C3)
+    a.text(1.08, 1.03, r"$S_R$", color=C3)
+    a.text(-0.95, 0.45, "contact lost:\naveraged away", fontsize=7.5, color=GREY)
+    a = axes[2]
+    a.plot(-1.25 * t, t, color=C3, lw=2)
+    a.plot(1.15 * t, t, color=C3, lw=2)
+    a.plot(0.3 * t, t, color=C2, ls="--", lw=1.8)
+    a.text(-0.55, 0.8, r"$\mathbf{U}_{*L}$", fontsize=10)
+    a.text(0.45, 0.8, r"$\mathbf{U}_{*R}$", fontsize=10)
+    a.text(-1.45, 1.03, r"$S_L$", color=C3)
+    a.text(0.22, 1.03, r"$S_*$", color=C2)
+    a.text(1.08, 1.03, r"$S_R$", color=C3)
+    save(fig, "riemann_fans_compare")
+
+
+# ---------------------------------------------------------------------------
+# 18. Entropy fix demo on Burgers' equation: a transonic rarefaction
+#     (uL < 0 < uR). Roe keeps an expansion shock; Harten's fix, HLL,
+#     Rusanov and Godunov produce the fan. Computed here, first order.
+# ---------------------------------------------------------------------------
+def entropy_fix_burgers():
+    uL0, uR0, t_end, N = -0.5, 1.0, 1.0, 400
+    x = np.linspace(-2, 2, N, endpoint=False) + 2.0 / N
+    dx = 4.0 / N
+    f = lambda u: 0.5 * u ** 2
+
+    def flux(name, ul, ur):
+        a = 0.5 * (ul + ur)  # Roe speed for Burgers
+        if name == "Roe":
+            return 0.5 * (f(ul) + f(ur)) - 0.5 * np.abs(a) * (ur - ul)
+        if name == "Roe + Harten fix":
+            d = 0.5
+            aa = np.where(np.abs(a) < d, (a ** 2 + d ** 2) / (2 * d), np.abs(a))
+            return 0.5 * (f(ul) + f(ur)) - 0.5 * aa * (ur - ul)
+        if name == "HLL (Einfeldt speeds)":
+            sl = np.minimum(np.minimum(ul, ur), a)
+            sr = np.maximum(np.maximum(ul, ur), a)
+            fh = (sr * f(ul) - sl * f(ur) + sl * sr * (ur - ul)) / np.where(sr - sl > 1e-14, sr - sl, 1.0)
+            return np.where(sl >= 0, f(ul), np.where(sr <= 0, f(ur), fh))
+        if name == "Godunov (exact)":
+            shock = ul > ur
+            s = 0.5 * (ul + ur)
+            fs = np.where(s > 0, f(ul), f(ur))
+            fr = np.where(ul > 0, f(ul), np.where(ur < 0, f(ur), 0.0))
+            return np.where(shock, fs, fr)
+
+    names = ["Roe", "Roe + Harten fix", "HLL (Einfeldt speeds)", "Godunov (exact)"]
+    styles = [(C1, "-", 2.0), (C0, "--", 1.6), (C2, "-.", 1.6), (C3, ":", 2.0)]
+    fig, ax = plt.subplots(figsize=(7.2, 4.0))
+    xe = np.linspace(-2, 2, 800)
+    ue = np.where(xe < uL0 * t_end, uL0, np.where(xe > uR0 * t_end, uR0, xe / t_end))
+    ax.plot(xe, ue, color="k", lw=3, alpha=0.25, label="exact: rarefaction fan")
+    for name, (c, ls, lw) in zip(names, styles):
+        u = np.where(x < 0, uL0, uR0)
+        dt = 0.4 * dx / max(abs(uL0), abs(uR0))
+        t = 0.0
+        while t < t_end - 1e-12:
+            h = min(dt, t_end - t)
+            ue_ = np.concatenate(([uL0], u, [uR0]))
+            F = flux(name, ue_[:-1], ue_[1:])
+            u = u - h / dx * (F[1:] - F[:-1])
+            t += h
+        ax.plot(x, u, color=c, ls=ls, lw=lw, label=name)
+    ax.annotate("Roe: the jump survives as an\nexpansion shock moving at " + r"$\tilde a = (u_L+u_R)/2$",
+                xy=(0.25, 0.25), xytext=(-1.9, 0.62), fontsize=8.5, color=C1,
+                arrowprops=dict(arrowstyle="->", color=C1))
+    ax.set(xlabel="x", ylabel="u", xlim=(-2, 2), ylim=(-0.65, 1.1),
+           title="Burgers, transonic rarefaction ($u_L=-0.5$, $u_R=1$), t = 1, 400 cells, first order\n(computed in scripts/make_figures.py; Harten $\\delta = 0.5$)")
+    ax.legend(fontsize=8, loc="lower right")
+    save(fig, "entropy_fix_burgers")
+
+
+# ---------------------------------------------------------------------------
+# 19. Capsule flow-field anatomy, forebody to wake. Schematic, not to scale.
+# ---------------------------------------------------------------------------
+def capsule_anatomy():
+    fig, ax = plt.subplots(figsize=(11, 6.2))
+    # capsule: shallow spherical heat shield (left), rounded shoulder, conical backshell
+    Rb, Rn = 1.0, 2.4  # base radius, nose radius
+    th = np.linspace(-np.arcsin(Rb / Rn), np.arcsin(Rb / Rn), 200)
+    hx = -(Rn * np.cos(th) - Rn * np.cos(th[0]))  # heat shield, apex at x<0
+    hy = Rn * np.sin(th)
+    hx = hx - hx.max()  # apex at negative x, rim at x=0
+    bx = np.array([0.0, 0.08, 1.05, 1.15])
+    by = np.array([1.0, 1.03, 0.42, 0.38])
+    upper = np.concatenate([hx[hy >= 0][::-1], bx])
+    uy = np.concatenate([hy[hy >= 0][::-1], by])
+    outline_x = np.concatenate([upper, [1.15], upper[::-1]])
+    outline_y = np.concatenate([uy, [-0.38], -uy[::-1]])
+    ax.fill(outline_x, outline_y, color="#cfd8dc", zorder=3)
+    ax.plot(outline_x, outline_y, color="k", lw=1.4, zorder=4)
+    apex = hx.min()
+    # bow shock
+    ys = np.linspace(-2.6, 2.6, 300)
+    xs = apex - 0.28 - 0.42 * (np.sqrt(1 + (ys / 0.75) ** 2) - 1)
+    ax.plot(xs, ys, color=C1, lw=2.2)
+    # boundary layer (thin band along heat shield and around shoulder)
+    for sgn in (1, -1):
+        yy = np.linspace(0, 1.0, 50)
+        xx = np.interp(yy, hy[hy >= 0], hx[hy >= 0])
+        ax.plot(xx - 0.06 - 0.06 * yy, sgn * yy, color=C2, lw=1.2)
+    # shoulder expansion fan
+    for ang in np.radians([10, 25, 40, 55]):
+        ax.plot([0.04, 0.04 + 0.9 * np.cos(ang)], [1.03, 1.03 + 0.9 * np.sin(ang)], color=C0, lw=0.8)
+        ax.plot([0.04, 0.04 + 0.9 * np.cos(ang)], [-1.03, -1.03 - 0.9 * np.sin(ang)], color=C0, lw=0.8)
+    # free shear layers from shoulder to neck
+    xn = 3.3
+    sx = np.linspace(0.08, xn, 100)
+    sy = 1.03 - (1.03 - 0.12) * ((sx - 0.08) / (xn - 0.08)) ** 1.3
+    for sgn in (1, -1):
+        ax.plot(sx, sgn * sy, color=C3, lw=1.6)
+        ax.plot(sx, sgn * (sy + 0.04 * np.sin(9 * sx) * (sx / xn)), color=C3, lw=0.8, alpha=0.5)
+    # recirculation zone
+    ax.fill(np.concatenate([sx, sx[::-1]]), np.concatenate([sy, -sy[::-1]]) * 0.96, color=C3, alpha=0.07)
+    for cy, d in [(0.42, 1), (-0.42, -1)]:
+        e = np.linspace(0, 2 * np.pi * 0.85, 60)
+        ax.plot(2.0 + 0.55 * np.cos(e), cy + 0.22 * d * np.sin(e), color=C3, lw=0.9)
+        ax.annotate("", xy=(2.0 + 0.55 * np.cos(e[-1]), cy + 0.22 * d * np.sin(e[-1])),
+                    xytext=(2.0 + 0.55 * np.cos(e[-3]), cy + 0.22 * d * np.sin(e[-3])),
+                    arrowprops=dict(arrowstyle="->", color=C3, lw=0.9))
+    # recompression shocks and wake
+    for sgn in (1, -1):
+        ax.plot([xn - 0.2, xn + 1.4], [sgn * 0.15, sgn * 1.25], color=C1, lw=1.5)
+    wx = np.linspace(xn, 6.2, 100)
+    for sgn in (1, -1):
+        ax.plot(wx, sgn * (0.12 + 0.08 * (wx - xn)), color=GREY, lw=1, ls="--")
+    # labels
+    L = dict(fontsize=8.5)
+    def lab(n, xy, xt, txt, c="k"):
+        ax.annotate(f"({n}) {txt}", xy=xy, xytext=xt, color=c, arrowprops=dict(arrowstyle="->", color=c, lw=0.8), **L)
+    lab(1, (xs[150] , 0.0), (-3.9, -0.35), "bow shock\n(near-normal on axis)", C1)
+    lab(2, (apex - 0.15, 0.25), (-3.9, 0.65), "shock layer / stagnation region\n(subsonic, reacting, nonequilibrium\njust behind the shock)")
+    lab(3, (0.55, -1.2), (-3.9, -1.9), "entropy layer\n(high-entropy gas from the near-normal\npart of the shock, wrapping the body)")
+    lab(4, (-0.12, -0.55), (-2.6, -2.65), "boundary layer\n(laminar on most forebodies)", C2)
+    lab(5, (0.35, 1.45), (-0.4, 2.45), "shoulder expansion\n(p, T fall fast; chemistry freezes)", C0)
+    lab(6, (1.6, 0.75), (1.4, 2.0), "free shear layer\n(transitions, unsteady)", C3)
+    lab(7, (2.0, -0.3), (2.0, -2.25), "recirculation zone / base flow\n(low speed, low density, reversed)", C3)
+    lab(8, (xn, 0.0), (4.3, -1.2), "neck: shear layers converge,\nrear stagnation point", "k")
+    lab(9, (xn + 0.7, 0.68), (4.3, 1.6), "recompression shock", C1)
+    lab(10, (5.5, 0.3), (5.0, 0.8), "far wake", GREY)
+    ax.annotate("", xy=(-3.2, 1.5), xytext=(-4.0, 1.5), arrowprops=dict(arrowstyle="->", lw=1.3))
+    ax.text(-4.0, 1.6, r"$M_\infty \gg 1$", fontsize=9)
+    ax.set_aspect("equal")
+    ax.set(xlim=(-4.1, 6.3), ylim=(-2.85, 2.85), xticks=[], yticks=[],
+           title="Flow around an entry capsule, forebody to wake (schematic, not to scale; zero angle of attack)")
+    ax.grid(False)
+    for s in ax.spines.values():
+        s.set_visible(False)
+    save(fig, "capsule_anatomy")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -591,3 +822,7 @@ if __name__ == "__main__":
     eigenvalue_limiter()
     virtual_upwind_point()
     double_cone_schematic()
+    riemann_face_and_fan()
+    riemann_fans_compare()
+    entropy_fix_burgers()
+    capsule_anatomy()

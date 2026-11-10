@@ -74,7 +74,17 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Implications:** separate from choosing the conservation form; numerically, why Roe's solver needs an entropy fix.
 - **In a run:** the entropy-fix coefficient in Roe-type schemes; it affects stagnation heating.
 - **Which codes:** LAURA (Roe with entropy fix) and any Roe-based code.
-- **See also:** [conservation form and weak solutions](reference/foundations/conservation-and-weak-solutions.md#nonuniqueness-and-the-entropy-condition), [Roe](reference/spatial/riemann-solvers.md#roe).
+- **See also:** [conservation form and weak solutions](reference/foundations/conservation-and-weak-solutions.md#nonuniqueness-and-the-entropy-condition), [which schemes enforce it](reference/foundations/conservation-and-weak-solutions.md#which-schemes-enforce-the-entropy-condition), [entropy fix](#entropy-fix-also-harten-fix-eigenvalue-limiting).
+
+### Entropy fix (also: Harten fix, eigenvalue limiting)
+
+- **Depth:** [deep] · **Slot:** flux functions
+- **What it is:** a floor on the dissipation coefficient of an upwind flux where an eigenvalue goes to zero, e.g. Harten's $|\lambda| \to (\lambda^2 + \delta^2)/2\delta$ for $|\lambda| < \delta$.
+- **Problem it solves:** Roe's solver damps each wave by $|\tilde\lambda|$, so at a transonic rarefaction it keeps an unphysical expansion shock; the fix restores the fan. Also used against the carbuncle.
+- **Implications:** adds dissipation wherever active, including boundary layers, so it is usually reduced near walls. HLL-family, Rusanov and exact solvers don't need it.
+- **In a run:** the entropy-fix or eigenvalue-limiter coefficient; heat flux can depend on it.
+- **Which codes:** Roe-based codes (LAURA); eigenvalue limiting in modified Steger–Warming (DPLR, US3D).
+- **See also:** [entropy fixes: why Roe needs one](reference/spatial/riemann-solvers.md#entropy-fixes-why-roe-needs-one), [modified Steger–Warming](reference/spatial/flux-vector-splitting.md#modified-steger-warming).
 
 ### Flux Jacobian
 
@@ -91,10 +101,10 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Depth:** [deep] · **Slot:** governing equations
 - **What it is:** the sound speed with chemistry and lagging internal modes held fixed: $a_f^2 = \gamma_f p/\rho$, $\gamma_f = 1 + R_{mix}/c_{v,tr}$ in a 2T model.
 - **Problem it solves:** the correct wave speed on acoustic time scales, which the eigenvalues and flux functions use.
-- **Implications:** higher than the equilibrium sound speed.
+- **Implications:** higher than the equilibrium sound speed, because compression energy can only go into translation and rotation; the flux Jacobian never contains source terms, so a finite-rate code's eigenvalues always use it.
 - **In a run:** inside every flux function of a reacting code.
 - **Which codes:** all reacting codes.
-- **See also:** [mathematical character](reference/foundations/mathematical-character.md#hyperbolic).
+- **See also:** [frozen and equilibrium sound speed](reference/foundations/mathematical-character.md#frozen-and-equilibrium-sound-speed).
 
 ### Lax–Wendroff theorem
 
@@ -186,6 +196,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **In a run:** Jacobian order, relaxation sweeps, CFL ramp.
 - **Which codes:** DPLR, LAURA, US3D, FUN3D, SU2.
 - **See also:** [implicit methods](reference/time/implicit-methods.md).
+
+### Star region (also: star states, $\mathbf U_{*L}$, $\mathbf U_{*R}$)
+
+- **Depth:** [deep] · **Slot:** flux functions
+- **What it is:** in a Riemann problem, the region between the left and right acoustic waves. Pressure and normal velocity are uniform there ($p_*$, $u_*$); density, temperature, species and tangential velocity can jump at the contact, giving two states $\mathbf U_{*L}$ and $\mathbf U_{*R}$.
+- **Problem it solves:** the vocabulary in which exact and HLLC solvers are written.
+- **Implications:** HLL replaces both star states (and any fans) by one average; HLLC keeps two.
+- **In a run:** invisible.
+- **Which codes:** all Godunov-type codes.
+- **See also:** [the Riemann problem at a face](reference/spatial/riemann-solvers.md#the-riemann-problem-at-a-face).
 
 ### Two-temperature model (also: Park 2T)
 

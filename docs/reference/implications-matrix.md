@@ -18,7 +18,7 @@ Every method covered so far, judged on the six lenses side by side. Each row lin
 | Method | Time step and cost | Steady vs unsteady | Accuracy | Robustness | Physics captured or lost | Hardware fit |
 |---|---|---|---|---|---|---|
 | [Roe](spatial/riemann-solvers.md#roe) | ~ medium | ~ entropy fix can cause limit cycles | ✓ resolves contacts, boundary layers | ✗ entropy fix needed; not positivity-preserving; carbuncle | ✓ contacts and shear | ✓ |
-| [HLL / HLLE](spatial/riemann-solvers.md#hll) | ✓ cheap | ✓ | ✗ smears contacts and boundary layers | ✓ positive, carbuncle-resistant | ✗ loses contact and shear waves | ✓ |
+| [HLL / HLLE](spatial/riemann-solvers.md#hll) | ✓ cheap | ✓ | ✗ smears contacts and boundary layers | ✓ positive with bounding (Einfeldt) speeds; carbuncle-resistant | ✗ loses contact and shear waves | ✓ |
 | [HLLC](spatial/riemann-solvers.md#hllc) | ✓ cheap | ✓ | ✓ resolves contacts | ~ positive with suitable speeds; carbuncle-prone | ✓ contacts, species ride the contact | ✓ |
 | [HLLC-LM](spatial/low-mach-corrections.md#hllc-lm) | ✓ cheap | ✓ smooth activation | ✓ less dissipative than HLLC | ✓ shock-stable incl. 3D | ✓ contacts, low-Mach features | ✓ |
 | [KEC + Ducros dissipation](spatial/central-schemes.md#kinetic-energy-consistent-fluxes) | ✓ cheap fluxes | ✓ built for LES/DNS, implicit capable | ✓ minimal dissipation away from shocks | ~ depends on sensor | ✓ turbulence, separation dynamics | ✓ |
