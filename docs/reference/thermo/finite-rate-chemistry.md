@@ -76,7 +76,7 @@ Because formation enthalpies are part of the total energy, chemistry needs no so
 
 ### Electrons and ions
 
-Electrons are a species with a tiny molar mass. Many codes don't solve an equation for them; they enforce **charge neutrality** ($n_e = \sum$ ions) and treat ion–electron diffusion as **ambipolar** (electrons would run ahead, but the electric field holds them to the ions; see [transport](transport-and-diffusion.md#ambipolar-diffusion)). In a 2T model electron energy rides in $T_v$.
+Electrons are a species with a tiny molar mass. Many codes don't solve an equation for them; they enforce **charge neutrality** ($n_e = \sum$ ions) and treat ion–electron diffusion as **ambipolar** (electrons would run ahead, but the electric field holds them to the ions; see [transport](transport-and-diffusion.md#ambipolar-diffusion)). In a 2T model electron energy rides in $T_v$. The full picture (the two stages of ionization, which temperature drives which reaction, the electron energy pool, 3T models, avalanche ionization and blackout) is on [ionization, electrons and plasma](ionization-and-electrons.md).
 
 ## Variants
 

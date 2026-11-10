@@ -886,6 +886,29 @@ def knudsen_regimes():
     save(fig, "knudsen_regimes")
 
 
+# ---------------------------------------------------------------------------
+# 23. Plasma frequency vs electron density, with communication bands.
+#     Computed: f_p = 8.98 sqrt(n_e) Hz, n_e in m^-3.
+# ---------------------------------------------------------------------------
+def plasma_frequency_bands():
+    ne = np.logspace(14, 20, 300)
+    fp = 8.98 * np.sqrt(ne)
+    fig, ax = plt.subplots(figsize=(7.4, 4.0))
+    ax.plot(ne, fp / 1e9, color=C0, lw=2.2, label=r"plasma frequency $f_p = 8.98\sqrt{n_e}$")
+    bands = [("VHF voice (~0.3 GHz)", 0.3e9, GREY), ("GPS L1 (1.58 GHz)", 1.575e9, C2),
+             ("S-band (2.3 GHz)", 2.3e9, C1), ("X-band (8.4 GHz)", 8.4e9, C3), ("Ka-band (32 GHz)", 32e9, "#6a3d9a")]
+    for lab, f, c in bands:
+        nc = (f / 8.98) ** 2
+        ax.axhline(f / 1e9, color=c, ls=":", lw=1)
+        ax.plot([nc], [f / 1e9], "o", color=c)
+        yoff = 0.72 if "GPS" in lab else 1.1
+        ax.text(1.3e14, f / 1e9 * yoff, f"{lab}: blacked out above $n_e$ ≈ {nc:.1e} m⁻³", fontsize=7.5, color=c)
+    ax.set(xscale="log", yscale="log", xlabel=r"electron number density $n_e$ (m$^{-3}$)", ylabel="frequency (GHz)",
+           title="Signals below the local plasma frequency are reflected (computed;\ncollisions add attenuation below this cutoff too)")
+    ax.legend(fontsize=8, loc="lower right")
+    save(fig, "plasma_frequency_bands")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -909,3 +932,4 @@ if __name__ == "__main__":
     sutton_graves_map()
     shock_limits_newtonian()
     knudsen_regimes()
+    plasma_frequency_bands()

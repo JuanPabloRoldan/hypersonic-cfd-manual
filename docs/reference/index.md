@@ -24,7 +24,8 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 [3.2 Energy modes and thermodynamics](thermo/energy-modes.md) ·
 [3.3 Thermal nonequilibrium](thermo/thermal-nonequilibrium.md) ·
 [3.4 Finite-rate chemistry](thermo/finite-rate-chemistry.md) ·
-[3.5 Transport and diffusion](thermo/transport-and-diffusion.md)
+[3.5 Transport and diffusion](thermo/transport-and-diffusion.md) ·
+[3.6 Ionization, electrons and plasma](thermo/ionization-and-electrons.md)
 
 **4 Turbulence.**
 [4.1 Turbulence modeling for hypersonic boundary layers](physics/turbulence-modeling.md)

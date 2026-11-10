@@ -130,6 +130,18 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - J. A. Fay & F. R. Riddell, "Theory of stagnation point heat transfer in dissociated air," *J. Aeronaut. Sci.* 25 (1958).
 - H. J. Allen & A. J. Eggers, "A study of the motion and aerodynamic heating of ballistic missiles entering the Earth's atmosphere at high supersonic speeds," NACA Report 1381 (1958).
 - E. R. G. Eckert, "Engineering relations for friction and heat transfer to surfaces in high velocity flow," *J. Aeronaut. Sci.* 22 (1955).
+- C. Park, *Nonequilibrium Hypersonic Aerothermodynamics*, Wiley, 1990.
+- C. Park, "Assessment of a two-temperature kinetic model for dissociating and weakly ionizing nitrogen," *J. Thermophys. Heat Transfer* 2(1) (1988), doi:10.2514/3.55.
+- C. Park, "Assessment of two-temperature kinetic model for ionizing air," *J. Thermophys. Heat Transfer* 3(3) (1989), doi:10.2514/3.28771.
+- C. Park, "Review of chemical-kinetic problems of future NASA missions, I: Earth entries," *J. Thermophys. Heat Transfer* 7(3) (1993), doi:10.2514/3.431.
+- R. N. Gupta, J. M. Yos, R. A. Thompson & K.-P. Lee, "A review of reaction rates and thermodynamic and transport properties for an 11-species air model for chemical and thermal nonequilibrium calculations to 30000 K," NASA RP-1232 (1990).
+- G. V. Candler & R. W. MacCormack, "Computation of weakly ionized hypersonic flows in thermochemical nonequilibrium," *J. Thermophys. Heat Transfer* 5(3) (1991), doi:10.2514/3.260.
+- M. Kim, A. Gülhan & I. D. Boyd, "Modeling of electron energy phenomena in hypersonic flows," *J. Thermophys. Heat Transfer* 26(2) (2012), doi:10.2514/1.T3716.
+- E. Farbar, I. D. Boyd & A. Martin, "Numerical prediction of hypersonic flowfields including effects of electron translational nonequilibrium," *J. Thermophys. Heat Transfer* 27(4) (2013), doi:10.2514/1.T3963.
+- M. P. Clarey & R. B. Greendyke, "Thermochemical nonequilibrium processes in weakly ionized air using three-temperature models," *J. Thermophys. Heat Transfer* 33(2) (2019a), doi:10.2514/1.T5536.
+- M. P. Clarey & R. B. Greendyke, "Three-temperature thermochemical nonequilibrium model with application to slender-body wakes," *J. Thermophys. Heat Transfer* 33(3) (2019b), doi:10.2514/1.T5573.
+- R. M. Wagnild & M. A. Gallis, "Continuum simulations of hypersonic flows in chemical and thermal nonequilibrium," *J. Thermophys. Heat Transfer* 32(4) (2018), doi:10.2514/1.T5196.
+- R. A. Hartunian, G. E. Stewart, S. D. Fergason et al., "Causes and mitigation of radio frequency (RF) blackout during reentry of reusable launch vehicles," Aerospace Corporation Report ATR-2007(5309)-1 (2007).
 - K. Sutton & R. A. Graves, "A general stagnation-point convective-heating equation for arbitrary gas mixtures," NASA TR R-376 (1971).
 - M. E. Tauber & K. Sutton, "Stagnation-point radiative heating relations for Earth and Mars entries," *J. Spacecraft Rockets* 28 (1991).
 - G. Moretti & M. Abbett, "A time-dependent computational method for blunt body flows," *AIAA J.* 4 (1966).

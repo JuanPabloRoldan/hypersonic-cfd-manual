@@ -117,6 +117,7 @@ nav:
           - "3.3 Thermal nonequilibrium": reference/thermo/thermal-nonequilibrium.md
           - "3.4 Finite-rate chemistry": reference/thermo/finite-rate-chemistry.md
           - "3.5 Transport and diffusion": reference/thermo/transport-and-diffusion.md
+          - "3.6 Ionization, electrons and plasma": reference/thermo/ionization-and-electrons.md
       - "4 Turbulence":
           - "4.1 Turbulence modeling for hypersonic boundary layers": reference/physics/turbulence-modeling.md
       - "5 Boundary conditions and walls":

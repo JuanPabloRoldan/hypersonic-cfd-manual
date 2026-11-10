@@ -50,3 +50,5 @@
 *[VHS]: Variable hard sphere (DSMC collision model)
 *[VSS]: Variable soft sphere (DSMC collision model)
 *[NTC]: No-time-counter (DSMC collision-pair selection)
+*[RAM-C]: Radio Attenuation Measurement flight experiments (late 1960s), the standard electron-density validation case
+*[QK]: Quantum-kinetic chemistry model (Bird)

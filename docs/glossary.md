@@ -65,6 +65,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Which codes:** a concept, not an option.
 - **See also:** [stiff source terms](reference/sources/stiff-sources.md), [gas models](reference/thermo/gas-models.md).
 
+### Debye length (also: Debye shielding, quasi-neutrality)
+
+- **Depth:** [feel] · **Slot:** ionization and electrons
+- **What it is:** the distance over which a plasma screens a charge imbalance, $\lambda_D \approx 69\sqrt{T_e/n_e}$ m; about a micrometre in an entry shock layer.
+- **Problem it solves:** justifies quasi-neutrality ($n_e = \sum n_{\text{ions}}$) in CFD, and makes the electron–ion Coulomb cross-section finite.
+- **Implications:** no need to resolve charge separation; sheath physics at walls and probes is lost.
+- **In a run:** invisible; electrons get no separate species equation.
+- **Which codes:** all ionizing-flow CFD codes.
+- **See also:** [ionization, electrons and plasma](reference/thermo/ionization-and-electrons.md#charge-neutrality-and-the-debye-length).
+
 ### Direct simulation Monte Carlo (also: DSMC)
 
 - **Depth:** [feel] · **Slot:** rarefied flow; discretization families (particles)
@@ -195,6 +205,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **In a run:** the "reconstruction variables" choice.
 - **Which codes:** common choice in reentry codes and in MFC.
 - **See also:** [the finite-volume pipeline](reference/spatial/finite-volume-pipeline.md#1-decode).
+
+### Plasma frequency (also: communications blackout, critical electron density)
+
+- **Depth:** [feel] · **Slot:** ionization and electrons
+- **What it is:** $f_p \approx 8.98\sqrt{n_e}$ Hz; radio waves below it are reflected by the plasma.
+- **Problem it solves:** predicts blackout: S-band (2.3 GHz) is cut off above about $7\times10^{16}$ m⁻³.
+- **Implications:** blackout prediction needs electron densities near the antenna, often on the afterbody.
+- **In a run:** post-process $n_e$; validate against RAM-C II.
+- **Which codes:** any code with ionized species.
+- **See also:** [communications blackout](reference/thermo/ionization-and-electrons.md#communications-blackout).
 
 ### Rankine–Hugoniot conditions
 

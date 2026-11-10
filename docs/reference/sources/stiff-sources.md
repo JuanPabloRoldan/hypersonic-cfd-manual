@@ -61,6 +61,8 @@ Eliminate the fastest modes analytically so they never need resolving: quasi-ste
 
 Knobs: source treatment (point-implicit, split), chemistry startup (frozen chemistry first, then switch on), sometimes a cap on reaction rates during startup. Symptoms: blow-up the moment chemistry is switched on; negative species densities near shocks; convergence slowdown when going from 5 to 11 species.
 
+
+- **Start-up:** ramp all chemical sources from zero to full strength over the early iterations, and prefer a two-temperature model behind strong shocks, where it is less stiff than a one-temperature model because $T_v$ starts low (Park 1990, §5.5). Electron-impact ionization is the stiffest reaction class; see [avalanche ionization](../thermo/ionization-and-electrons.md#effects-on-stability-and-robustness).
 ## Which codes
 
 !!! warning "Calibration"
