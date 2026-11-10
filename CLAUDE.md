@@ -97,7 +97,7 @@ Writing habits that follow from these: lead each section with the plain statemen
 
 **From a paper or book.** Paraphrase and cite; add the entry to `docs/references.md`. Put each result on the method page it belongs to, not on a page about the paper.
 
-**Before pushing.** Run `mkdocs build --strict`, then `python scripts/check_render.py` (builds on the already-built `site/`, opens every page in headless Chrome, and fails on math errors, raw LaTeX, unrendered `$` and missing images). Commit one chapter or one topic at a time.
+**Before pushing.** Run `mkdocs build --strict`, then `python scripts/check_render.py`. The script opens every page of the built `site/` in headless Chrome and fails on math errors, raw LaTeX, unrendered `$`, missing images, display equations wider than the text column, and course wording. It needs Playwright and Chrome; without internet access, point `LOCAL_NPM` at a directory where `npm install mathjax@3 mermaid@11` has been run (see the script's header). It is not part of CI. Look at a screenshot (`--shots DIR`) of any page with a new figure or Mermaid diagram. Commit one chapter or one topic at a time.
 
 ## Calibration
 
@@ -141,4 +141,5 @@ pip install -r requirements.txt
 python scripts/make_figures.py   # only if figures changed; needs numpy + matplotlib
 mkdocs serve                      # http://127.0.0.1:8000
 mkdocs build --strict             # what CI runs
+python scripts/check_render.py    # rendered-page check; needs playwright + Chrome
 ```

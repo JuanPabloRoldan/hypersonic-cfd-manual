@@ -70,6 +70,30 @@ Each species carries a heat of formation $h_s^0$ (zero for N₂ and O₂ by conv
 
 *(Outline.)* All of the above follow from the partition function of each mode. Production codes often use NASA polynomial fits for $c_p(T)$, $h(T)$ and $s(T)$ instead of explicit mode sums, which is simpler in a one-temperature model but needs care in multi-temperature models where modes have different temperatures.
 
+## Variants
+
+How codes evaluate the energies: closed-form expressions for each mode (rigid rotor, harmonic oscillator, a table of electronic levels), needed whenever $T \ne T_v$; or polynomial fits of $c_p(T)$ for each species (the NASA polynomials), which lump all the modes together and so assume a single temperature.
+
+## Typical values
+
+- Characteristic vibrational temperatures: about 3390 K (N₂), 2270 K (O₂), 2740 K (NO) (Anderson; other compilations differ by a percent or two).
+- Characteristic rotational temperatures: about 2.9 K (N₂) and 2.1 K (O₂), which is why rotation is fully excited at any temperature of interest.
+- Dissociation energies: 9.76 eV (N₂), 5.12 eV (O₂), 6.50 eV (NO); as characteristic temperatures, about 113,000 K, 59,500 K and 75,500 K.
+- Ionization energies: 14.53 eV (N), 13.62 eV (O), 9.26 eV (NO). NO ionizes most easily, which is why NO⁺ supplies the first electrons.
+- Collisions to equilibrate: a few (translation), about ten (rotation), $10^3$–$10^5$ (vibration).
+
+## Trade-offs
+
+- **Harmonic oscillator vs anharmonic levels.** The harmonic form is closed and cheap; it over-counts energy near the top of the well, where real levels crowd together and the molecule dissociates.
+- **Truncating the electronic levels.** A few low-lying levels are enough for the energy below about 10,000 K; radiation needs many more.
+- **Mode-by-mode expressions vs polynomial fits.** Fits are faster and are what most thermodynamic data sets provide; they can't be split between two temperatures.
+
+## Effects on stability and robustness
+
+- The vibrational energy is a steep, nonlinear function of $T_v$ at low temperature; the Newton inversion for $T_v$ needs a safeguarded start when $e_v$ is very small.
+- Polynomial fits evaluated outside their fitted range are the usual source of unphysical heat capacities.
+- None of the mode models is a source of instability in itself; their role in robustness is through the temperature inversion ([closing the system](../foundations/closing-the-system.md#2-caloric-relations-and-the-temperature-inversion)).
+
 ## Implications
 
 | Lens | Effect |

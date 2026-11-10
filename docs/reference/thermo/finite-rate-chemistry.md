@@ -84,6 +84,30 @@ Electrons are a species with a tiny molar mass. Many codes don't solve an equati
 
 Park's air mechanisms (5- and 11-species), Dunn–Kang, and newer QCT-informed rates; CO₂–N₂ mechanisms for Mars; N₂–CH₄ for Titan.
 
+## Typical values
+
+- Arrhenius form: $k_f = C\,T^{n}\,e^{-\theta/T}$, with the activation temperature $\theta$ equal to the dissociation temperature for dissociation reactions: about 113,000 K (N₂), 59,500 K (O₂), 75,500 K (NO).
+- Controlling-temperature exponent: $a$ of 0.5–0.7 in $T_c = T^a T_v^{1-a}$.
+- Arrhenius factor for N₂ dissociation: about $10^{-164}$ at 300 K and $10^{-5}$ at 10,000 K (figure above).
+- Species and reactions: 5 or 11 species for air; each dissociation is counted once per collision partner, so mechanisms run to tens of reactions.
+- Rate uncertainty: individual high-temperature rates are commonly uncertain by a factor of several, and more for ionization.
+
+!!! warning "Calibration"
+    Pre-exponential factors and temperature exponents are not quoted here because the rate table in Park (1993) could not be read reliably from the available copy. Take them from the mechanism file of the code in use.
+
+## Trade-offs
+
+- **Bigger mechanism:** more of the physics (ionization, minor species), more equations, more stiffness and more rates that each carry uncertainty.
+- **Backward rates from equilibrium constants vs independent fits:** deriving them from the equilibrium constant guarantees the mechanism relaxes to the right equilibrium; independent fits don't.
+- **Park's controlling temperature vs physics-based coupling models:** one empirical exponent against models that need state-specific data.
+
+## Effects on stability and robustness
+
+- Rates rising exponentially with temperature make the source term stiff and are why it is treated implicitly ([stiff source terms](../sources/stiff-sources.md)).
+- An overshoot in temperature feeds straight into the rates: one bad cell can produce an enormous source.
+- Trace species near zero are easily driven negative; codes clip or limit them.
+- Electron-impact ionization is self-amplifying and is the stiffest class ([ionization and electrons](ionization-and-electrons.md#effects-on-stability-and-robustness)).
+
 ## Implications
 
 | Lens | Effect |

@@ -61,6 +61,32 @@ The magnitude of the perfect-gas error is large. At Mach 25 a calorically perfec
 
 A **dense gas** is one where molecules are close enough that intermolecular forces and finite molecular volume matter, so $p \ne \rho RT$ and the compressibility factor $Z = p/(\rho RT)$ departs from 1. This happens near the critical point and at high pressure: supercritical rocket chambers, organic Rankine cycle turbines. It needs real-fluid equations of state (van der Waals, Peng–Robinson, Span–Wagner); $\mathbf U$ is unchanged and only the closure changes. Entry shock layers sit at a fraction of an atmosphere and thousands of kelvin, so $Z\approx 1$. A curiosity: in certain heavy fluids (BZT fluids, with negative fundamental derivative $\Gamma < 0$), expansion shocks become physically admissible, because the [entropy condition](../foundations/conservation-and-weak-solutions.md#nonuniqueness-and-the-entropy-condition) selects different weak solutions in that regime.
 
+## Variants
+
+The rungs of the ladder above are the variants. Two practical sub-choices sit inside them: the **species set** (5, 7 or 11 species for air; other mixtures for other atmospheres) and, for equilibrium air, **how the equilibrium state is obtained** (curve fits, tables, or a Gibbs-energy minimization done as the code runs).
+
+## Typical values
+
+- Unknowns per cell in 3-D: 5 (perfect gas, thermally perfect, equilibrium), 15 (finite-rate 1T, 11 species), 16 (2T), 17 or more (multi-temperature).
+- Ratio of specific heats: 1.4 for cold air; an effective value of roughly 1.1–1.2 describes the shock-layer density ratio of dissociating equilibrium air.
+- Strong-shock density ratio: 6 for $\gamma = 1.4$; roughly 10–15 or more for high-speed equilibrium air ([entry flow anatomy](../physics/entry-flow-anatomy.md#post-shock-density-and-standoff)).
+- Size of the perfect-gas error: for Apollo-class entry at Mach 36, a calorically perfect gas gives a post-shock temperature of about 58,000 K where equilibrium air gives about 11,600 K (Anderson, ch. 1).
+- Species-set thresholds: 5 species below about 8–9 km/s, 11 above ([choosing physical models](../model-selection.md)).
+
+## Trade-offs
+
+- **Up the ladder:** each rung captures a lag that the one below assumes away, and costs unknowns, closure work and rate data whose uncertainty grows with every step.
+- **Equilibrium air vs finite-rate:** equilibrium costs the same five equations as a perfect gas and gets temperature, density and standoff right when chemistry is fast; it can't represent relaxation zones, frozen wakes or finite wall catalysis.
+- **5 vs 11 species:** six more equations and a stiffer system, in exchange for ionization, electron density and the inputs a radiation calculation needs.
+- **Fidelity vs data:** above 2T the limiting factor is usually the quality of the rates, not the cost.
+
+## Effects on stability and robustness
+
+- Each added variable is another quantity that can go unphysical; chemistry and relaxation sources add stiffness.
+- A calorically perfect gas at entry Mach numbers gives extreme post-shock temperatures, which is harmless numerically but makes it a poor starting solution for a reacting run unless the chemistry is ramped in.
+- Equilibrium-air curve fits have piecewise ranges; discontinuities in their derivatives at range boundaries can slow implicit convergence.
+- Starting with a simpler model and switching up (perfect gas or frozen chemistry first) is the standard way to get a reacting run established.
+
 ## Implications
 
 | Lens | Effect |

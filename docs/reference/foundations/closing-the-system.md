@@ -87,7 +87,7 @@ With $n_s$ species, $n_r$ reactions and $k$ Newton iterations:
 
 - Dissociation energies: 9.8 eV per N₂ molecule (about 33.6 MJ per kg of N₂) and 5.1 eV per O₂ molecule (about 15.4 MJ per kg of O₂).
 - Newton iterations for the temperature inversion: typically 2–5 from the previous iteration's temperature as the starting guess.
-- Characteristic vibrational temperatures: 3395 K (N₂), 2239 K (O₂), 2817 K (NO); a mode is substantially excited once $T$ is of this order ([energy modes](../thermo/energy-modes.md)).
+- Characteristic vibrational temperatures: about 3390 K (N₂), 2270 K (O₂), 2740 K (NO); a mode is substantially excited once $T$ is of this order ([energy modes](../thermo/energy-modes.md)).
 - Cost scaling per cell: table above.
 
 ## Trade-offs

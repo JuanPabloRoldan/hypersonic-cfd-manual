@@ -44,6 +44,17 @@ Every method covered so far, judged on the six lenses side by side. Each row lin
 | [Point-implicit](sources/stiff-sources.md#point-implicit) | ✓ removes chemical limit; dense block per cell | ✓ both | ✓ | ✓ | ✓ | ✓ cell-local |
 | [Operator splitting + stiff ODE](sources/stiff-sources.md#operator-splitting-with-sub-stepped-chemistry) | ~ work scales with local stiffness | ✗ Lie splitting: $\Delta t$-dependent steady state | ~ Strang is 2nd order | ✓ | ✓ | ✗ uneven work per cell |
 
+## Wall conditions
+
+| Condition | Time step and cost | Steady vs unsteady | Accuracy | Robustness | Physics captured or lost | Hardware fit |
+|---|---|---|---|---|---|---|
+| [Cold isothermal wall](walls/wall-boundary-conditions.md#thermal-conditions) | ✓ free | ✓ | ✓ conservative heat flux | ~ impulsive start; ghost-temperature trap | ✗ no surface temperature | ✓ |
+| [Radiative equilibrium](walls/wall-boundary-conditions.md#thermal-conditions) | ✓ small Newton solve per face | steady idealization | ✓ realistic $T_w$ | ~ nonlinear, lag slows convergence | ✗ no conduction into the material | ✓ |
+| [Non-catalytic](walls/wall-boundary-conditions.md#catalytic-conditions) | ✓ free | ✓ | ✗ lower bound; unsafe for design | ✓ | ✗ no surface recombination | ✓ |
+| [Fully / super-catalytic](walls/wall-boundary-conditions.md#catalytic-conditions) | ✓ free | ✓ | ✓ upper bound | ~ steep species gradients at the wall | ✗ material dependence | ✓ |
+| [Finite-rate catalysis](walls/wall-boundary-conditions.md#catalytic-conditions) | ✓ cheap | ✓ | ~ limited by measured $\gamma$ | ~ nonlinear | ✓ real surface | ✓ |
+| [Coupled surface energy balance](walls/surface-energy-balance.md#levels-of-coupling) | ✗ flow solution per coupling iteration | quasi-steady flow, transient material | ✓ blowing, hot wall, ablation products | ~ needs under-relaxation | ✓ | ~ two codes |
+
 ## Gas models
 
 | Model | Time step and cost | Steady vs unsteady | Accuracy | Robustness | Physics captured or lost | Hardware fit |

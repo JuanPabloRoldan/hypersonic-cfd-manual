@@ -153,6 +153,14 @@ with any of the limiters above and a mirror-image formula for $U_{f,R}$.
 
 This keeps the familiar slope-ratio limiters (minmod, van Leer, ...) on arbitrary elements. It still assumes the cell pair is well aligned with the face; on skewed or stretched tetrahedra the gradients degrade. Nompelis et al. (2004) found Green–Gauss gradients error-prone on such cells and switched the stencil to first order at shocks; US3D's viscous gradients use weighted least squares with a deferred correction ([viscous fluxes](viscous-fluxes.md)).
 
+## Typical values
+
+- Stencil: 4 cells per face and 2 ghost layers for MUSCL on a structured grid.
+- The $\kappa$ family of unlimited slopes: $\kappa = -1$ fully upwind (second order), 0 Fromm, 1/3 third-order upwind-biased in one dimension, 1 central.
+- Limiter value at $r = 1$ (smooth data): 1 for every second-order limiter in the table above. At an extremum ($r \le 0$): 0, which makes the scheme first order there.
+- Sweby's second-order region is bounded below by minmod (most dissipative) and above by superbee (most compressive).
+- Sensitivity: on the double cone, the choice of limiter changes the separation length about as much as the choice of flux function (section above).
+
 ## Trade-offs
 
 - **Minmod vs van Leer vs superbee.** Minmod: most robust, most dissipative; shrinks separation bubbles and smears shear layers. Van Leer and van Albada: the usual production compromise; van Leer was the best performer on the double cone. Superbee: least dissipative, but steepens smooth gradients and can produce oscillations.

@@ -105,6 +105,27 @@ In **nonequilibrium**, the composition right behind the shock is still frozen, s
 
 Not variants of a method but of the flow: **angle of attack** (moves the stagnation point towards the shoulder and makes the wake asymmetric), **slender versus blunt bodies** (slender bodies have weaker shocks, long entropy layers and boundary layers that dominate the heating), and **altitude** (from continuum through slip and transitional to free-molecular flow, where [DSMC](../rarefied/dsmc.md) replaces CFD).
 
+## Typical values
+
+- Density ratio across the bow shock: 6 (perfect gas, $\gamma = 1.4$); roughly 10–15 or more (high-speed equilibrium air).
+- Standoff on a sphere from $\Delta/R_n \approx 0.78\,\rho_1/\rho_2$: 13% of the nose radius for a density ratio of 6, 5% for a ratio of 15. For $R_n = 1$ m that is 13 cm against 5 cm (computed from the formula).
+- Post-shock pressure: close to $\rho_1 u_1^2$ whatever the gas model. At 7.5 km/s and $\rho_1 = 10^{-4}$ kg/m³ that is about 5.6 kPa.
+- Post-shock enthalpy: close to $u_1^2/2$, so 28 MJ/kg at 7.5 km/s.
+- Post-shock velocity: $u_1$ divided by the density ratio, so of order 0.5–1 km/s at orbital entry speed.
+
+## Trade-offs
+
+A page about a flow has no method trade-off of its own. What the anatomy imposes on a computation is a set of competing resolution demands: the bow shock wants grid lines aligned with it, the boundary layer wants cells thin in the wall-normal direction, the shoulder wants streamwise resolution through a rapid expansion, and the wake wants a time-accurate method. Forebody heating needs only the first two, which is why forebody-only grids and steady solvers are the design workhorse.
+
+## Effects on stability and robustness
+
+Where each region causes numerical trouble:
+
+- **Stagnation region and bow shock:** [carbuncle](../spatial/shock-instabilities.md) and axis artefacts.
+- **Boundary layer:** stiffness from high-aspect-ratio cells ([relaxation methods](../time/relaxation-methods.md)).
+- **Shoulder expansion:** density and pressure fall by orders of magnitude over a short distance, which is where negative pressures appear.
+- **Wake:** unsteady, partly rarefied, and often the reason a steady residual stalls ([convergence diagnostics](../time/convergence-diagnostics.md#stalls-and-limit-cycles)).
+
 ## Implications
 
 | Lens | Effect |

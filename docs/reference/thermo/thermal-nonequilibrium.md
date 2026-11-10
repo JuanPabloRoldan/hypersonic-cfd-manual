@@ -37,7 +37,7 @@ A_{sr} &= 1.16\times10^{-3}\,\mu_{sr}^{1/2}\,\theta_{v,s}^{4/3},\qquad B_{sr} = 
 \end{aligned}
 $$
 
-for molecule $s$ colliding with partner $r$, where $\mu_{sr}$ is the reduced molar mass of the pair in g/mol and $\theta_{v,s}$ the characteristic vibrational temperature in kelvin. The left side is pressure times relaxation time because the time is inversely proportional to the collision rate, and so to pressure. For N₂–N₂, $\mu = 14$, $\theta_v = 3395$ K, giving $A = 221$ and $B = 0.029$. The mixture value $\tau_s$ is a mole-fraction-weighted average over collision partners.
+for molecule $s$ colliding with partner $r$, where $\mu_{sr}$ is the reduced molar mass of the pair in g/mol and $\theta_{v,s}$ the characteristic vibrational temperature in kelvin. The left side is pressure times relaxation time because the time is inversely proportional to the collision rate, and so to pressure. For N₂–N₂, $\mu = 14$, $\theta_v = 3390$ K, giving $A = 221$ and $B = 0.029$. The mixture value $\tau_s$ is a mole-fraction-weighted average over collision partners.
 
 The correlation was fitted below about 8000 K and extrapolates to unphysically short times at higher temperature: shorter than the time between collisions. **Park's correction** adds a collision-limited floor,
 
@@ -104,7 +104,7 @@ Speed and altitude thresholds, and what goes wrong if a level is left out, are c
 
 - Collisions needed to equilibrate: a few for translation, about ten for rotation, $10^3$–$10^5$ for vibration ([energy modes](energy-modes.md#equilibration-rates)).
 - Millikan–White, N₂–N₂: $A = 221$, $B = 0.029$; $p\,\tau_v = 6.8\times10^{-6}$, $4.7\times10^{-7}$ and $1.3\times10^{-7}$ atm s at 5000, 10,000 and 15,000 K (computed from the correlation).
-- Characteristic vibrational temperatures: 3395 K (N₂), 2239 K (O₂), 2817 K (NO).
+- Characteristic vibrational temperatures: about 3390 K (N₂), 2270 K (O₂), 2740 K (NO) ([energy modes](energy-modes.md#typical-values)).
 - Temperature cost of exciting N₂ vibration behind a shock at 14,000 K: about 2750 K (computed above, no dissociation).
 
 ## Trade-offs

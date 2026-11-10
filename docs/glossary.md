@@ -4,6 +4,26 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 
 ---
 
+### Blowing correction (also: blockage, $B'$)
+
+- **Depth:** [deep] · **Topic:** walls; surface energy balance
+- **What it is:** the reduction of the heat-transfer coefficient caused by gas injected at the wall, $C_H/C_{H0} = \varphi/(e^\varphi - 1)$ with $\varphi = 2\lambda B'_0$ and $B'_0 = \dot m/(\rho_e u_e C_{H0})$ the dimensionless blowing rate.
+- **Problem it solves:** lets a material-response code account for pyrolysis and ablation gases thickening the boundary layer without rerunning the flow solver.
+- **Implications:** at $B'_0 = 1$ laminar heating falls to 0.58 of its unblown value; the correction is empirical ($\lambda = 0.5$ laminar, about 0.4 turbulent) and breaks down near blow-off.
+- **In a run:** $B'$ above about 1 along the surface means blowing is reshaping the boundary layer and coupled analysis is worth considering.
+- **Which codes:** the CMA/FIAT family of material-response codes; flow codes see it as a blowing wall condition.
+- **See also:** [surface energy balance](reference/walls/surface-energy-balance.md#blowing).
+
+### Catalytic wall (also: recombination efficiency $\gamma$, fully/non/super-catalytic)
+
+- **Depth:** [deep] · **Topic:** wall boundary conditions
+- **What it is:** a wall condition on species: the diffusive flux of atoms to the wall equals the rate at which the surface recombines them, set by the fraction $\gamma$ of impinging atoms that recombine. $\gamma = 0$ is non-catalytic, $\gamma = 1$ fully catalytic; super-catalytic forces the free-stream composition at the wall.
+- **Problem it solves:** decides whether the dissociation energy carried by atoms is released at the wall.
+- **Implications:** up to about a factor of two on heat flux when the boundary layer is chemically frozen; no effect when it is in equilibrium. Non-catalytic is the unsafe assumption.
+- **In a run:** run the non-catalytic and fully catalytic cases as a bracket; quote the catalytic condition with every heat flux.
+- **Which codes:** all production entry codes offer the ladder from non- to super-catalytic plus material-specific models.
+- **See also:** [wall boundary conditions](reference/walls/wall-boundary-conditions.md#catalytic-conditions), [stagnation-point heating](reference/physics/stagnation-point-heating.md).
+
 ### Cell Reynolds number (also: wall cell Reynolds number, $Re_\Delta$)
 
 
@@ -85,6 +105,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Which codes:** SPARTA (Kokkos GPU), DAC, MONACO.
 - **See also:** [DSMC](reference/rarefied/dsmc.md), [continuum breakdown](reference/rarefied/continuum-breakdown.md).
 
+### Dual time stepping (also: pseudo-time subiterations)
+
+- **Depth:** [deep] · **Topic:** time advancement
+- **What it is:** an implicit time-accurate method in which each physical step (usually BDF2) is converged by iterating in a fictitious pseudo-time with a steady-state solver.
+- **Problem it solves:** lets the physical step be set by the physics instead of by the smallest cell's stability limit.
+- **Implications:** several steady-solver iterations per step; second-order accuracy only if the subiterations converge; BDF2 keeps 99.7% of an oscillation's amplitude per period at 50 steps per period.
+- **In a run:** knobs are the physical step and the subiteration count or tolerance; watch the unsteady residual drop within each step.
+- **Which codes:** the unsteady mode of implicit codes (FUN3D, SU2, US3D, LAURA, STAR-CCM+ coupled solver).
+- **See also:** [dual time stepping](reference/time/dual-time-stepping.md), [explicit vs implicit](reference/time/explicit-vs-implicit.md).
+
 ### Entropy condition
 
 
@@ -106,6 +136,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Which codes:** Roe-based codes (LAURA); eigenvalue limiting in modified Steger–Warming (DPLR, US3D).
 - **See also:** [entropy fixes: why Roe needs one](reference/spatial/riemann-solvers.md#entropy-fixes-why-roe-needs-one), [modified Steger–Warming](reference/spatial/flux-vector-splitting.md#modified-steger-warming).
 
+### Film coefficient (also: heat-transfer coefficient, $\rho_e u_e C_H$, Stanton number)
+
+- **Depth:** [deep] · **Topic:** walls; hand-off from CFD to material response
+- **What it is:** the factor in $q_{conv} = \rho_e u_e C_H\,(H_r - h_w)$ that multiplies the enthalpy difference between recovery and wall conditions.
+- **Problem it solves:** it is nearly independent of wall temperature and wall chemistry, so a value computed by CFD at one wall state can be reused by a material code at another.
+- **Implications:** wall temperature and catalysis act through $h_w$, not through the coefficient; blowing acts on the coefficient.
+- **In a run:** form it from a CFD solution as $q_w/(H_r - h_w)$ using the wall state of that solution.
+- **Which codes:** the standard interface between DPLR or LAURA and FIAT-type sizing tools.
+- **See also:** [surface energy balance](reference/walls/surface-energy-balance.md#the-film-coefficient-and-why-cfd-hands-it-over).
+
 ### Flux Jacobian
 
 - **Depth:** [deep] · **Topic:** governing equations; flux functions
@@ -125,6 +165,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **In a run:** inside every flux function of a reacting code.
 - **Which codes:** all reacting codes.
 - **See also:** [frozen and equilibrium sound speed](reference/foundations/mathematical-character.md#frozen-and-equilibrium-sound-speed).
+
+### Grid convergence index (also: GCI, Richardson extrapolation, observed order)
+
+- **Depth:** [deep] · **Topic:** verification
+- **What it is:** an error band on a fine-grid result from solutions on two or three systematically refined grids, $\text{GCI} = F_s\,|(f_2 - f_1)/f_1|/(r^p - 1)$, with $p$ the observed order and $r$ the refinement ratio.
+- **Problem it solves:** separates "the solver finished" from "the grid is fine enough".
+- **Implications:** needs monotone convergence and iteratively converged solutions on every grid; heat flux behind a captured shock shows an observed order between 1 and 2.
+- **In a run:** refine the wall-normal spacing and the shock region separately before a full three-grid study.
+- **Which codes:** independent of the code.
+- **See also:** [convergence diagnostics](reference/time/convergence-diagnostics.md#grid-convergence-and-richardson-extrapolation).
 
 ### Knudsen number (also: $Kn$, gradient-length Knudsen number)
 
@@ -165,6 +215,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **In a run:** "local time stepping" switch, CFL.
 - **Which codes:** essentially all steady solvers; subcycling in AMR codes.
 - **See also:** [local time stepping](reference/time/local-time-stepping.md).
+
+### Millikan–White relaxation time (also: Landau–Teller relaxation, Park's high-temperature correction)
+
+- **Depth:** [deep] · **Topic:** thermal nonequilibrium
+- **What it is:** an empirical correlation for the vibrational relaxation time of a molecule in collisions with a given partner, $p\tau = \exp[A(T^{-1/3} - B) - 18.42]$ atm s, used as the time constant in the Landau–Teller energy-exchange source.
+- **Problem it solves:** supplies the rate at which $T_v$ approaches $T$ behind a shock.
+- **Implications:** sets the thickness of the relaxation zone and the stiffness of the exchange source; too fast above about 8000 K without Park's collision-limited correction.
+- **In a run:** the relaxation-time model is a knob in two-temperature codes; a relaxation zone much thinner than the shock layer means a one-temperature model would do.
+- **Which codes:** standard in DPLR, LAURA, US3D, SU2-NEMO and Eilmer.
+- **See also:** [thermal nonequilibrium](reference/thermo/thermal-nonequilibrium.md#the-relaxation-time), [stiff source terms](reference/sources/stiff-sources.md).
 
 ### Modified Newtonian theory (also: Lees' modified Newtonian, Newtonian flow)
 
@@ -216,6 +276,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Which codes:** common choice in reentry codes and in MFC.
 - **See also:** [the finite-volume pipeline](reference/spatial/finite-volume-pipeline.md#1-decode).
 
+### Radiative-equilibrium wall
+
+- **Depth:** [deep] · **Topic:** wall boundary conditions
+- **What it is:** a thermal wall condition in which the wall re-radiates all the heat it receives, $q_w = \varepsilon\sigma T_w^4$, with no conduction into the material.
+- **Problem it solves:** gives a realistic surface temperature for a low-conductivity surface without a material-response calculation.
+- **Implications:** a nonlinear solve per wall face; an upper bound on surface temperature; 2134 K at 100 W/cm² for $\varepsilon = 0.85$.
+- **In a run:** specify the emissivity; expect a slightly lower heat flux than a cold isothermal wall.
+- **Which codes:** offered by all production entry codes.
+- **See also:** [wall boundary conditions](reference/walls/wall-boundary-conditions.md#thermal-conditions), [surface energy balance](reference/walls/surface-energy-balance.md).
+
 ### Rankine–Hugoniot conditions
 
 
@@ -247,6 +317,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Which codes:** DPLR, LAURA, US3D, FUN3D, SU2.
 - **See also:** [implicit methods](reference/time/implicit-methods.md).
 
+### Riemann invariants (also: characteristic boundary condition)
+
+- **Depth:** [deep] · **Topic:** boundary conditions
+- **What it is:** the quantities $R^\pm = u_n \pm 2a/(\gamma-1)$ carried unchanged along the acoustic characteristics of one-dimensional isentropic perfect-gas flow.
+- **Problem it solves:** at a subsonic boundary they say which information comes from outside (the incoming invariant) and which from the interior (the outgoing one), so the boundary neither over- nor under-specifies the flow.
+- **Implications:** one condition per incoming characteristic: all at a supersonic inflow, none at a supersonic outflow, one (pressure) at a subsonic outflow.
+- **In a run:** a boundary that reflects waves or drifts is usually specifying the wrong number of quantities.
+- **Which codes:** characteristic far-field conditions are universal; non-reflecting variants appear in unsteady codes such as MFC.
+- **See also:** [boundary conditions](reference/spatial/boundary-conditions.md#riemann-invariants-for-subsonic-boundaries).
+
 ### Star region (also: star states, $\mathbf U_{*L}$, $\mathbf U_{*R}$)
 
 - **Depth:** [deep] · **Topic:** flux functions
@@ -256,6 +336,26 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **In a run:** invisible.
 - **Which codes:** all Godunov-type codes.
 - **See also:** [the Riemann problem at a face](reference/spatial/riemann-solvers.md#the-riemann-problem-at-a-face).
+
+### Strong stability preserving (also: SSP Runge–Kutta, TVD Runge–Kutta)
+
+- **Depth:** [deep] · **Topic:** time advancement
+- **What it is:** a Runge–Kutta scheme whose stages are weighted averages of forward Euler steps with non-negative weights.
+- **Problem it solves:** whatever non-oscillatory or positivity property forward Euler has with a given spatial scheme, the SSP scheme keeps at high order in time.
+- **Implications:** SSP-RK3 costs three residual evaluations per step with an SSP coefficient of 1; classical RK4 is not SSP.
+- **In a run:** the default time integrator of explicit shock-capturing codes; CFL of 0.3–0.9 in practice.
+- **Which codes:** MFC and most WENO codes.
+- **See also:** [explicit methods](reference/time/explicit-methods.md#strong-stability-preservation).
+
+### Surface energy balance
+
+- **Depth:** [deep] · **Topic:** walls; flow–material coupling
+- **What it is:** the statement that convective heating, absorbed radiation and the enthalpy of gases arriving from the material equal reradiation, the enthalpy of blown gas leaving and conduction into the solid.
+- **Problem it solves:** it is the boundary condition joining a flow solver to a material-response code, and it determines the surface temperature of an ablator.
+- **Implications:** strongly nonlinear in wall temperature; the level of coupling (uncoupled, loose, full) sets the cost of a TPS analysis.
+- **In a run:** CFD supplies film coefficient, recovery enthalpy and pressure; the material code solves the balance through the trajectory.
+- **Which codes:** FIAT and the other material-response tools; coupled forms in LAURA and US3D.
+- **See also:** [surface energy balance](reference/walls/surface-energy-balance.md).
 
 ### Two-temperature model (also: Park 2T)
 
