@@ -66,6 +66,39 @@ The six-lens implications table:
 | Physics captured or lost | |
 | Hardware / parallel fit | |
 
+## Reader checks (run these on every page you add or change)
+
+The reader has a working CFD background but reads each page cold, and stops at anything asserted without support. These twelve checks come from the questions and complaints raised in review so far; the example in brackets is the question that motivated each one. A page isn't done until it passes all that apply.
+
+1. **Every term and symbol is defined where it first appears on the page**, in a clause, not by a link alone. ("Star states: I don't know what this means." "What is a dense gas?")
+2. **Structural claims are shown, not stated.** If the text says something about eigenvalues, a Jacobian, a stencil or a limit, write the matrix, the stencil or the limit. ("How does adding species keep the eigenvalues? Show the matrices.")
+3. **Every displayed equation is read back.** One sentence saying where it comes from (which balance, which assumption), then what each term does. Give a short derivation, with skipped steps named, when the derivation is the understanding.
+4. **Neighbours are told apart.** When two methods, models or terms sound alike, say in one or two sentences what differs and when it matters, or give a comparison table. Text and tables must name the same set of things. ("HLL vs HLLE if both are positivity preserving?" "Why does only Roe need an entropy fix?" "The text names three models, the table has four.")
+5. **"When do I need this?" has an answer**: a rule of thumb in terms of something easy to estimate (entry speed, Mach number, altitude, Knudsen, Damköhler or cell Reynolds number), plus what goes wrong, and in which direction, if it is left out.
+6. **Physical results come with their causal chain**, one link per sentence, with numbers. ("Dissociation absorbs energy, so the gas is colder; at nearly the same pressure a colder gas is denser; the same mass flux then needs a thinner layer, so the standoff shrinks.")
+7. **Likely misconceptions are met head on.** Where a statement collides with a reasonable prior belief, say so and resolve it. ("I thought explicit codes were faster in hypersonics." "CFL can be much greater than 1?")
+8. **At least one worked example with numbers** on every method page (minmod slopes, a Roe average, a time step at a wall cell), and **costs in concrete terms** (operation counts, memory scaling, iterations to converge, with the source and test case).
+9. **No dangling promises.** "Covered later" is not allowed. Link to the page and section that covers it; if none exists, create the outline stub.
+10. **A figure wherever geometry, a stencil, a wave pattern, an algorithm's data flow or a trend carries the point.** If a paragraph describes a picture in words, draw the picture. Captions say what to look at.
+11. **Alternatives and codes.** Each method page says what else could be used in its place and what the production codes actually do, calibrated.
+12. **It renders.** No raw `$`, backslash commands or broken images on the built page; no course references ("Track 6", "lesson", "checkpoint").
+
+Writing habits that follow from these: lead each section with the plain statement and put the formula second; one idea per paragraph; short declarative sentences; prefer a small table over a long sentence with four parallel items.
+
+## Adding material
+
+**A new fact, number or explanation.** Find the page that owns the topic and put it in the section the template gives it (a parameter range goes in Typical values, a failure mode in Effects on stability, a knob in In a run). Don't create a page for something that is a section of an existing family page. Then update whatever else repeats it: the six-lens table on that page, the implications matrix, the glossary entry, the codes appendix.
+
+**A new page.** Use the template below in full. Place it in the chapter order, number it in `nav` and in `docs/reference/index.md`, and link to it from every page that already mentions the topic. Start it as `outline` (headings and pointers), move it to `draft` when How it works, one figure and one worked example are in, and remove the status when every template section is filled and the reader checks pass.
+
+**A new figure.** Add a function to `scripts/make_figures.py`, call it from `__main__`, regenerate, and look at the PNG preview before committing. Schematics are labelled "schematic" or "not to scale". Computed curves say in the caption what was computed and from which formula. Published data are plotted exactly as published and credited in the caption.
+
+**A number.** Give the value, the units, the source and the test case. Order-of-magnitude teaching values are labelled "illustrative". If the only source is paywalled or wasn't read in full, say what was read (abstract, table, conclusions).
+
+**From a paper or book.** Paraphrase and cite; add the entry to `docs/references.md`. Put each result on the method page it belongs to, not on a page about the paper.
+
+**Before pushing.** Run `mkdocs build --strict`, then `python scripts/check_render.py` (builds on the already-built `site/`, opens every page in headless Chrome, and fails on math errors, raw LaTeX, unrendered `$` and missing images). Commit one chapter or one topic at a time.
+
 ## Calibration
 
 Separate settled results from active debate or one group's preference. Many production codes (DPLR, LAURA, US3D, FIAT) are not open, so code-specific claims get a `!!! warning "Calibration"` admonition unless backed by a cited primary source (NTRS papers, AIAA/JCP papers, user manuals). Never state a code detail more confidently than the source allows.

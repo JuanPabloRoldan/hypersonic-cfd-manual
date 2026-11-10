@@ -92,7 +92,7 @@ Candler, Subbareddy & Nompelis (2015) ran five fluxes (modified Steger–Warming
 - **Time convergence matters too:** the bubble takes a long time to settle, and at least 150 flow times (free-stream speed and cone-face length) must be simulated.
 - **Heat flux is less grid-sensitive than $L_s$**, because refining wall-normally (which controls heat flux) is cheaper than refining axially (which controls the separation and reattachment points).
 
-The lesson for aeroheating runs: report the limiter alongside the flux function, and treat a separation length or bubble size that changes with limiter choice as a sign the result is dissipation-limited.
+The practical point for aeroheating runs: report the limiter alongside the flux function, and treat a separation length or bubble size that changes with limiter choice as a sign the result is dissipation-limited.
 
 ### Extremum clipping and the stagnation point
 

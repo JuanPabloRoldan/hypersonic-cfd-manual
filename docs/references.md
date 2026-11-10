@@ -5,7 +5,7 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 ## Books
 
 - J. D. Anderson, *Hypersonic and High-Temperature Gas Dynamics*, 2nd ed., AIAA, 2006.
-- C. Park, *Nonequilibrium Hypersonic Aerodynamics*, Wiley, 1990.
+- C. Park, *Nonequilibrium Hypersonic Aerothermodynamics*, Wiley, 1990.
 - H. Babinsky & J. K. Harvey (eds.), *Shock Wave–Boundary-Layer Interactions*, Cambridge University Press, 2011.
 - E. F. Toro, *Riemann Solvers and Numerical Methods for Fluid Dynamics*, 3rd ed., Springer, 2009.
 - R. J. LeVeque, *Finite Volume Methods for Hyperbolic Problems*, Cambridge University Press, 2002.
@@ -17,6 +17,7 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - G. A. Bird, *Molecular Gas Dynamics and the Direct Simulation of Gas Flows*, Oxford University Press, 1994.
 - C. Shen, *Rarefied Gas Dynamics*, Springer, 2005.
 - P. J. Roache, *Verification and Validation in Computational Science and Engineering*, Hermosa, 1998.
+- W. L. Oberkampf & C. J. Roy, *Verification and Validation in Scientific Computing*, Cambridge University Press, 2010.
 
 ## Review articles
 
@@ -102,8 +103,23 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - A. Jameson, "Time dependent calculations using multigrid, with applications to unsteady flows past airfoils and wings," AIAA Paper 91-1596 (1991).
 - M. J. Berger & J. Oliger, "Adaptive mesh refinement for hyperbolic partial differential equations," *J. Comput. Phys.* 53 (1984).
 - M. J. Berger & P. Colella, "Local adaptive mesh refinement for shock hydrodynamics," *J. Comput. Phys.* 82 (1989).
+- J.-P. Dussauge, P. Dupont & J.-F. Debiève, "Unsteadiness in shock wave boundary layer interactions with separation," *Aerosp. Sci. Technol.* 10 (2006).
 - G. Moretti & M. Abbett, "A time-dependent computational method for blunt body flows," *AIAA J.* 4 (1966).
 - Y. C. Vigneron, J. V. Rakich & J. C. Tannehill, "Calculation of supersonic viscous flow over delta wings with sharp subsonic leading edges," AIAA Paper 78-1137 (1978).
+
+## Boundary conditions and walls
+
+- K. W. Thompson, "Time dependent boundary conditions for hyperbolic systems," *J. Comput. Phys.* 68 (1987).
+- T. J. Poinsot & S. K. Lele, "Boundary conditions for direct simulations of compressible viscous flows," *J. Comput. Phys.* 101 (1992).
+- D. H. Rudy & J. C. Strikwerda, "A nonreflecting outflow boundary condition for subsonic Navier–Stokes calculations," *J. Comput. Phys.* 36 (1980).
+- R. Goulard, "On catalytic recombination rates in hypersonic stagnation heat transfer," *Jet Propulsion* 28 (1958).
+- C. B. Moyer & R. A. Rindal, "An analysis of the coupled chemically reacting boundary layer and charring ablator, Part II: Finite difference solution for the in-depth response of charring materials considering surface chemical and energy balances," NASA CR-1061 (1968). (The CMA code.)
+- Y.-K. Chen & F. S. Milos, "Ablation and thermal response program for spacecraft heatshield analysis," *J. Spacecraft Rockets* 36 (1999). (FIAT.)
+- F. S. Milos & D. J. Rasky, "Review of numerical procedures for computational surface thermochemistry," *J. Thermophys. Heat Transfer* 8 (1994).
+
+## Verification
+
+- P. J. Roache, "Perspective: a method for uniform reporting of grid refinement studies," *J. Fluids Eng.* 116 (1994). (Grid convergence index.)
 
 ## Sources and stiffness
 

@@ -938,6 +938,287 @@ def physics_ladder():
     save(fig, "physics_ladder")
 
 
+# ---------------------------------------------------------------------------
+# Boundary conditions: how many characteristics enter at each boundary type.
+# ---------------------------------------------------------------------------
+def bc_characteristics():
+    fig, axes = plt.subplots(1, 4, figsize=(11.5, 3.1), sharey=True)
+    cases = [
+        ("Supersonic inflow\n(free stream)", 2.0, "left"),
+        ("Subsonic inflow", 0.5, "left"),
+        ("Subsonic outflow", 0.5, "right"),
+        ("Supersonic outflow", 2.0, "right"),
+    ]
+    labels = [r"$u_n - a$", r"$u_n$", r"$u_n + a$"]
+    for ax, (title, M, side) in zip(axes, cases):
+        speeds = [M - 1.0, M, M + 1.0]  # in units of a, flow left to right
+        xb = 0.0
+        ax.axvline(xb, color="k", lw=2)
+        if side == "left":
+            ax.axvspan(xb, 1.2, color=C0, alpha=0.06)
+            ax.text(0.6, 0.06, "domain", ha="center", color=C0, fontsize=9)
+        else:
+            ax.axvspan(-1.2, xb, color=C0, alpha=0.06)
+            ax.text(-0.6, 0.06, "domain", ha="center", color=C0, fontsize=9)
+        n_in = 0
+        for s, lab in zip(speeds, labels):
+            # a characteristic through the boundary point at t = 0.5
+            t = np.linspace(0, 1, 2)
+            x = s * (t - 0.5) * 0.9
+            entering = (s > 0) if side == "left" else (s < 0)
+            n_in += entering
+            col = C1 if entering else GREY
+            ax.plot(x, t, color=col, lw=2.2 if entering else 1.4, ls="-" if entering else "--")
+            ax.annotate(
+                "", xy=(x[1], t[1]), xytext=(x[1] - 0.12 * s, t[1] - 0.12 / 0.9),
+                arrowprops=dict(arrowstyle="->", color=col, lw=1.6),
+            )
+            ax.text(x[1], 1.03, lab, ha="center", va="bottom", fontsize=8, color=col)
+        ax.set_title(title, fontsize=10)
+        ax.text(
+            0.5, -0.2, f"specify {n_in} of 3 wave families\nextrapolate {3 - n_in}",
+            transform=ax.transAxes, ha="center", va="top", fontsize=9,
+        )
+        ax.set_xlim(-1.2, 1.2)
+        ax.set_ylim(0, 1.18)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.grid(False)
+        for sp in ax.spines.values():
+            sp.set_visible(False)
+    axes[0].set_ylabel("time")
+    fig.suptitle("Characteristics through a boundary point (flow left to right; solid orange = entering the domain)", fontsize=10, y=1.16)
+    save(fig, "bc_characteristics")
+
+
+# ---------------------------------------------------------------------------
+# Wall BCs: radiative-equilibrium wall temperature, and what a catalytic wall
+# does to the atom profile (schematic).
+# ---------------------------------------------------------------------------
+def wall_bc_thermal_catalytic():
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 3.7))
+    ax = axes[0]
+    sigma = 5.670e-8
+    q = np.logspace(0, 3.2, 200)  # W/cm^2
+    for eps, col in ((0.6, C2), (0.85, C0), (1.0, GREY)):
+        ax.semilogx(q, (q * 1e4 / (eps * sigma)) ** 0.25, color=col, label=rf"$\varepsilon = {eps}$")
+    for qq in (10, 100, 1000):
+        T = (qq * 1e4 / (0.85 * sigma)) ** 0.25
+        ax.plot(qq, T, "o", color=C0)
+        ax.annotate(f"{T:.0f} K", (qq, T), textcoords="offset points", xytext=(-8, 8), ha="right", fontsize=9)
+    ax.set_xlabel(r"heat flux into the wall, $q_w$ (W/cm$^2$)")
+    ax.set_ylabel(r"radiative-equilibrium $T_w$ (K)")
+    ax.set_title(r"$q_w = \varepsilon\sigma T_w^4$ (computed)", fontsize=10)
+    ax.legend(frameon=False)
+
+    ax = axes[1]
+    y = np.linspace(0, 1, 200)
+    edge = 0.6
+    nc = edge * np.ones_like(y)
+    fc = edge * (1 - np.exp(-y / 0.22)) / (1 - np.exp(-1 / 0.22))
+    pc = 0.45 * nc + 0.55 * fc
+    ax.plot(nc, y, color=C2, label=r"non-catalytic: $\partial Y_a/\partial n = 0$")
+    ax.plot(pc, y, color=C0, label=r"partially catalytic: finite $\gamma$")
+    ax.plot(fc, y, color=C1, label="fully catalytic: atoms recombine at the wall")
+    ax.axhline(0, color="k", lw=3)
+    ax.text(0.7, 0.03, "wall", ha="center", va="bottom", fontsize=9)
+    ax.annotate("steeper gradient here\n= larger diffusive heating", xy=(0.12, 0.04), xytext=(0.2, 0.42),
+                arrowprops=dict(arrowstyle="->", color=C1), color=C1, fontsize=9)
+    ax.set_xlabel(r"atom mass fraction $Y_a$")
+    ax.set_ylabel("distance from wall / boundary-layer thickness")
+    ax.set_xlim(0, 0.75)
+    ax.set_ylim(-0.02, 1)
+    ax.set_title("Atom profile in a frozen boundary layer (schematic)", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    save(fig, "wall_bc_thermal_catalytic")
+
+
+# ---------------------------------------------------------------------------
+# Surface energy balance: the control surface (schematic) and the blowing
+# reduction of the heat-transfer coefficient (computed).
+# ---------------------------------------------------------------------------
+def surface_energy_balance():
+    fig, axes = plt.subplots(1, 2, figsize=(11, 3.9), gridspec_kw={"width_ratios": [1.35, 1]})
+    ax = axes[0]
+    ax.axhspan(-1, 0, color="#bcaaa4", alpha=0.6)
+    ax.axhline(0, color="k", lw=2)
+    ax.text(-0.02, -0.5, "material\n(char, then virgin)", ha="left", va="center", fontsize=9)
+    ax.text(-0.02, 0.12, "gas", ha="left", va="center", fontsize=9)
+
+    def arrow(x, y0, y1, col, text, ty, ha="center"):
+        ax.annotate("", xy=(x, y1), xytext=(x, y0), arrowprops=dict(arrowstyle="-|>", color=col, lw=2.2))
+        ax.text(x, ty, text, ha=ha, va="center", fontsize=8.5, color=col)
+
+    arrow(0.16, 0.62, 0.04, C1, "conduction +\nspecies diffusion\n" + r"$\rho_e u_e C_H(H_r - h_w)$", 0.78)
+    arrow(0.40, 0.62, 0.04, C1, "absorbed\nradiation\n" + r"$\alpha\,q_{rad}$", 0.78)
+    arrow(0.60, 0.04, 0.62, C0, "reradiation\n" + r"$\varepsilon\sigma T_w^4$", 0.76)
+    arrow(0.86, 0.04, 0.62, C0, "blown gas\nleaves\n" + r"$(\dot m_g + \dot m_c)\,h_w$", 0.80)
+    arrow(0.30, -0.04, -0.62, C0, "conduction\ninto solid\n" + r"$q_{cond}$", -0.8)
+    arrow(0.56, -0.62, -0.04, C1, "pyrolysis gas\narrives\n" + r"$\dot m_g h_g$", -0.8)
+    arrow(0.80, -0.62, -0.04, C1, "char consumed\n" + r"$\dot m_c h_c$", -0.8)
+    ax.set_xlim(-0.05, 1.02)
+    ax.set_ylim(-1, 1)
+    ax.axis("off")
+    ax.set_title("Energy crossing the surface (schematic; orange = in, blue = out)", fontsize=10)
+
+    ax = axes[1]
+    B = np.linspace(1e-3, 5, 300)
+    for lam, col, lab in ((0.5, C0, r"laminar, $\lambda = 0.5$"), (0.4, C2, r"turbulent, $\lambda = 0.4$")):
+        phi = 2 * lam * B
+        ax.plot(B, phi / np.expm1(phi), color=col, label=lab)
+    ax.plot(1, 1 / np.expm1(1.0), "o", color=C0)
+    ax.annotate("0.58", (1, 1 / np.expm1(1.0)), textcoords="offset points", xytext=(8, 6), fontsize=9)
+    ax.set_xlabel(r"$B'_0 = \dot m / (\rho_e u_e C_{H0})$")
+    ax.set_ylabel(r"$C_H / C_{H0}$")
+    ax.set_title(r"Blowing correction $\varphi/(e^{\varphi}-1)$, $\varphi = 2\lambda B'_0$ (computed)", fontsize=10)
+    ax.set_ylim(0, 1.02)
+    ax.legend(frameon=False)
+    save(fig, "surface_energy_balance")
+
+
+# ---------------------------------------------------------------------------
+# Explicit methods: linear stability regions of Runge-Kutta schemes, with the
+# eigenvalues of typical spatial operators.
+# ---------------------------------------------------------------------------
+def rk_stability_regions():
+    import math
+
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.2))
+    x = np.linspace(-3.4, 0.8, 500)
+    y = np.linspace(-3.3, 3.3, 600)
+    X, Y = np.meshgrid(x, y)
+    Z = X + 1j * Y
+    ax = axes[0]
+    handles = []
+    for s, col, name in ((1, GREY, "forward Euler"), (2, C2, "RK2 (SSP-RK2)"), (3, C0, "RK3 (SSP-RK3)"), (4, C1, "RK4")):
+        G = sum(Z**k / math.factorial(k) for k in range(s + 1))
+        ax.contour(X, Y, np.abs(G), levels=[1.0], colors=[col], linewidths=1.8)
+        handles.append(plt.Line2D([], [], color=col, lw=1.8, label=name))
+    ax.axhline(0, color="k", lw=0.6)
+    ax.axvline(0, color="k", lw=0.6)
+    ax.set_aspect("equal")
+    ax.set_xlabel(r"Re($\lambda\Delta t$)")
+    ax.set_ylabel(r"Im($\lambda\Delta t$)")
+    ax.set_title(r"Stable where $|G(\lambda\Delta t)| \leq 1$ (inside each curve)", fontsize=10)
+    ax.legend(handles=handles, frameon=False, fontsize=8, loc="upper left")
+
+    ax = axes[1]
+    G3 = sum(Z**k / math.factorial(k) for k in range(4))
+    ax.contourf(X, Y, np.abs(G3), levels=[0, 1.0], colors=[C0], alpha=0.12)
+    ax.contour(X, Y, np.abs(G3), levels=[1.0], colors=[C0], linewidths=1.8)
+    th = np.linspace(0, 2 * np.pi, 41)
+    c = 1.0
+    ax.plot(-c * (1 - np.cos(th)), -c * np.sin(th), "o", ms=3.5, color=C1, label="first-order upwind convection, CFL = 1")
+    ax.plot(0 * th, 1.5 * np.sin(th), "s", ms=3.5, color=C2, label="central convection, CFL = 1.5")
+    r = 0.5
+    ax.plot(-2 * r * (1 - np.cos(th)), 0 * th, "^", ms=3.5, color=C3, label=r"central diffusion, $\nu\Delta t/\Delta x^2 = 0.5$")
+    ax.axhline(0, color="k", lw=0.6)
+    ax.axvline(0, color="k", lw=0.6)
+    ax.set_aspect("equal")
+    ax.set_xlabel(r"Re($\lambda\Delta t$)")
+    ax.set_title("Where spatial operators put their eigenvalues\n(shaded: RK3 region)", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    save(fig, "rk_stability_regions")
+
+
+# ---------------------------------------------------------------------------
+# Dual time stepping: subiteration sawtooth (schematic) and what the physical
+# time step does to a resolved oscillation (computed).
+# ---------------------------------------------------------------------------
+def dual_time_stepping():
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 3.7))
+    ax = axes[0]
+    k = np.arange(0, 13)
+    for n in range(4):
+        res = 10.0 ** (-0.28 * k) * (1.0 if n else 3.0)
+        ax.semilogy(n * 12 + k, res, color=C0)
+        ax.axvline(n * 12, color=GREY, lw=0.8, ls=":")
+        ax.text(n * 12 + 6, 6.0, rf"step $n{'+' + str(n) if n else ''}$", ha="center", fontsize=9)
+    ax.axhline(10.0**-3, color=C1, ls="--", lw=1)
+    ax.text(47, 10.0**-2.85, "subiteration tolerance", color=C1, ha="right", fontsize=9)
+    ax.set_ylim(1e-4, 20)
+    ax.set_xlabel(r"pseudo-time iterations (all physical steps)")
+    ax.set_ylabel(r"unsteady residual $\|\mathbf{R}^*\|$")
+    ax.set_title("Each physical step is a small steady-state problem (schematic)", fontsize=10)
+
+    ax = axes[1]
+    N = np.arange(8, 201)
+
+    def amp1(n):
+        z = 2j * np.pi / n
+        return abs(1 / (1 - z)) ** n
+
+    def amp2(n):
+        z = 2j * np.pi / n
+        r = np.roots([1.5 - z, -2, 0.5])
+        return max(abs(r)) ** n
+
+    ax.semilogx(N, [amp1(n) for n in N], color=GREY, label="BDF1 (backward Euler)")
+    ax.semilogx(N, [amp2(n) for n in N], color=C0, label="BDF2")
+    for n in (20, 50):
+        a = amp2(n)
+        ax.plot(n, a, "o", color=C0)
+        ax.annotate(f"{a:.3f}", (n, a), textcoords="offset points", xytext=(6, -14), fontsize=9)
+    ax.set_xlabel("physical time steps per period of the oscillation")
+    ax.set_ylabel("amplitude left after one period")
+    ax.set_ylim(0, 1.05)
+    ax.set_title(r"Numerical damping of $u' = i\omega u$ (computed)", fontsize=10)
+    ax.legend(frameon=False, loc="lower right")
+    save(fig, "dual_time_stepping")
+
+
+# ---------------------------------------------------------------------------
+# Convergence diagnostics: residual vs heat-flux history (schematic) and a
+# three-grid Richardson extrapolation (illustrative numbers).
+# ---------------------------------------------------------------------------
+def convergence_histories():
+    fig, axes = plt.subplots(1, 3, figsize=(12.5, 3.6))
+    it = np.linspace(0, 3000, 600)
+    ax = axes[0]
+    res = 10 ** (-it / 380.0)
+    res = np.maximum(res, 1e-8)
+    ax.semilogy(it, res, color=C0)
+    ax.set_xlabel("iteration")
+    ax.set_ylabel("density residual (relative)", color=C0)
+    ax2 = ax.twinx()
+    ax2.spines["right"].set_visible(True)
+    q = 50 + 14 * np.exp(-it / 900.0) * np.cos(it / 260.0) + 6 * np.exp(-it / 1400.0)
+    ax2.plot(it, q, color=C1)
+    ax2.set_ylabel(r"stagnation heat flux (W/cm$^2$)", color=C1)
+    ax2.grid(False)
+    ax.axvline(1750, color=GREY, ls=":")
+    ax.text(1780, 1e-1, "residual down\n5 orders;\n$q_w$ still moving", fontsize=8, color=GREY)
+    ax.set_title("Residual converges before heat flux", fontsize=10)
+
+    ax = axes[1]
+    res2 = 10 ** (-np.minimum(it, 900) / 300.0) * (1 + 0.5 * np.sin(it / 9.0) * (it > 900))
+    ax.semilogy(it, res2, color=C0)
+    ax.set_xlabel("iteration")
+    ax.set_ylabel("density residual (relative)")
+    ax.text(1500, 4e-3, "stall after 3 orders:\nlimiter chatter or\nunsteady flow", fontsize=8, color=GREY)
+    ax.set_ylim(1e-8, 2)
+    ax.set_title("A limit cycle", fontsize=10)
+
+    ax = axes[2]
+    h = np.array([4.0, 2.0, 1.0])
+    f = np.array([52.0, 50.8, 50.4])
+    p = np.log((f[0] - f[1]) / (f[1] - f[2])) / np.log(2.0)
+    fext = f[2] + (f[2] - f[1]) / (2.0**p - 1)
+    hh = np.linspace(0, 4.2, 100)
+    C = (f[2] - fext) / 1.0**p
+    ax.plot(hh, fext + C * hh**p, color=GREY, lw=1)
+    ax.plot(h, f, "o", color=C0, label="three grids")
+    ax.plot(0, fext, "s", color=C1, label=f"Richardson: {fext:.1f}")
+    ax.set_xlabel("relative grid spacing $h$ (fine = 1)")
+    ax.set_ylabel(r"stagnation heat flux (W/cm$^2$)")
+    ax.set_title(f"Grid convergence, observed order p = {p:.2f}\n(illustrative numbers)", fontsize=10)
+    ax.legend(frameon=False)
+    for a in (axes[0], axes[1]):
+        a.text(0.02, 0.03, "schematic", transform=a.transAxes, fontsize=8, color=GREY)
+    fig.tight_layout()
+    save(fig, "convergence_histories")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -963,3 +1244,9 @@ if __name__ == "__main__":
     knudsen_regimes()
     plasma_frequency_bands()
     physics_ladder()
+    bc_characteristics()
+    wall_bc_thermal_catalytic()
+    surface_energy_balance()
+    rk_stability_regions()
+    dual_time_stepping()
+    convergence_histories()

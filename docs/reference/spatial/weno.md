@@ -107,7 +107,7 @@ Research schemes replace the smoothness-indicator formula with a neural network 
 
 ### Other named variants
 
-Codes expose many more (ALPACA lists, among others, WENOF3+, WENO5-AER, WENO5-IS, WENO5-NU6+, WENO7, WENO9). They are refinements of the same weight-design problem; they will be described here only if a lesson needs them.
+Codes expose many more (ALPACA lists, among others, WENOF3+, WENO5-AER, WENO5-IS, WENO5-NU6+, WENO7, WENO9). They are refinements of the same weight-design problem; they are not described individually here.
 
 ## Implications
 

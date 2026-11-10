@@ -23,10 +23,12 @@ Each time step $\Delta t$:
 1. **Move.** Every particle moves ballistically, $\mathbf x \leftarrow \mathbf x + \mathbf c\,\Delta t$, interacting with walls (diffuse/specular reflection, accommodation) and boundaries.
 2. **Index.** Particles are sorted into cells.
 3. **Collide.** Within each cell, pairs are selected at random and collided with a probability proportional to their relative speed times the collision cross-section. Bird's **no-time-counter (NTC)** scheme selects
-   $$
-   N_{\text{pairs}} = \tfrac12\,N\,\bar N\,F_N\,(\sigma_T c_r)_{\max}\,\frac{\Delta t}{V_c}
-   $$
-   candidate pairs in a cell of volume $V_c$ with $N$ particles, and accepts each with probability $\sigma_T c_r/(\sigma_T c_r)_{\max}$. Cost is linear in $N$.
+
+    $$
+    N_{\text{pairs}} = \tfrac12\,N\,\bar N\,F_N\,(\sigma_T c_r)_{\max}\,\frac{\Delta t}{V_c}
+    $$
+
+    candidate pairs in a cell of volume $V_c$ holding $N$ simulated particles (time-averaged number $\bar N$), each standing for $F_N$ real molecules. $\sigma_T$ is the total collision cross-section, $c_r$ the relative speed of a pair, and $(\sigma_T c_r)_{\max}$ the largest value of their product seen in the cell. Each candidate pair is accepted with probability $\sigma_T c_r/(\sigma_T c_r)_{\max}$. The cost is linear in $N$.
 4. **Sample.** Accumulate moments for output.
 
 Moving and colliding separately is exact in the limit of small $\Delta t$ and small cells, which sets the numerical parameters below.

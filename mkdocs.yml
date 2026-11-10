@@ -40,8 +40,8 @@ theme:
 
 extra:
   status:
-    outline: Outline only, not yet taught
-    draft: Partly written, lesson still pending
+    outline: Outline, headings and pointers only
+    draft: Draft, some sections still to be written
 
 extra_css:
   - stylesheets/extra.css
