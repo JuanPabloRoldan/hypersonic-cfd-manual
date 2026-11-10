@@ -9,7 +9,8 @@ It fails (exit code 1) if any page has
 
   * a MathJax error, or an equation that still shows a raw backslash command;
   * a `$...$` or `\\(` left in the visible text (math that was never picked up);
-  * an image that didn't load;
+  * an image that didn't load, or a display equation, image or table wider than
+    the text column;
   * a course reference ("Track 6", "checkpoint", "lesson") in the visible text.
 
 Needs `pip install playwright` and a Chrome or Chromium binary (set CHROME_PATH
@@ -49,6 +50,12 @@ PAGE_JS = r"""
   out.course = (text.match(/Track \d[\d.]*|\bcheckpoint\b|\blesson\b/gi) || []).slice(0, 3);
   out.brokenImg = Array.from(article.querySelectorAll('img'))
     .filter(i => !(i.complete && i.naturalWidth > 0)).map(i => i.getAttribute('src'));
+  const right = article.getBoundingClientRect().right;
+  out.wideMath = Array.from(article.querySelectorAll('mjx-container[display="true"]'))
+    .filter(c => { const m = c.querySelector('mjx-math'); return m && m.getBoundingClientRect().right > right + 4; })
+    .map(c => c.textContent.slice(0, 40)).slice(0, 3);
+  out.wideImg = Array.from(article.querySelectorAll('img, table'))
+    .filter(e => e.getBoundingClientRect().right > right + 4 && !e.closest('.md-typeset__scrollwrap')).length;
   out.mermaidTotal = article.querySelectorAll('.mermaid').length;
   out.mathCount = document.querySelectorAll('mjx-container').length;
   out.arith = document.querySelectorAll('.arithmatex').length;
@@ -120,6 +127,10 @@ async def main():
                 problems.append(f"unrendered $...$: {r['dollar']}")
             if r["backslash"]:
                 problems.append(f"backslash command in text: {r['backslash']}")
+            if r["wideMath"]:
+                problems.append(f"display equation wider than the text column: {r['wideMath']}")
+            if r["wideImg"]:
+                problems.append(f"{r['wideImg']} image(s) or table(s) wider than the text column")
             if r["brokenImg"]:
                 problems.append(f"broken image(s): {r['brokenImg']}")
             if r["course"] and not rel.startswith(("how-to-use", "index.html")):

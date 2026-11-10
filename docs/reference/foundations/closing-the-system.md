@@ -16,6 +16,19 @@ Without closures the equations can't be evaluated. With them, the PDEs plus clos
 
 A reentry code needs four kinds of closure.
 
+```mermaid
+flowchart LR
+    U["Conserved state U<br/>ρₛ, ρu, ρE, ρeᵥ"] --> C2["2. Caloric inversion<br/>Tᵥ by Newton, then T"]
+    C2 --> C1["1. Equation of state<br/>p = Σ ρₛ Rₛ T"]
+    C2 --> C3["3. Transport<br/>μ, κ, κᵥ, Dₛ"]
+    C2 --> C4["4. Kinetics<br/>reaction rates, T–v exchange"]
+    C1 --> F["Inviscid flux"]
+    C3 --> V["Viscous flux"]
+    C4 --> S["Source terms"]
+```
+
+The order matters: nothing else can be evaluated until the temperatures are known, so the caloric inversion runs first, in every cell, at every residual evaluation.
+
 ### 1. Thermal equation of state
 
 $p = \sum_s \rho_s R_s T$ (Dalton's law for a mixture of thermally perfect gases). Free electrons, if present, use $T_v$ in a two-temperature model. At entry shock-layer densities the gas is ideal to excellent accuracy; non-ideal ([dense-gas](../thermo/gas-models.md#dense-gases)) corrections need far higher densities.
@@ -70,6 +83,25 @@ With $n_s$ species, $n_r$ reactions and $k$ Newton iterations:
 !!! warning "Calibration"
     In reacting codes, thermochemistry is commonly a large share of runtime, sometimes the majority. For implicit codes the $O(n^3)$ block linear algebra usually dominates at these system sizes. The split varies a lot between codes and cases; don't quote a percentage without a profile of the specific code.
 
+## Typical values
+
+- Dissociation energies: 9.8 eV per N₂ molecule (about 33.6 MJ per kg of N₂) and 5.1 eV per O₂ molecule (about 15.4 MJ per kg of O₂).
+- Newton iterations for the temperature inversion: typically 2–5 from the previous iteration's temperature as the starting guess.
+- Characteristic vibrational temperatures: 3395 K (N₂), 2239 K (O₂), 2817 K (NO); a mode is substantially excited once $T$ is of this order ([energy modes](../thermo/energy-modes.md)).
+- Cost scaling per cell: table above.
+
+## Trade-offs
+
+- **Fits vs first principles.** Polynomial fits of $c_p(T)$ are fast and are what the classic air data sets provide; statistical-mechanics sums are needed when $T \ne T_v$ and at temperatures beyond the fits' range.
+- **Mixing rules vs kinetic theory for transport.** Wilke-type rules cost $O(n_s^2)$ and are adequate below about 10,000 K; collision-integral formulations are more accurate in ionized gas and cost more ([transport and diffusion](../thermo/transport-and-diffusion.md)).
+- **In-house routines vs a shared library.** A library such as Mutation++ gives one tested implementation across codes, at the cost of a call overhead per cell.
+
+## Effects on stability and robustness
+
+- The temperature inversion is the most common place for a reacting run to abort: an update that leaves the thermal energy negative has no temperature to converge to.
+- Curve fits evaluated outside their temperature range return garbage quietly. A cold wall at 300 K and a shock layer at 20,000 K must both be inside it.
+- Transport properties and rates are smooth functions; they don't cause instabilities themselves, but errors in them go directly into heat flux.
+
 ## Variants
 
 The closures differ by [gas model](../thermo/gas-models.md): a perfect gas needs only $p = (\gamma-1)\rho e$; equilibrium air replaces kinetics with a table lookup $p(\rho, e)$, $T(\rho, e)$; finite-rate multi-temperature models need all four. Libraries such as [Mutation++](../../codes/index.md#mutationpp) package the thermodynamic, transport and kinetic closures for several codes.
@@ -99,4 +131,4 @@ DPLR, LAURA and US3D use built-in thermochemistry with similar model families; S
 
 ## References
 
-Anderson, *Hypersonic and High-Temperature Gas Dynamics*; Park, *Nonequilibrium Hypersonic Aerodynamics*; Gnoffo, Gupta & Shinn (1989), NASA TP-2867. See the [bibliography](../../references.md).
+Anderson, *Hypersonic and High-Temperature Gas Dynamics*; Park, *Nonequilibrium Hypersonic Aerothermodynamics*; Gnoffo, Gupta & Shinn (1989), NASA TP-2867. See the [bibliography](../../references.md).

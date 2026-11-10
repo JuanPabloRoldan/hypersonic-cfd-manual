@@ -37,8 +37,10 @@ In supersonic flow all eigenvalues share a sign and the flux is fully upwinded. 
 The fix used in DPLR and US3D evaluates the split Jacobians not at each side's own state but at a state averaged between the two sides. In the first-order form (Subbareddy & Candler 2009; Candler, Subbareddy & Nompelis 2015),
 
 $$
-\hat{\mathbf F}_{i+\frac12} = \big(\mathbf R\boldsymbol\Lambda^+\mathbf R^{-1}\big)_{i+\frac12}\,\mathbf U_i + \big(\mathbf R\boldsymbol\Lambda^-\mathbf R^{-1}\big)_{i+\frac12}\,\mathbf U_{i+1}
-= \big(\mathbf R\boldsymbol\Lambda\mathbf R^{-1}\big)_{i+\frac12}\,\frac{\mathbf U_i + \mathbf U_{i+1}}{2} - \frac12\big(\mathbf R\lvert\boldsymbol\Lambda\rvert\mathbf R^{-1}\big)_{i+\frac12}\,(\mathbf U_{i+1} - \mathbf U_i),
+\begin{aligned}
+\hat{\mathbf F}_{i+\frac12} &= \big(\mathbf R\boldsymbol\Lambda^+\mathbf R^{-1}\big)_{i+\frac12}\,\mathbf U_i + \big(\mathbf R\boldsymbol\Lambda^-\mathbf R^{-1}\big)_{i+\frac12}\,\mathbf U_{i+1}\\
+&= \big(\mathbf R\boldsymbol\Lambda\mathbf R^{-1}\big)_{i+\frac12}\,\frac{\mathbf U_i + \mathbf U_{i+1}}{2} - \frac12\big(\mathbf R\lvert\boldsymbol\Lambda\rvert\mathbf R^{-1}\big)_{i+\frac12}\,(\mathbf U_{i+1} - \mathbf U_i),
+\end{aligned}
 $$
 
 with all matrices evaluated at face-averaged values. That expansion is the key insight: a symmetric (central) part plus a dissipation term $\tfrac12\mathbf R\lvert\boldsymbol\Lambda\rvert\mathbf R^{-1}\Delta\mathbf U$. **If the face average is the Roe average, this is exactly the Roe flux.** The signature flux of DPLR and US3D is, in disguise, a Roe-type upwind flux with a different averaging, and it gives results close to Roe's for hypersonic flows. Unlike the original Steger–Warming, it keeps the dissipation in shear layers low, because the averaged Jacobian doesn't see the jump in $\mathbf U$ across a boundary-layer cell as upwind information.

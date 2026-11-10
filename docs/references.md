@@ -169,6 +169,12 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - G. Moretti & M. Abbett, "A time-dependent computational method for blunt body flows," *AIAA J.* 4 (1966).
 - B. Edney, "Anomalous heat transfer and pressure distributions on blunt bodies at hypersonic speeds in the presence of an impinging shock," FFA Report 115, Aeronautical Research Institute of Sweden (1968).
 - F. S. Billig, "Shock-wave shapes around spherical- and cylindrical-nosed bodies," *J. Spacecraft Rockets* 4 (1967).
+- J. Délery & J. G. Marvin, "Shock-wave boundary layer interactions," AGARDograph 280 (1986).
+- D. S. Dolling, "Fifty years of shock-wave/boundary-layer interaction research: what next?" *AIAA J.* 39 (2001).
+- N. T. Clemens & V. Narayanaswamy, "Low-frequency unsteadiness of shock wave/turbulent boundary layer interactions," *Annu. Rev. Fluid Mech.* 46 (2014).
+- D. V. Gaitonde, "Progress in shock wave/boundary layer interactions," *Prog. Aerosp. Sci.* 72 (2015).
+- A. R. Wieting & M. S. Holden, "Experimental shock-wave interference heating on a cylinder at Mach 6 and 8," *AIAA J.* 27 (1989).
+- R. Goulard, "The coupling of radiation and convection in detached shock layers," *J. Quant. Spectrosc. Radiat. Transfer* 1 (1961).
 
 ## Rarefied flow
 

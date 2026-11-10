@@ -141,8 +141,10 @@ $$
 and the second form is preferred because the gradient is centred at C. The ordinary 1-D MUSCL formula then applies along P–C–D:
 
 $$
-U_{f,L} = U_C + \tfrac12\,\mathrm{limit}\big(U_C - U_P,\; U_D - U_C\big)
-= U_C + \tfrac12\,\mathrm{limit}\big(2\nabla U_C\cdot\vec r_{CD} - (U_D - U_C),\; U_D - U_C\big),
+\begin{aligned}
+U_{f,L} &= U_C + \tfrac12\,\mathrm{limit}\big(U_C - U_P,\; U_D - U_C\big)\\
+&= U_C + \tfrac12\,\mathrm{limit}\big(2\nabla U_C\cdot\vec r_{CD} - (U_D - U_C),\; U_D - U_C\big),
+\end{aligned}
 $$
 
 with any of the limiters above and a mirror-image formula for $U_{f,R}$.

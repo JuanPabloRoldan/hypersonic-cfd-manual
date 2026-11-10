@@ -1658,6 +1658,209 @@ def local_time_steps():
     save(fig, "local_time_steps")
 
 
+# ---------------------------------------------------------------------------
+# Governing equations: what is in the state vector for three gas models, and
+# the size of the implicit block that goes with it.
+# ---------------------------------------------------------------------------
+def state_vector_blocks():
+    fig, ax = plt.subplots(figsize=(10, 3.6))
+    cases = [
+        ("Perfect gas", [("ρ", 1, GREY), ("ρu", 3, C0), ("ρE", 1, C1)]),
+        ("5-species air, 2T", [(r"ρ$_s$", 5, C2), ("ρu", 3, C0), ("ρE", 1, C1), (r"ρe$_v$", 1, C3)]),
+        ("11-species air, 2T", [(r"ρ$_s$", 11, C2), ("ρu", 3, C0), ("ρE", 1, C1), (r"ρe$_v$", 1, C3)]),
+    ]
+    x0 = 0.0
+    for name, parts in cases:
+        n = sum(k for _, k, _ in parts)
+        y = 0
+        for lab, k, col in parts:
+            for j in range(k):
+                ax.add_patch(plt.Rectangle((x0, -(y + j + 1) * 0.25), 0.45, 0.23, fc=col, alpha=0.75, ec="white"))
+            ax.text(x0 - 0.08, -(y + k / 2) * 0.25, lab, ha="right", va="center", fontsize=9)
+            y += k
+        side = n * 0.25
+        ax.add_patch(plt.Rectangle((x0 + 0.9, -side), side, side, fc=C0, alpha=0.12, ec=C0))
+        ax.text(x0 + 0.9 + side / 2, -side / 2, f"{n}×{n}\nblock\n{n * n} entries", ha="center", va="center", fontsize=9, color=C0)
+        ax.text(x0 + 0.2 + (0.7 + side) / 2, 0.22, f"{name}: {n} unknowns", ha="center", fontsize=10)
+        x0 += 1.9 + side
+    ax.set_xlim(-0.6, x0 - 0.5)
+    ax.set_ylim(-4.25, 0.6)
+    ax.set_aspect("equal")
+    ax.axis("off")
+    fig.text(0.5, 0.02, "State vector per cell (3-D) and the implicit block it implies, drawn to the same scale", ha="center", fontsize=9, color=GREY)
+    save(fig, "state_vector_blocks")
+
+
+# ---------------------------------------------------------------------------
+# Thermal nonequilibrium: Landau-Teller relaxation behind a shock in N2
+# (computed with a simplified constant-pressure, no-dissociation model).
+# ---------------------------------------------------------------------------
+def vibrational_relaxation():
+    th, mu = 3395.0, 14.0
+    A = 1.16e-3 * mu**0.5 * th ** (4 / 3)
+    B = 0.015 * mu**0.25
+
+    def ptau(T):  # atm s, Millikan-White
+        return np.exp(A * (T ** (-1 / 3) - B) - 18.42)
+
+    def ev(T):  # vibrational energy / R, harmonic oscillator
+        return th / np.expm1(th / T)
+
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 3.7))
+    ax = axes[0]
+    T = np.linspace(2000, 20000, 300)
+    ax.semilogy(T, ptau(T), color=C0)
+    for Tm in (5000, 10000, 15000):
+        ax.plot(Tm, ptau(Tm), "o", color=C0)
+        ax.annotate(f"{ptau(Tm):.1e}", (Tm, ptau(Tm)), textcoords="offset points", xytext=(8, 4), fontsize=8)
+    ax.set_xlabel("translational temperature T (K)")
+    ax.set_ylabel(r"$p\,\tau_v$ (atm s)")
+    ax.set_title(r"Millikan–White relaxation time, N$_2$–N$_2$ (computed)", fontsize=10)
+
+    ax = axes[1]
+    p = 0.1  # atm
+    T0, Tv = 14000.0, 300.0
+    H = 3.5 * T0 + ev(Tv)  # enthalpy / R, constant
+    t, dt = 0.0, 2e-9
+    ts, Ts, Tvs = [], [], []
+    e = ev(Tv)
+    while t < 3.0e-5:
+        Ttr = (H - e) / 3.5
+        ts.append(t * 1e6)
+        Ts.append(Ttr)
+        # invert e -> Tv
+        Tvs.append(th / np.log1p(th / e) if e > 0 else 0)
+        e += dt * (ev(Ttr) - e) / (ptau(Ttr) / p)
+        t += dt
+    ax.plot(ts, Ts, color=C1, label="T (translation–rotation)")
+    ax.plot(ts, Tvs, color=C0, label=r"$T_v$ (vibration)")
+    ax.axhline(Ts[-1], color=GREY, ls=":", lw=0.8)
+    ax.text(29, Ts[-1] + 300, f"common temperature ≈ {Ts[-1]:.0f} K", ha="right", fontsize=8, color=GREY)
+    ax.set_xlabel("time since the shock (µs)")
+    ax.set_ylabel("temperature (K)")
+    ax.set_title("Relaxation zone behind a shock: N$_2$, 0.1 atm, no dissociation\n(simplified Landau–Teller model, computed)", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="center right")
+    save(fig, "vibrational_relaxation")
+
+
+# ---------------------------------------------------------------------------
+# Space marching: planes marched downstream from an initial data plane, and the
+# subsonic sublayer (schematic).
+# ---------------------------------------------------------------------------
+def pns_marching():
+    fig, ax = plt.subplots(figsize=(9.5, 3.6))
+    x = np.linspace(0, 10, 200)
+    body = 0.25 + 0.12 * x
+    shock = 0.75 + 0.2 * x
+    ax.fill_between(x, 0, body, color="#bcaaa4")
+    ax.plot(x, shock, color=C0, lw=2)
+    ax.text(9.9, shock[-1] + 0.1, "shock", color=C0, ha="right", fontsize=9)
+    sub = body + 0.07 + 0.012 * x
+    ax.fill_between(x, body, sub, color=C1, alpha=0.35)
+    ax.annotate("subsonic sublayer:\npressure signals travel upstream here", xy=(6.5, 0.25 + 0.12 * 6.5 + 0.08), xytext=(5.6, 0.2),
+                arrowprops=dict(arrowstyle="->", color=C1), color=C1, fontsize=9)
+    # blunt nose region
+    th = np.linspace(np.pi / 2, np.pi, 50)
+    ax.fill(0.0 + 0.25 * np.cos(th) * 1.6, 0.25 * np.sin(th), color="#bcaaa4")
+    ys = np.linspace(0, 0.75, 50)
+    ax.plot(-0.72 + 0.9 * ys**2 / 0.75, ys, color=C0, lw=2)
+    ax.fill_betweenx(ys, -0.72 + 0.9 * ys**2 / 0.75, 0.0, color=C3, alpha=0.12)
+    ax.text(-0.95, 1.85, "blunt nose: subsonic,\nfull Navier–Stokes", fontsize=9, color=C3, ha="left")
+    for k, xs in enumerate(np.arange(0.0, 10.01, 1.25)):
+        yb, ysk = 0.25 + 0.12 * xs, 0.75 + 0.2 * xs
+        ax.plot([xs, xs], [yb, ysk], color=GREY if k else C2, lw=1.2 if k else 2.5)
+    ax.text(0.05, 0.85, "initial data plane", color=C2, fontsize=9, rotation=90, va="bottom")
+    ax.annotate("", xy=(5.0, 2.45), xytext=(1.2, 2.45), arrowprops=dict(arrowstyle="-|>", color="k", lw=1.8))
+    ax.text(3.1, 2.55, "march: one cross-flow plane at a time", ha="center", fontsize=9)
+    ax.set_xlim(-1.0, 10.2)
+    ax.set_ylim(0, 2.95)
+    ax.axis("off")
+    ax.set_title("Space marching down a slender afterbody (schematic, upper half, not to scale)", fontsize=10)
+    save(fig, "pns_marching")
+
+
+# ---------------------------------------------------------------------------
+# Engineering methods: surface pressure coefficient against local inclination
+# for Newtonian, modified Newtonian, tangent wedge and tangent cone at Mach 10.
+# ---------------------------------------------------------------------------
+def surface_inclination_methods():
+    g, M1 = 1.4, 10.0
+
+    def shock(beta):
+        mn1 = M1 * np.sin(beta)
+        p21 = 1 + 2 * g / (g + 1) * (mn1**2 - 1)
+        delta = np.arctan(2 / np.tan(beta) * (mn1**2 - 1) / (M1**2 * (g + np.cos(2 * beta)) + 2))
+        mn2 = np.sqrt((1 + 0.5 * (g - 1) * mn1**2) / (g * mn1**2 - 0.5 * (g - 1)))
+        M2 = mn2 / np.sin(beta - delta)
+        return p21, delta, M2
+
+    betas = np.radians(np.linspace(6.5, 62, 220))
+    wedge = np.array([[shock(b)[1], (shock(b)[0] - 1) / (0.5 * g * M1**2)] for b in betas])
+
+    def cone(beta):
+        p21, delta, M2 = shock(beta)
+        V = (2 / ((g - 1) * M2**2) + 1) ** -0.5
+        vr, vt = V * np.cos(beta - delta), -V * np.sin(beta - delta)
+        th, h = beta, -1e-4
+
+        def rhs(th, vr, vt):
+            a = 0.5 * (g - 1) * (1 - vr**2 - vt**2)
+            return vt, (vt**2 * vr - a * (2 * vr + vt / np.tan(th))) / (a - vt**2)
+
+        while vt < 0 and th > 1e-3:
+            k1 = rhs(th, vr, vt)
+            k2 = rhs(th + h / 2, vr + h / 2 * k1[0], vt + h / 2 * k1[1])
+            k3 = rhs(th + h / 2, vr + h / 2 * k2[0], vt + h / 2 * k2[1])
+            k4 = rhs(th + h, vr + h * k3[0], vt + h * k3[1])
+            vr += h / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0])
+            vt += h / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1])
+            th += h
+        Mc2 = 2 / ((g - 1) * (1 / vr**2 - 1))
+        pc_p2 = ((1 + 0.5 * (g - 1) * M2**2) / (1 + 0.5 * (g - 1) * Mc2)) ** (g / (g - 1))
+        return th, (p21 * pc_p2 - 1) / (0.5 * g * M1**2)
+
+    cones = np.array([cone(b) for b in np.radians(np.linspace(7.0, 62, 80))])
+
+    th = np.radians(np.linspace(0, 50, 200))
+    p02 = ((g + 1) ** 2 * M1**2 / (4 * g * M1**2 - 2 * (g - 1))) ** (g / (g - 1)) * ((1 - g + 2 * g * M1**2) / (g + 1))
+    cpmax = 2 / (g * M1**2) * (p02 - 1)
+
+    fig, ax = plt.subplots(figsize=(7.4, 4.0))
+    ax.plot(np.degrees(th), 2 * np.sin(th) ** 2, color=GREY, label=r"Newtonian, $2\sin^2\theta$")
+    ax.plot(np.degrees(th), cpmax * np.sin(th) ** 2, color=C3, label=rf"modified Newtonian, $C_{{p,\max}} = {cpmax:.3f}$")
+    m = wedge[:, 0] < np.radians(45)
+    ax.plot(np.degrees(wedge[m, 0]), wedge[m, 1], color=C0, label="tangent wedge (exact oblique shock)")
+    ax.plot(np.degrees(cones[:, 0]), cones[:, 1], color=C1, label="tangent cone (Taylor–Maccoll)")
+    ax.set_xlim(0, 45)
+    ax.set_ylim(0, 1.5)
+    ax.set_xlabel(r"local surface inclination $\theta$ (degrees)")
+    ax.set_ylabel(r"pressure coefficient $C_p$")
+    ax.set_title(r"Surface-inclination methods at Mach 10, $\gamma = 1.4$ (computed)", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    print("  check: cone 10 deg Cp =", float(np.interp(np.radians(10), cones[:, 0], cones[:, 1])),
+          " wedge 10 deg Cp =", float(np.interp(np.radians(10), wedge[:, 0], wedge[:, 1])), " cpmax", cpmax)
+    save(fig, "surface_inclination_methods")
+
+
+# ---------------------------------------------------------------------------
+# Free-molecular flow: hypersonic-limit pressure coefficients against the
+# continuum modified-Newtonian value (computed from the limiting formulas).
+# ---------------------------------------------------------------------------
+def free_molecular_cp():
+    fig, ax = plt.subplots(figsize=(7.0, 3.8))
+    th = np.radians(np.linspace(0, 90, 200))
+    ax.plot(np.degrees(th), 4 * np.sin(th) ** 2, color=C1, label=r"free-molecular, specular: $4\sin^2\theta$")
+    ax.plot(np.degrees(th), 2 * np.sin(th) ** 2, color=C0, label=r"free-molecular, diffuse cold wall: $2\sin^2\theta$ (= Newtonian)")
+    ax.plot(np.degrees(th), 1.839 * np.sin(th) ** 2, color=GREY, ls="--", label=r"continuum, modified Newtonian ($\gamma = 1.4$, $M\to\infty$): $1.84\sin^2\theta$")
+    ax.set_xlabel(r"surface inclination to the flow, $\theta$ (degrees)")
+    ax.set_ylabel(r"pressure coefficient $C_p$")
+    ax.set_title(r"Pressure on an inclined surface, hypersonic limit $S\to\infty$ (computed)", fontsize=10)
+    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    ax.set_xlim(0, 90)
+    ax.set_ylim(0, 4.6)
+    save(fig, "free_molecular_cp")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -1699,3 +1902,8 @@ if __name__ == "__main__":
     stiff_relaxation()
     implicit_sparsity()
     local_time_steps()
+    state_vector_blocks()
+    vibrational_relaxation()
+    pns_marching()
+    surface_inclination_methods()
+    free_molecular_cp()

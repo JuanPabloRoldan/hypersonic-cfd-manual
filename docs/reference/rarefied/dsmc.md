@@ -18,6 +18,14 @@ In transitional flow ($0.1 \lesssim Kn \lesssim 10$) the Navier–Stokes equatio
 
 ## How it works
 
+```mermaid
+flowchart LR
+    M["1. Move<br/>free flight for Δt,<br/>wall and boundary interactions"] --> I["2. Index<br/>sort particles into cells"]
+    I --> C["3. Collide<br/>random pairs within each cell"]
+    C --> S["4. Sample<br/>accumulate density, velocity,<br/>temperature, surface fluxes"]
+    S --> M
+```
+
 Each time step $\Delta t$:
 
 1. **Move.** Every particle moves ballistically, $\mathbf x \leftarrow \mathbf x + \mathbf c\,\Delta t$, interacting with walls (diffuse/specular reflection, accommodation) and boundaries.
@@ -50,6 +58,7 @@ Rules of thumb for the numerical parameters (Bird 1994; widely used):
 - **Cell size:** smaller than the local mean free path, typically $\Delta x \lesssim \lambda/3$ (subcells or transient adaptive subcells relax this for collision partner selection).
 - **Time step:** smaller than the local mean collision time, and small enough that particles cross a fraction of a cell per step.
 - **Particles per cell:** of order 10–20 or more for collision statistics.
+- **Worked sizing (illustrative):** at 90 km altitude the ambient mean free path is about 2 cm, so cells of $\lambda/3$ are about 7 mm. A 3-D domain of 5 m on a side would need of order $4\times10^8$ such cells and several billion particles at 10–20 per cell, before allowing for the denser gas behind the shock, where $\lambda$ is an order of magnitude smaller. At 110 km, $\lambda$ is of order 1 m and the same domain needs a few thousand cells. This steep growth with density is why DSMC stops being practical as the flow becomes continuum.
 - **Statistical noise** in a sampled mean falls only as $1/\sqrt{\text{number of samples}}$: halving the noise costs four times the sampling.
 
 ## Trade-offs

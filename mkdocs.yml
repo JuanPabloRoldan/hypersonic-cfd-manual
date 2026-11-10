@@ -111,6 +111,8 @@ nav:
           - "2.1 Entry flow anatomy": reference/physics/entry-flow-anatomy.md
           - "2.2 Hypersonic shock relations and Newtonian theory": reference/physics/hypersonic-shock-relations.md
           - "2.3 Stagnation-point heating": reference/physics/stagnation-point-heating.md
+          - "2.4 Shock/boundary-layer interaction": reference/physics/shock-boundary-layer-interaction.md
+          - "2.5 Shock–shock interactions": reference/physics/shock-shock-interactions.md
       - "3 Gas models and thermochemistry":
           - "3.1 Gas models": reference/thermo/gas-models.md
           - "3.2 Energy modes and thermodynamics": reference/thermo/energy-modes.md
@@ -156,6 +158,8 @@ nav:
       - "12 Verification and diagnosis":
           - "12.1 Convergence diagnostics": reference/time/convergence-diagnostics.md
           - "12.2 Engineering checks on a solution": reference/verification/engineering-checks.md
+      - "13 Shock-layer radiation":
+          - "13.1 Shock-layer radiation": reference/radiation/shock-layer-radiation.md
       - "Appendix":
           - "A Codes at a glance": codes/index.md
           - "B Choosing physical models": reference/model-selection.md

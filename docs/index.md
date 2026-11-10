@@ -12,7 +12,7 @@ The goal isn't to know what a method is called. It's to know **what it implies f
 
     ---
 
-    Eleven numbered chapters in the order a solver is built: equations, physical models, spatial discretization, flux functions, sources, time integration, verification. One page per method family, each with the same structure, so any choice a code makes can be looked up and its effect on a run understood.
+    Thirteen numbered chapters in the order a solver is built: equations, entry-flow physics, physical models, boundary conditions, spatial discretization, flux functions, sources, time integration, reduced and rarefied methods, verification, radiation. One page per method family, each with the same structure, so any choice a code makes can be looked up and its effect on a run understood.
 
 -   :material-alphabetical: **[Glossary](glossary.md)**
 

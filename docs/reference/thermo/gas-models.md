@@ -86,4 +86,4 @@ DPLR, LAURA and US3D run finite-rate 2T air and Mars mechanisms as standard; equ
 
 ## References
 
-Anderson, *Hypersonic and High-Temperature Gas Dynamics*; Park, *Nonequilibrium Hypersonic Aerodynamics*; Gnoffo, Gupta & Shinn (1989); Tannehill & Mugge (1974). See the [bibliography](../../references.md).
+Anderson, *Hypersonic and High-Temperature Gas Dynamics*; Park, *Nonequilibrium Hypersonic Aerothermodynamics*; Gnoffo, Gupta & Shinn (1989); Tannehill & Mugge (1974). See the [bibliography](../../references.md).

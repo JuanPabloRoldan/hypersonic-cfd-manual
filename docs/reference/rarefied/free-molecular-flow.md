@@ -28,6 +28,13 @@ In the hypersonic limit $S \to \infty$ the results take a simple form for a surf
 - **Diffuse reflection, cold wall:** incoming normal momentum is fully absorbed and re-emitted molecules carry little momentum back: $C_p \to 2\sin^2\theta$ plus a small re-emission term of order $\sqrt{T_w/T_\infty}/S$. This is Newton's model ([Newtonian theory](../physics/hypersonic-shock-relations.md#newtonian-theory)), which is why Newton's corpuscular picture is exact for free-molecular flow and only approximate in a continuum.
 - **Heating:** the energy flux is the incoming kinetic energy flux times the energy accommodation coefficient, $q \approx \alpha\,\tfrac12\rho_\infty V_\infty^3\sin\theta$ for large $S$; the **heat-transfer coefficient** $C_H = q/(\tfrac12\rho_\infty V_\infty^3)$ is at most about 1.
 
+<figure markdown>
+![Free-molecular pressure coefficients](../../assets/figures/free_molecular_cp.svg)
+<figcaption markdown="span">Pressure coefficient on a surface inclined at $\theta$ to the flow, in the hypersonic limit. Specular reflection gives twice the diffuse cold-wall value, which is Newton's $2\sin^2\theta$. The continuum modified-Newtonian curve is shown for comparison: pressure hardly changes between the free-molecular and continuum limits. Heating and shear are what change by orders of magnitude. Computed from the limiting formulas.</figcaption>
+</figure>
+
+A worked number for heating: with full accommodation, a surface normal to the flow at 7.5 km/s and 120 km altitude ($\rho_\infty \approx 2\times10^{-8}$ kg/m³) receives $q \approx \tfrac12\rho_\infty V_\infty^3 \approx 0.4$ W/cm². The whole kinetic energy flux arrives because there is no shock layer or boundary layer to turn it away, but the density is so low that the flux is small. Lower down the density rises by orders of magnitude while $C_H$ falls by orders of magnitude, and their product peaks in the continuum regime.
+
 Finite-$S$ formulas (Schaaf & Chambré) add error-function and exponential terms in $S\sin\theta$.
 
 ## Variants
@@ -49,7 +56,9 @@ Finite-$S$ formulas (Schaaf & Chambré) add error-function and exponential terms
 
 ## Effects on stability and robustness
 
-n/a (closed form).
+- Nothing iterates, so nothing can diverge.
+- The practical risk is geometric: on concave or multi-body shapes, panels shadowed from the free stream, or struck by molecules reflected from other panels, are not covered by the single-panel formulas.
+- Results scale directly with accommodation coefficients, so an assumed value of 1 is a modelling choice to state, not a default to forget.
 
 ## Implications
 

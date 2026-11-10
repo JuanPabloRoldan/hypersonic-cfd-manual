@@ -71,6 +71,11 @@ Two consequences are worth holding on to. First, **the total-energy equation has
 | 5-species air, 2T | 5 + 3 + 1 + 1 = 10 |
 | 11-species air, 2T | 11 + 3 + 1 + 1 = 16 |
 
+<figure markdown>
+![State vectors and implicit block sizes](../../assets/figures/state_vector_blocks.svg)
+<figcaption markdown="span">What each cell stores for three gas models, and the dense block an implicit solver builds for every cell and every cell–neighbour pair. Going from a perfect gas to 11-species two-temperature air triples the state vector and multiplies the block's entries by ten.</figcaption>
+</figure>
+
 The jump from 5 to 16 costs an [explicit](../time/explicit-methods.md) code roughly linearly, but an [implicit](../time/implicit-methods.md) code pays $n^2$ in memory and $n^3$ in block factorizations. See [explicit vs implicit](../time/explicit-vs-implicit.md).
 
 ## Variants
@@ -90,6 +95,26 @@ Drop the viscous derivatives along the wall (thin-layer) and, additionally, the 
 ### Reacting variants
 
 Equilibrium (5 equations, chemistry hidden in the closure), finite-rate one-temperature, two-temperature and multi-temperature. See the [gas-model ladder](../thermo/gas-models.md).
+
+## Typical values
+
+- Unknowns per cell in 3-D: 5 (perfect gas), 10 (5-species 2T air), 16 (11-species 2T air); one more for each extra temperature, two or more for turbulence-model equations.
+- Implicit block entries per cell–neighbour pair: 25, 100 and 256 for those three cases.
+- Species sets for air: 5 (N₂, O₂, NO, N, O) below about 8–9 km/s; 11 (adding the ions and electrons) above ([choosing physical models](../model-selection.md)).
+- Total enthalpy at entry speeds: $V^2/2$, so 28 MJ/kg at 7.5 km/s and 60 MJ/kg at 11 km/s. For comparison, dissociating all the O₂ and N₂ in a kilogram of air takes about 30 MJ.
+
+## Trade-offs
+
+- **More equations vs more closure.** Every quantity given its own transport equation can lag behind equilibrium, which is more physics, and costs an unknown per cell and a rate model with its own uncertainty.
+- **Species densities vs mixture density plus mass fractions.** Carrying each $\rho_s$ keeps every species conservative; the total density is then a sum, and round-off or clipping of negative $\rho_s$ must not break $\rho = \sum\rho_s$.
+- **Total plus vibrational energy vs two separate energies.** Total energy is exactly conserved and has no chemistry source, so it belongs in conservation form; the vibrational equation carries the source terms.
+- **Euler vs Navier–Stokes.** Euler gives shock shape and pressure at a fraction of the grid cost; heat flux and skin friction need the viscous terms and a wall-resolved grid.
+
+## Effects on stability and robustness
+
+- New unknowns bring new ways to be unphysical: a negative species density, a vibrational energy below its minimum, a temperature inversion that fails.
+- The source terms $\dot\omega_s$ and $Q_{T\text{-}v}$ are [stiff](../sources/stiff-sources.md); the fluxes are not.
+- The wave speeds of the inviscid part don't change when species are added ([mathematical character](mathematical-character.md#adding-species-and-vibrational-energy)), so shock capturing and the CFL condition carry over unchanged.
 
 ## Implications
 

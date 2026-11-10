@@ -17,7 +17,9 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 **2 Entry flow physics.** The flows the equations describe.
 [2.1 Entry flow anatomy](physics/entry-flow-anatomy.md) ·
 [2.2 Hypersonic shock relations and Newtonian theory](physics/hypersonic-shock-relations.md) ·
-[2.3 Stagnation-point heating](physics/stagnation-point-heating.md)
+[2.3 Stagnation-point heating](physics/stagnation-point-heating.md) ·
+[2.4 Shock/boundary-layer interaction](physics/shock-boundary-layer-interaction.md) ·
+[2.5 Shock–shock interactions](physics/shock-shock-interactions.md)
 
 **3 Gas models and thermochemistry.** The closures that make it a reentry code.
 [3.1 Gas models](thermo/gas-models.md) ·
@@ -74,8 +76,11 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 [12.1 Convergence diagnostics](time/convergence-diagnostics.md) ·
 [12.2 Engineering checks on a solution](verification/engineering-checks.md)
 
+**13 Shock-layer radiation.** Heating by light from the shock layer.
+[13.1 Shock-layer radiation](radiation/shock-layer-radiation.md)
+
 **Appendix.** [A Codes at a glance](../codes/index.md): each production code's choice in each slot, with primary sources. [B Choosing physical models](model-selection.md): when each gas model, species set, temperature model, radiation and rarefaction treatment is needed, by speed, altitude and output.
 
 ## Chapters still to come
 
-Shock-layer radiation, material response and ablation, and further entry-flow physics (entropy layers and viscous interaction, SWBLI, shock–shock interactions, transition, wake flow) will be added as chapters in this order.
+Outlines exist for shock/boundary-layer interaction (2.4), shock–shock interactions (2.5) and shock-layer radiation (13). Still to be added: material response and ablation, and further entry-flow physics (entropy layers and viscous interaction, transition, wake flow).

@@ -4,7 +4,7 @@ A theory manual for atmospheric entry: hypersonic flow physics, the numerical me
 
 **Site:** https://juanpabloroldan.github.io/hypersonic-cfd-manual/
 
-- **Theory manual**: eleven numbered chapters in the order a solver is built (equations, physical models, spatial discretization, flux functions, sources, time integration, verification), with one page per method or model family (Riemann solvers, limiters, relaxation methods, gas models, ...), each with the same structure: what it is, the problem it solves, how it works, variants, typical values and trade-offs, implications for a run, which codes use it.
+- **Theory manual**: thirteen numbered chapters in the order a solver is built (equations, entry-flow physics, physical models, boundary conditions, spatial discretization, flux functions, sources, time integration, reduced and rarefied methods, verification, radiation), with one page per method or model family (Riemann solvers, limiters, relaxation methods, gas models, ...), each with the same structure: what it is, the problem it solves, how it works, variants, typical values and trade-offs, implications for a run, which codes use it.
 
 Plus an appendix comparing the production codes slot by slot, a glossary and a bibliography.
 

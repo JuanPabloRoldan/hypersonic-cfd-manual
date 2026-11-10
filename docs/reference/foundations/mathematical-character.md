@@ -29,11 +29,13 @@ two acoustic waves and one entropy (contact) wave. Information at a point comes 
 For a reacting multi-temperature mixture, each species equation and the vibrational-energy equation add another eigenvalue $\lambda = u$, and the acoustic speeds don't change. The cleanest way to see it is to write the 1D inviscid equations in **primitive variables**, $\mathbf W = (\rho, u, p, Y_s, e_v)^T$ (one species shown; each extra species adds an identical row). Away from the source terms, each of these quantities obeys a simple transport law:
 
 $$
+\begin{gathered}
 \frac{D\rho}{Dt} = -\rho\,\frac{\partial u}{\partial x},\qquad
 \frac{Du}{Dt} = -\frac1\rho\frac{\partial p}{\partial x},\qquad
-\frac{Dp}{Dt} = -\rho a_f^2\,\frac{\partial u}{\partial x},\qquad
+\frac{Dp}{Dt} = -\rho a_f^2\,\frac{\partial u}{\partial x},\\[1ex]
 \frac{DY_s}{Dt} = 0,\qquad
 \frac{De_v}{Dt} = 0,
+\end{gathered}
 $$
 
 with $D/Dt = \partial_t + u\,\partial_x$. Written as $\partial_t\mathbf W + \mathbf A_W\,\partial_x\mathbf W = 0$,

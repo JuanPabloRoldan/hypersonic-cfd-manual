@@ -58,7 +58,10 @@ with $M_{\text{lim}} = 0.1$; $S_*$ and the star states are computed with the ori
 Act on the reconstructed face velocities instead of the flux:
 
 $$
-u_L' = \frac{u_L + u_R}{2} + z\,\frac{u_L - u_R}{2},\qquad u_R' = \frac{u_L + u_R}{2} - z\,\frac{u_L - u_R}{2},\qquad z = \min\!\Big(\max\big(\tfrac{|u_L|}{c_L}, \tfrac{|u_R|}{c_R}\big),\ 1\Big).
+\begin{gathered}
+u_L' = \frac{u_L + u_R}{2} + z\,\frac{u_L - u_R}{2},\qquad u_R' = \frac{u_L + u_R}{2} - z\,\frac{u_L - u_R}{2},\\[1ex]
+z = \min\!\Big(\max\big(\tfrac{|u_L|}{c_L}, \tfrac{|u_R|}{c_R}\big),\ 1\Big).
+\end{gathered}
 $$
 
 The velocity jump the Riemann solver sees is reduced by $z$ at low Mach and untouched at $M \ge 1$. Developed for implicit LES of low-Mach mixing (Richtmyer–Meshkov); Xie et al. report it can introduce small disturbances near strong shocks and switch it off there with a pressure-based shock sensor.

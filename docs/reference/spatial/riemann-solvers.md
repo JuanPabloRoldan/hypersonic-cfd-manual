@@ -58,9 +58,15 @@ with, for $K = L, R$,
 $$
 f_K(p) =
 \begin{cases}
-(p - p_K)\sqrt{\dfrac{A_K}{p + B_K}}, \quad A_K = \dfrac{2}{(\gamma+1)\rho_K},\ B_K = \dfrac{\gamma-1}{\gamma+1}p_K & p > p_K \text{ (shock)}\\[2ex]
-\dfrac{2a_K}{\gamma - 1}\left[\left(\dfrac{p}{p_K}\right)^{(\gamma-1)/2\gamma} - 1\right] & p \le p_K \text{ (rarefaction)}.
+(p - p_K)\sqrt{\dfrac{A_K}{p + B_K}} & p > p_K \text{ (shock)}\\[2ex]
+\dfrac{2a_K}{\gamma - 1}\left[\left(\dfrac{p}{p_K}\right)^{(\gamma-1)/2\gamma} - 1\right] & p \le p_K \text{ (rarefaction)},
 \end{cases}
+$$
+
+with
+
+$$
+A_K = \frac{2}{(\gamma+1)\rho_K},\qquad B_K = \frac{\gamma-1}{\gamma+1}\,p_K .
 $$
 
 The function is monotone in $p$, so Newton's method converges in a few iterations (typically 2–5 from a good initial guess). Then:

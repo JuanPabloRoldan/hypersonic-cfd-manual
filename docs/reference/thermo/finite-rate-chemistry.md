@@ -109,4 +109,4 @@ All reacting codes. Mutation++ supplies mechanisms and rates to SU2-NEMO and oth
 
 ## References
 
-Park (1990, 1993); Park, *Nonequilibrium Hypersonic Aerodynamics*; Gnoffo, Gupta & Shinn (1989); Dunn & Kang (1973). See the [bibliography](../../references.md).
+Park (1990, 1993); Park, *Nonequilibrium Hypersonic Aerothermodynamics*; Gnoffo, Gupta & Shinn (1989); Dunn & Kang (1973). See the [bibliography](../../references.md).

@@ -47,7 +47,50 @@ The Huang et al. DNS reproduce CUBRC's Mach 11.1 flat-plate experiment (wall she
 
 ## Variants
 
-*(To be written: Spalart–Allmaras, SST and $k$–$\omega$ variants used in reentry codes; wall functions and why they fail with strong wall heat transfer; LES/DNS for transition and SWBLI.)*
+### RANS model families
+
+| Family | Extra equations | How the eddy viscosity is set | Strengths | Weak points for entry flows |
+|---|---|---|---|---|
+| Algebraic (Baldwin–Lomax, Cebeci–Smith) | 0 | from the mean velocity profile and wall distance | cheap, robust for attached boundary layers | needs an identifiable boundary-layer edge; poor in separation and wakes |
+| Spalart–Allmaras | 1 | a transport equation for the eddy viscosity itself | robust, easy to converge | needs wall distance; compressible variants change the answer |
+| $k$–$\omega$ and SST | 2 | from turbulent kinetic energy $k$ and specific dissipation rate $\omega$ | better in pressure gradients and mild separation | cold-wall eddy-viscosity errors (above); over-production of $k$ at shocks |
+
+All of them are eddy-viscosity models: the turbulent stress is assumed proportional to the mean strain rate. Two consequences matter at hypersonic speed. A shock is a region of enormous strain rate, so an eddy-viscosity model produces turbulent kinetic energy there far faster than real turbulence responds, and codes limit production at shocks. And the heat flux inherits whatever error the eddy viscosity has, through the turbulent Prandtl number.
+
+### Wall functions
+
+A wall function replaces the near-wall grid with an assumed velocity and temperature profile (the log law), so the first cell can be far thicker. The assumed profile comes from incompressible, near-adiabatic boundary layers in equilibrium. With a cold wall and large property variation across the layer it doesn't hold in untransformed variables, and the wall heat flux is exactly the quantity the assumed profile dictates. Aeroheating runs therefore resolve the wall, with the first cell at $y^+$ of order one.
+
+### Transition
+
+RANS models don't predict where the boundary layer becomes turbulent. Entry analyses usually prescribe the transition location, or run fully laminar and fully turbulent solutions as a bracket. The location comes from correlations (a momentum-thickness Reynolds number, sometimes divided by edge Mach number, exceeding a threshold of a few hundred; roughness-based criteria on ablated heatshields) or from stability analysis.
+
+### Scale-resolving methods
+
+LES and DNS resolve the turbulence instead of modelling it, and need the low-dissipation numerics of [central schemes](../spatial/central-schemes.md) and time-accurate integration. They are used for transition mechanisms, shock/boundary-layer interaction unsteadiness and to build the databases RANS models are judged against. Hybrid RANS/LES (detached-eddy simulation) is used for capsule wakes, where the separated flow is unsteady at large scale.
+
+## Typical values
+
+- Turbulent Prandtl number: 0.85–0.9; about 0.9 fits the outer layer in Mach 11 and 14 cold-wall DNS (Huang et al. 2020).
+- Wall-to-recovery temperature ratio in entry: 0.2 or below.
+- Algebraic energy flux model: up to 20% better temperature in $10 < y^+ < 200$ against data from Mach 0.02 to 11.8 (Bowersox & North 2010).
+- Danis–Durbin correction: tested for $2.5 \le M \le 14$ and $0.18 \le T_w/T_r \le 1$ (Danis & Durbin 2022).
+- First-cell height for wall-resolved heating: $y^+$ of order one.
+- Turbulent over laminar heating at the same location: commonly a factor of several.
+
+## Trade-offs
+
+- **Algebraic vs transport-equation models.** Algebraic models add no equations and no stiffness but only work where a boundary layer is clearly defined; one- and two-equation models work in separated regions and cost extra unknowns per cell.
+- **Laminar/turbulent bracket vs transition prediction.** The bracket is cheap and safe (fully turbulent is the conservative end) but can over-size the TPS; transition prediction removes conservatism and adds a large uncertainty of its own.
+- **RANS vs scale-resolving.** RANS gives steady heating at design cost; LES and DNS give the physics at a cost that restricts them to small domains and research.
+- **Constant $Pr_t$ vs a heat-flux model.** Constant $Pr_t$ does well for the wall-normal heat flux that sets heating; better models mainly improve the temperature profile and streamwise flux.
+
+## Effects on stability and robustness
+
+- Turbulence-model source terms are stiff near the wall and are treated implicitly; $k$, $\omega$ and the SA variable must be kept positive.
+- Unlimited production of $k$ at a strong shock can flood the shock layer with eddy viscosity, which shows up as unphysically high heating downstream.
+- Switching the model on over an established laminar solution is a standard start-up strategy.
+- A RANS solution of a flow that is really unsteady (wake, separated interaction) may not converge ([convergence diagnostics](../time/convergence-diagnostics.md#stalls-and-limit-cycles)).
 
 ## Implications
 
@@ -66,7 +109,10 @@ Knobs: turbulence model, compressibility correction, $Pr_t$ or heat-flux model, 
 
 ## Which codes
 
-*(To be written.)* Production reentry codes use one- and two-equation RANS models (Baldwin–Lomax historically, SA and SST more recently) with constant $Pr_t$ by default.
+Production reentry codes use algebraic models (Baldwin–Lomax, Cebeci–Smith) historically, and Spalart–Allmaras and SST more recently, with constant $Pr_t$ by default. [US3D](../../codes/index.md#us3d) adds hybrid RANS/LES and low-dissipation fluxes for scale-resolving work.
+
+!!! warning "Calibration"
+    The model lists are from the codes' manuals and methods papers at a general level. Which compressibility corrections and shock production limiters are applied by default is version-specific.
 
 ## See also
 

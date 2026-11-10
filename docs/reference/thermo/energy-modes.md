@@ -95,4 +95,4 @@ All reacting codes. Mutation++ provides mode-resolved thermodynamics to codes th
 
 ## References
 
-Anderson, *Hypersonic and High-Temperature Gas Dynamics* (statistical thermodynamics chapters); Vincenti & Kruger, *Introduction to Physical Gas Dynamics*; Park, *Nonequilibrium Hypersonic Aerodynamics*. See the [bibliography](../../references.md).
+Anderson, *Hypersonic and High-Temperature Gas Dynamics* (statistical thermodynamics chapters); Vincenti & Kruger, *Introduction to Physical Gas Dynamics*; Park, *Nonequilibrium Hypersonic Aerothermodynamics*. See the [bibliography](../../references.md).

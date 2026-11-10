@@ -168,7 +168,7 @@ Park (1990, §5.4–5.5) collects most of the practical lessons:
 ## Which codes
 
 - **DPLR:** two-temperature with Park rates in production use; a three-temperature version was used by Wagnild & Gallis (2018) to implement QK chemistry.
-- **LAURA:** two-temperature Park model with 11-species air, coupled with HARA radiation (see the radiation chapter, still to be written).
+- **LAURA:** two-temperature Park model with 11-species air, coupled with HARA radiation ([shock-layer radiation](../radiation/shock-layer-radiation.md)).
 - **FUN3D:** a three-temperature model was implemented and validated against RAM-C II by Clarey & Greendyke (2019b).
 - **LeMANS** (University of Michigan research code): separate electron energy equation (Farbar, Boyd & Martin 2013).
 - **Candler & MacCormack (1991)** is the ancestor of the Minnesota line (DPLR, US3D): seven species, a separate vibrational temperature for each molecule and an electron temperature, solved implicitly with line relaxation.

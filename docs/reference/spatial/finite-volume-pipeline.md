@@ -42,7 +42,10 @@ Build face states $\mathbf W_L$, $\mathbf W_R$ on each side of every face. First
 A worked example with the minmod limiter, for any primitive $q$ in 1D:
 
 $$
-\Delta^- = q_i - q_{i-1},\quad \Delta^+ = q_{i+1} - q_i,\quad \sigma_i = \operatorname{minmod}(\Delta^-,\Delta^+),\quad q^L_{i+1/2} = q_i + \tfrac12\sigma_i,\quad q^R_{i-1/2} = q_i - \tfrac12\sigma_i .
+\begin{gathered}
+\Delta^- = q_i - q_{i-1},\qquad \Delta^+ = q_{i+1} - q_i,\qquad \sigma_i = \operatorname{minmod}(\Delta^-,\Delta^+),\\[1ex]
+q^L_{i+1/2} = q_i + \tfrac12\sigma_i,\qquad q^R_{i-1/2} = q_i - \tfrac12\sigma_i .
+\end{gathered}
 $$
 
 With $q = 1, 2, 4$ in cells $i-1, i, i+1$: $\Delta^- = 1$, $\Delta^+ = 2$, so $\sigma_i = 1$ and $q^L_{i+1/2} = 2.5$ (an unlimited central slope would give 2.75). At an extremum, $q = 1, 3, 2$, the slopes have opposite signs, $\sigma_i = 0$, and the cell goes flat (locally first order).

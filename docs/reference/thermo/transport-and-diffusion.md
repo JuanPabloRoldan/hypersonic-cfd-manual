@@ -61,9 +61,41 @@ In an ionized gas, electrons diffuse far faster than ions, but any separation cr
 
 ## Variants
 
+### Viscosity and conductivity models
+
+| Model | What it is | Range | Cost |
+|---|---|---|---|
+| Sutherland | one-line fit of air viscosity against temperature | non-reacting air, up to roughly 2000 K | negligible |
+| Blottner fits + Wilke mixing + Eucken conductivity | curve-fitted species viscosities, mixed with Wilke's rule; conductivity from viscosity and heat capacities | neutral, weakly ionized air, up to roughly 10,000 K | $O(n_s^2)$ |
+| Gupta–Yos (collision integrals) | mixture properties built from binary collision integrals | ionized air to 30,000 K (Gupta et al. 1990) | $O(n_s^2)$, larger constant |
+| Full Chapman–Enskog | solve the kinetic-theory linear systems | reference accuracy | $O(n_s^3)$ |
+
+### Diffusion models
+
+Constant Lewis or Schmidt number; mixture-averaged Fick with a correction velocity; SCEBD; full Stefan–Maxwell (section above). Ambipolar treatment is added to any of them when ions are present.
+
 ### Libraries
 
-Mutation++ (VKI) provides transport, thermodynamics and chemistry to several codes. *(See [Mutation++](../../codes/index.md#mutationpp).)*
+[Mutation++](../../codes/index.md#mutationpp) (VKI) provides transport, thermodynamics and chemistry to several codes.
+
+## Typical values
+
+- Prandtl number of air: about 0.7. Lewis number used by Fay & Riddell for dissociated air: 1.4. Schmidt numbers assumed in constant-Schmidt models: 0.5–0.7.
+- Ambipolar diffusion coefficient: $D_a = D_i(1 + T_e/T_i)$, so twice the ion coefficient when electron and ion temperatures are equal.
+- Cost per cell: $O(n_s^2)$ for mixing rules (121 pair terms for 11 species), $O(n_s^3)$ for Stefan–Maxwell.
+- Validity limits in the table above are approximate; the 30,000 K figure is the stated range of the Gupta et al. (1990) data.
+
+## Trade-offs
+
+- **Wilke/Blottner vs collision integrals.** The simple route is cheap and adequate for neutral air; it degrades as ionization rises, because charged-particle collisions are long-range and don't follow the fitted trends.
+- **Fick vs SCEBD vs Stefan–Maxwell.** Each step is more consistent with mass conservation and costs more; the gain is small for neutral air and large when species masses differ widely.
+- **Constant Lewis number.** One number instead of a diffusion model, which is why it appears in correlations and in the film-coefficient [surface energy balance](../walls/surface-energy-balance.md); it can't represent species separating from each other.
+
+## Effects on stability and robustness
+
+- Fick's law with independent coefficients doesn't sum to zero mass flux. Without a correction velocity, total mass is not conserved near walls where gradients are large.
+- Mass fractions pushed slightly negative by diffusion near a catalytic wall need limiting.
+- Transport coefficients are smooth and positive, so they don't destabilize a run; their effect is on accuracy and on the viscous time-step limit through $\nu$.
 
 ## Implications
 
@@ -82,7 +114,10 @@ Knobs: transport model, diffusion model, Lewis/Schmidt numbers if constant. Symp
 
 ## Which codes
 
-*(To be written.)*
+The production entry codes use collision-integral transport (Gupta–Yos type mixing) for ionized air and offer simpler curve-fit options; for diffusion, SCEBD or an approximate multicomponent (Stefan–Maxwell) treatment is typical. [SU2-NEMO](../../codes/index.md#su2-nemo) can take all of these from Mutation++.
+
+!!! warning "Calibration"
+    Which transport and diffusion model each of DPLR, LAURA and US3D uses by default is in their user manuals and varies with version; this page has not been checked against them line by line.
 
 ## See also
 

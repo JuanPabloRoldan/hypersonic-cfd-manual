@@ -23,12 +23,14 @@ The flow solver needs a wall temperature and a blowing rate. The material-respon
 The surface is a control volume of zero thickness, so it stores nothing. Per unit area and time:
 
 $$
-\underbrace{\rho_e u_e C_H\,(H_r - h_w)}_{\text{convection}}
+\begin{aligned}
+&\underbrace{\rho_e u_e C_H\,(H_r - h_w)}_{\text{convection}}
 + \underbrace{\alpha\,q_{rad}}_{\text{absorbed radiation}}
-+ \underbrace{\dot m_g h_g + \dot m_c h_c}_{\text{arriving from the material}}
-= \underbrace{\varepsilon\sigma T_w^4}_{\text{reradiation}}
++ \underbrace{\dot m_g h_g + \dot m_c h_c}_{\text{arriving from the material}}\\[1ex]
+&\qquad= \underbrace{\varepsilon\sigma T_w^4}_{\text{reradiation}}
 + \underbrace{(\dot m_g + \dot m_c)\,h_w}_{\text{blown gas leaving}}
 + \underbrace{q_{cond}}_{\text{into the solid}} .
+\end{aligned}
 $$
 
 <figure markdown>

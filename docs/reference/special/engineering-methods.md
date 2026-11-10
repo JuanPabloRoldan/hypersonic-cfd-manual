@@ -28,6 +28,13 @@ Each surface panel's pressure depends only on its own inclination $\theta$ to th
 - **Shock-expansion:** an oblique shock at the leading edge, then Prandtl–Meyer expansion along the surface, ignoring reflected waves (valid when they are weak, i.e. at high Mach number). Good for slender bodies and airfoils.
 - **Prandtl–Meyer expansion** on leeward panels, often with a base-pressure correlation behind blunt bases.
 
+<figure markdown>
+![Surface-inclination methods compared](../../assets/figures/surface_inclination_methods.svg)
+<figcaption markdown="span">Pressure coefficient against local surface inclination at Mach 10 for a perfect gas with $\gamma = 1.4$: Newtonian, modified Newtonian (with $C_{p,\max}$ from the normal-shock stagnation pressure), tangent wedge from the exact oblique-shock relations, and tangent cone from a numerical solution of the Taylor–Maccoll equation. All computed. A cone sees a lower pressure than a wedge of the same angle because the flow can relieve sideways.</figcaption>
+</figure>
+
+A worked comparison at 10° and Mach 10: tangent wedge gives $C_p = 0.087$, tangent cone 0.067, Newtonian $2\sin^2 10° = 0.060$ and modified Newtonian 0.055. On a slender body the choice of method changes the pressure by tens of percent, so matching the method to the local body shape (two-dimensional or axisymmetric, blunt or slender) matters more than any refinement within one method.
+
 Practical tools pick a method per panel (compression vs expansion, blunt vs slender) and add viscous corrections from reference-temperature skin friction and heating ([stagnation-point heating](../physics/stagnation-point-heating.md#away-from-the-stagnation-point-reference-temperature)).
 
 ### Thin-shock-layer theory
@@ -56,6 +63,9 @@ Newtonian · modified Newtonian · Newtonian–Busemann · tangent wedge · tang
 ## Typical values
 
 - Modified Newtonian forebody pressure on blunt capsules: within a few percent of CFD over the heat shield; poor at the shoulder and on the backshell.
+- $C_{p,\max}$ at Mach 10, $\gamma = 1.4$: 1.832; limit as $M\to\infty$: 1.839 (computed).
+- At 10° inclination and Mach 10: wedge 0.087, cone 0.067, Newtonian 0.060, modified Newtonian 0.055 (computed, figure above).
+- Cost: a loop over surface panels; thousands of flight conditions per minute on a laptop.
 - Shock-expansion and tangent-cone methods: best for slender bodies at high Mach number, where reflected waves are weak.
 
 ## Trade-offs

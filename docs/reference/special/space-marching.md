@@ -36,6 +36,11 @@ where the viscous fluxes now contain only cross-plane derivatives.
 
 ### Marching
 
+<figure markdown>
+![Space marching schematic](../../assets/figures/pns_marching.svg)
+<figcaption markdown="span">The split a marching analysis uses. The subsonic blunt nose is solved with the full equations and supplies an initial data plane where the shock layer has become supersonic. From there the solution is advanced one cross-flow plane at a time. The thin subsonic sublayer next to the wall (orange) is where a naive march is ill-posed. Schematic, not to scale.</figcaption>
+</figure>
+
 Treat $x$ like time and march implicitly, for example
 
 $$
@@ -70,6 +75,26 @@ Time-marched; used as an option in some codes to save viscous-flux work on attac
 
 Multiple marching sweeps with the lagged pressure updated each sweep, allowing limited upstream influence.
 
+## Typical values
+
+- Size of the dropped terms: streamwise viscous terms are smaller than wall-normal ones by $(\delta/L)^2 \sim 1/Re_L$, so of order $10^{-6}$ at $Re_L = 10^6$.
+- Vigneron safety factor $\sigma$: slightly below one; values around 0.75–0.95 are quoted in the literature.
+- Cost: one implicit 2-D solve per marching station, against hundreds to thousands of global iterations on the full 3-D grid.
+- Starting plane: downstream of the sonic line of the nose solution, where the inviscid shock layer is supersonic.
+
+## Trade-offs
+
+- **Gain:** a slender-body solution for roughly the cost of one sweep through the grid, and with very fine streamwise resolution if wanted.
+- **Pay:** no upstream influence at all. Separation, strong interactions and any subsonic pocket are outside the method.
+- **Thin-layer instead of PNS:** keeps time marching and therefore upstream influence through the inviscid terms; saves only the cost of the cross-derivative viscous terms.
+- **Today:** implicit time-marching codes are fast enough that marching is used mainly for long slender bodies and parametric studies.
+
+## Effects on stability and robustness
+
+- Without pressure splitting the march is ill-posed in the subsonic sublayer and fails through departure solutions: the pressure runs away exponentially within a few steps.
+- Too small a marching step makes this worse, not better, because it gives the upstream-travelling mode room to grow.
+- The march stops at separation; there is no way to continue through reversed flow.
+
 ## Implications
 
 | Lens | Effect |
@@ -87,8 +112,10 @@ Knobs: starting plane, marching step, Vigneron safety factor. Symptoms: departur
 
 ## Which codes
 
+Dedicated PNS codes were widely used in NASA and industry for slender vehicles from the late 1970s to the 1990s. The current production entry codes are time-marching; several offer a thin-layer option for the viscous terms.
+
 !!! warning "Calibration"
-    PNS codes were prominent in NASA and industry for slender vehicles (e.g. UPS at Langley); some general codes offer thin-layer options. Specific current availability to be checked.
+    Which codes still ship a space-marching mode is not established here from a primary source.
 
 ## See also
 

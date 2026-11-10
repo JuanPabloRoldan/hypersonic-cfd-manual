@@ -69,7 +69,7 @@ Lees' method gives the laminar heating distribution over a blunt body as a ratio
 
 ### Radiative heating
 
-At high entry speeds the hot shock layer also radiates to the wall. Radiative heating grows much faster with velocity than convective heating (correlations scale with a high power of $V$) and *increases* with nose radius, the opposite trend. Above roughly 10–11 km/s at Earth (lunar return and faster) it becomes a significant or dominant part of stagnation heating. It will be covered in the radiation chapter (planned); correlations such as Tauber–Sutton are the radiative counterpart of Sutton–Graves.
+At high entry speeds the hot shock layer also radiates to the wall. Radiative heating grows much faster with velocity than convective heating (correlations scale with a high power of $V$) and *increases* with nose radius, the opposite trend. Above roughly 10–11 km/s at Earth (lunar return and faster) it becomes a significant or dominant part of stagnation heating. See [shock-layer radiation](../radiation/shock-layer-radiation.md); correlations such as Tauber–Sutton are the radiative counterpart of Sutton–Graves.
 
 ## Variants
 
