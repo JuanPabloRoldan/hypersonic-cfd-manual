@@ -35,6 +35,8 @@ Gas models differ along two separate axes, the thermal state of the energy modes
 
 ### The ladder, with implications
 
+For *when* each rung is needed (by speed, altitude and output), see [choosing physical models](../model-selection.md).
+
 Counts are for 3D with 11-species air; costs are qualitative and case-dependent.
 
 | Model | Unknowns per cell | Closure work per cell | Implicit block | Captures | Loses | Typical use |

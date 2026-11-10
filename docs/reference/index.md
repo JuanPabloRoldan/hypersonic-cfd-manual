@@ -74,7 +74,7 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 [12.1 Convergence diagnostics](time/convergence-diagnostics.md) ·
 [12.2 Engineering checks on a solution](verification/engineering-checks.md)
 
-**Appendix.** [A Codes at a glance](../codes/index.md): each production code's choice in each slot, with primary sources.
+**Appendix.** [A Codes at a glance](../codes/index.md): each production code's choice in each slot, with primary sources. [B Choosing physical models](model-selection.md): when each gas model, species set, temperature model, radiation and rarefaction treatment is needed, by speed, altitude and output.
 
 ## Chapters still to come
 

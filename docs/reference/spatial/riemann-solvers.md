@@ -236,7 +236,7 @@ This is HLL with $S_L = -S$, $S_R = S$. Most dissipative, very robust, cheapest.
 | HLLC-LM | as HLLC | resolved | as HLLC | no | resistant | low–medium |
 | Rusanov | 1 speed for all | heavily smeared | yes | no | resistant | lowest |
 
-The pattern is the classical trade-off of hypersonic flux design: **the dissipation that smears contacts and boundary layers is the same dissipation that suppresses the carbuncle.** Hybrid and rotated solvers, and dissipation applied only at shocks, try to get both. A newer line of work argues the trade-off is partly false: the carbuncle is driven by *mis-scaled* acoustic dissipation at low face-normal Mach numbers, so it can be cured by reducing dissipation there ([HLLC-LM](#hllc-lm), [low-Mach corrections](low-mach-corrections.md)). See [shock instabilities](shock-instabilities.md) and Track 2.2–2.3.
+The pattern is the classical trade-off of hypersonic flux design: **the dissipation that smears contacts and boundary layers is the same dissipation that suppresses the carbuncle.** Hybrid and rotated solvers, and dissipation applied only at shocks, try to get both. A newer line of work argues the trade-off is partly false: the carbuncle is driven by *mis-scaled* acoustic dissipation at low face-normal Mach numbers, so it can be cured by reducing dissipation there ([HLLC-LM](#hllc-lm), [low-Mach corrections](low-mach-corrections.md)). See [shock instabilities](shock-instabilities.md).
 
 ### Dissipation in practice: the double cone {#double-cone-comparison}
 

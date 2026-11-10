@@ -32,7 +32,7 @@ Each check compares one CFD quantity with an independent estimate; the expected 
 
 ## Variants
 
-Checks against **published solutions** (code-to-code comparisons, validation cases such as the double cone) belong to validation rather than this page; see Track 8.
+Checks against **published solutions** (code-to-code comparisons, validation cases such as the double cone) belong to validation rather than this page (a validation chapter is planned).
 
 ## Typical values
 

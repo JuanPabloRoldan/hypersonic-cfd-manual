@@ -10,7 +10,7 @@ The PDEs give one equation per conserved variable, but their fluxes and sources 
 
 ## The problem it solves
 
-Without closures the equations can't be evaluated. With them, the PDEs plus closures form a complete system. The PDEs themselves are only conservation and carry essentially no uncertainty; almost all the physical uncertainty in an aeroheating prediction lives in the closures. That is why the uncertainty sources in Track 8 are mostly closure models.
+Without closures the equations can't be evaluated. With them, the PDEs plus closures form a complete system. The PDEs themselves are only conservation and carry essentially no uncertainty; almost all the physical uncertainty in an aeroheating prediction lives in the closures. That is why the main uncertainty sources in aeroheating predictions are mostly closure models.
 
 ## How it works
 

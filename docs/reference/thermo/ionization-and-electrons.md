@@ -14,7 +14,7 @@ Above roughly 7–8 km/s the shock layer becomes a weakly ionized plasma: a smal
 
 ## The problem it solves
 
-Electrons matter far beyond their tiny mass. They control ionization (and therefore radiation, Track 6), they carry a separate pool of energy that may not be in equilibrium with anything else, they set the plasma frequency that decides whether radio signals get through, and the electron-impact reactions are the stiffest and most explosive part of a reacting-flow calculation.
+Electrons matter far beyond their tiny mass. They control ionization (and, through electronic excitation, radiation), they carry a separate pool of energy that may not be in equilibrium with anything else, they set the plasma frequency that decides whether radio signals get through, and the electron-impact reactions are the stiffest and most explosive part of a reacting-flow calculation.
 
 ## How it works
 
@@ -178,7 +178,7 @@ Park (1990, §5.4–5.5) collects most of the practical lessons:
 
 ## See also
 
-[Finite-rate chemistry](finite-rate-chemistry.md) · [Thermal nonequilibrium](thermal-nonequilibrium.md) · [Energy modes](energy-modes.md) · [Transport and diffusion](transport-and-diffusion.md) · [Stiff source terms](../sources/stiff-sources.md) · [Frozen and equilibrium sound speed](../foundations/mathematical-character.md#frozen-and-equilibrium-sound-speed)
+[Choosing physical models](../model-selection.md) · [Finite-rate chemistry](finite-rate-chemistry.md) · [Thermal nonequilibrium](thermal-nonequilibrium.md) · [Energy modes](energy-modes.md) · [Transport and diffusion](transport-and-diffusion.md) · [Stiff source terms](../sources/stiff-sources.md) · [Frozen and equilibrium sound speed](../foundations/mathematical-character.md#frozen-and-equilibrium-sound-speed)
 
 ## References
 

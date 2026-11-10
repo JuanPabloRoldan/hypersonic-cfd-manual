@@ -909,6 +909,35 @@ def plasma_frequency_bands():
     save(fig, "plasma_frequency_bands")
 
 
+# ---------------------------------------------------------------------------
+# 24. Physics ladder vs Earth entry velocity. Schematic, indicative onsets
+#     (stagnation region of a metre-scale blunt body).
+# ---------------------------------------------------------------------------
+def physics_ladder():
+    rows = [
+        ("Vibrational excitation", 1.0, 16, C0),
+        ("O₂ dissociation", 2.5, 16, C0),
+        ("N₂ dissociation", 5.0, 16, C0),
+        ("Ionization (NO⁺ first, then N⁺, O⁺)", 7.0, 16, C1),
+        ("Radiative heating: secondary", 10.0, 12.0, C3),
+        ("Radiative heating: comparable / dominant", 12.0, 16, C3),
+    ]
+    fig, ax = plt.subplots(figsize=(9.5, 4.2))
+    for i, (lab, a, b, c) in enumerate(rows):
+        ax.barh(i, b - a, left=a, color=c, alpha=0.75, height=0.55)
+        ax.text(a + 0.12, i, lab, va="center", fontsize=8.5)
+    for v, lab in [(7.8, "LEO return\n~7.8"), (11.0, "lunar return\n(Apollo, Orion) ~11"), (12.9, "Stardust\n12.9")]:
+        ax.axvline(v, color=GREY, ls="--", lw=1)
+        ax.text(v, len(rows) + 0.25, lab, ha="center", va="center", fontsize=7.5, color=GREY)
+    sec = ax.secondary_xaxis("top", functions=(lambda x: x / 0.315, lambda m: m * 0.315))
+    sec.set_xlabel("approximate Mach number at ~60 km altitude (a ≈ 315 m/s)")
+    ax.set(xlim=(0, 16), ylim=(-0.6, len(rows) + 0.75), yticks=[], xlabel="flight velocity (km/s), Earth atmosphere",
+           title="What turns on as entry speed rises (schematic; onsets indicative, see text)")
+    ax.invert_yaxis()
+    ax.grid(axis="y", visible=False)
+    save(fig, "physics_ladder")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -933,3 +962,4 @@ if __name__ == "__main__":
     shock_limits_newtonian()
     knudsen_regimes()
     plasma_frequency_bands()
+    physics_ladder()
