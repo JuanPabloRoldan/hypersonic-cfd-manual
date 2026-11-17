@@ -30,7 +30,11 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 [3.6 Ionization, electrons and plasma](thermo/ionization-and-electrons.md)
 
 **4 Turbulence.**
-[4.1 Turbulence modeling for hypersonic boundary layers](physics/turbulence-modeling.md)
+[4.1 Turbulence fundamentals and averaging](turbulence/fundamentals.md) ·
+[4.2 RANS turbulence models](turbulence/rans-models.md) ·
+[4.3 Scale-resolving methods: DNS, LES, hybrid](turbulence/scale-resolving.md) ·
+[4.4 Turbulence modeling for hypersonic boundary layers](physics/turbulence-modeling.md) ·
+[4.5 Laminar–turbulent transition](turbulence/transition.md)
 
 **5 Boundary conditions and walls.**
 [5.1 Boundary conditions](spatial/boundary-conditions.md) ·
@@ -83,4 +87,4 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 
 ## Chapters still to come
 
-Shock/boundary-layer interaction (2.4) is a draft; outlines exist for shock–shock interactions (2.5) and shock-layer radiation (13). Still to be added: material response and ablation, and further entry-flow physics (entropy layers and viscous interaction, transition, wake flow).
+Shock/boundary-layer interaction (2.4) is a draft; outlines exist for shock–shock interactions (2.5) and shock-layer radiation (13). Chapter 4 has outlines for fundamentals (4.1), RANS models (4.2), scale-resolving methods (4.3) and transition (4.5). Still to be added: material response and ablation, and further entry-flow physics (entropy layers and viscous interaction, wake flow).

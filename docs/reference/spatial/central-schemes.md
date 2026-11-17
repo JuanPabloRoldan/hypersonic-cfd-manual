@@ -14,7 +14,7 @@ Central schemes compute the face flux from a symmetric average of the two sides 
 
 ## The problem it solves
 
-Upwind fluxes dissipate everywhere, including in smooth regions where they damp turbulence, instability waves and acoustics. For LES and DNS of transition, SWBLI unsteadiness or turbulent heating, that numerical dissipation can swamp the physics (Subbareddy & Candler showed fully upwind fluxes visibly over-damp decaying turbulence). Central schemes can be nearly dissipation-free in smooth flow and add dissipation only at shocks.
+Upwind fluxes dissipate everywhere, including in smooth regions where they damp turbulence, instability waves and acoustics. For [LES and DNS](../turbulence/scale-resolving.md) of [transition](../turbulence/transition.md), SWBLI unsteadiness or turbulent heating, that numerical dissipation can swamp the physics (Subbareddy & Candler showed fully upwind fluxes visibly over-damp decaying turbulence). Central schemes can be nearly dissipation-free in smooth flow and add dissipation only at shocks.
 
 ## How it works
 

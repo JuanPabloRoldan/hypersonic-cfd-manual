@@ -133,7 +133,7 @@ Why pressure predicts heating: the heat flux into a boundary layer scales roughl
 
 - **Laminar** interactions are long (the interaction extent is of order ten boundary-layer thicknesses and can be much more), the heat flux **falls** under the bubble (the layer lifts off the wall), and the peak at reattachment is moderate (Délery 2011, §2.3.3, Fig. 2.61a).
 - **Turbulent** interactions are short and the heat flux **rises** already at separation, because turbulence is amplified there and large eddies carry hot outer gas towards the wall (Délery 2011, Fig. 2.61b).
-- **Transitional** interactions are the common case at hypersonic speed and the most dangerous. The separated shear layer is far less stable than the attached layer, so it transitions inside the interaction even when the incoming layer is laminar. Separation then behaves as laminar (long bubble, falling heat flux) while reattachment behaves as turbulent (high pressure and heating peaks). The peak heating at reattachment during transition **can exceed the fully turbulent value**, because the transitional structures are large and organized before they break down (Délery 2011, §2.8). Most "laminar" hypersonic interactions in ground tests are in fact transitional (Délery 2011, §2.8; Candler 2011, §7.5).
+- **Transitional** interactions are the common case at hypersonic speed and the most dangerous. The separated shear layer is far less stable than the attached layer, so it [transitions](../turbulence/transition.md) inside the interaction even when the incoming layer is laminar. Separation then behaves as laminar (long bubble, falling heat flux) while reattachment behaves as turbulent (high pressure and heating peaks). The peak heating at reattachment during transition **can exceed the fully turbulent value**, because the transitional structures are large and organized before they break down (Délery 2011, §2.8). Most "laminar" hypersonic interactions in ground tests are in fact transitional (Délery 2011, §2.8; Candler 2011, §7.5).
 
 !!! note "A misconception to drop"
     "Laminar flow is the benign case, so a laminar CFD run is conservative for heating." Not for interactions. A laminar run predicts a bubble that is too large (the real shear layer transitions and reattaches sooner) and a reattachment peak that is too low (transitional reattachment heats more than laminar, and sometimes more than turbulent). Candler notes that his laminar Mach 6 and compression-corner computations over-predict the separation length for this reason (Candler 2011, §7.2.1–7.2.2).
@@ -169,7 +169,7 @@ Compiled data from shock reflections, compression ramps, blunt fins and overexpa
 
 The current reading is that upstream turbulence drives weak interactions and the bubble dynamics drive strongly separated ones (Dupont et al. 2011, §9.4; Clemens & Narayanaswamy 2014).
 
-**Why it matters for the solver.** A steady RANS solver has nothing to converge to; it may stall or wander ([convergence diagnostics](../time/convergence-diagnostics.md#stalls-and-limit-cycles)). A time-accurate run must cover many cycles of the slowest frequency while resolving the fastest, so the number of time steps is large (worked example below).
+**Why it matters for the solver.** A steady [RANS](../turbulence/rans-models.md) solver has nothing to converge to; it may stall or wander ([convergence diagnostics](../time/convergence-diagnostics.md#stalls-and-limit-cycles)). A time-accurate run must cover many cycles of the slowest frequency while resolving the fastest, so the number of time steps is large (worked example below).
 
 ### Canonical cases
 
@@ -253,7 +253,7 @@ Take a turbulent interaction with $L = 5$ cm, $U_\infty = 1000$ m/s and $\delta 
 
 - Shock-motion frequency: $f = 0.03\times1000/0.05 = 600$ Hz, period 1.7 ms.
 - Energetic-eddy frequency: $U_\infty/\delta = 2\times10^5$ Hz, about 330 times higher.
-- Statistics over 30 low-frequency periods need 50 ms of physical time. With a wall-resolved LES time step of order $10^{-8}$ s (illustrative), that is $5\times10^6$ time steps.
+- Statistics over 30 low-frequency periods need 50 ms of physical time. With a [wall-resolved LES](../turbulence/scale-resolving.md#wall-resolved-les) time step of order $10^{-8}$ s (illustrative), that is $5\times10^6$ time steps.
 
 This is why interaction unsteadiness is studied with LES and DNS at modest Reynolds numbers and short records, and why steady RANS remains the design tool despite its known faults.
 
@@ -262,7 +262,7 @@ This is why interaction unsteadiness is studied with LES and DNS at modest Reyno
 - **Steady laminar Navier–Stokes.** Accurate when the flow really is laminar, the free stream is known and there is little chemistry; needs a large grid and low-dissipation numerics (Candler 2011, §7.5). Wrong (bubble too large, peak too low) as soon as the shear layer transitions.
 - **Steady RANS.** The only practical tool at flight Reynolds numbers. But eddy-viscosity models produce turbulent kinetic energy from the mean strain rate, which at a shock becomes huge and unphysical, while real shock–turbulence interaction actually suppresses production (Sinha, Mahesh & Candler 2003, 2005). On a 33° flare at Mach 7.16, baseline Spalart–Allmaras predicted no separation; a strain-adaptive formulation (Rung et al. 2003) that limits production at high strain gave a separation close to the experiment and a better pressure distribution, **but did not significantly improve the heat flux** (MacLean et al. 2008; Candler 2011, §7.3). Knight & Zheltovodov (2011, §4.3) summarize RANS as the engineering standard whose accuracy for multiple shock interactions over wide ranges of conditions is still not established.
 - **LES and DNS.** Little or no calibration, and they capture the unsteadiness; but resolving the viscous sublayer limits them to low Reynolds numbers (Knight & Zheltovodov 2011, §4.3), and the low-frequency motion makes the records long (worked example above).
-- **Hybrid RANS/LES (DES family).** RANS near the wall, LES away from it; an active research area for interactions (Knight & Zheltovodov 2011, §4.3). See [turbulence modeling](turbulence-modeling.md#scale-resolving-methods).
+- **Hybrid RANS/LES (DES family).** RANS near the wall, LES away from it; an active research area for interactions (Knight & Zheltovodov 2011, §4.3). See [scale-resolving methods](../turbulence/scale-resolving.md#detached-eddy-simulation).
 - **Correlations** (free interaction, Holden's power law). Instant, and good for peak values and sanity checks; they give no distributions and no location.
 
 ## Effects on stability and robustness

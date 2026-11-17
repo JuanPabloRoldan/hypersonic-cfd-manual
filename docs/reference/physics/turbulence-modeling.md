@@ -10,7 +10,7 @@ status: draft
 
 ## What it is
 
-The models that close the Reynolds- (Favre-) averaged Navier–Stokes equations for turbulent boundary layers at hypersonic Mach numbers: an eddy-viscosity model for the Reynolds stresses, and a model for the turbulent heat flux $\overline{\rho h'' u_i''}$. In entry analysis they matter wherever the boundary layer has transitioned: lunar-return and Mars capsules late in the heat pulse, large heatshields, backshells, and slender vehicles.
+What is specific to hypersonic, cold-wall boundary layers in the models that close the Reynolds- ([Favre-](../turbulence/fundamentals.md#reynolds-and-favre-averaging)) averaged Navier–Stokes equations for turbulent boundary layers at hypersonic Mach numbers: an eddy-viscosity model for the Reynolds stresses, and a model for the turbulent heat flux $\overline{\rho h'' u_i''}$. In entry analysis they matter wherever the boundary layer has transitioned: lunar-return and Mars capsules late in the heat pulse, large heatshields, backshells, and slender vehicles.
 
 ## The problem it solves
 
@@ -49,11 +49,13 @@ The Huang et al. DNS reproduce CUBRC's Mach 11.1 flat-plate experiment (wall she
 
 ### RANS model families
 
+The families are built up one at a time, with their equations and hypersonic failure modes, on [RANS turbulence models](../turbulence/rans-models.md). The summary that matters for entry heating:
+
 | Family | Extra equations | How the eddy viscosity is set | Strengths | Weak points for entry flows |
 |---|---|---|---|---|
-| Algebraic (Baldwin–Lomax, Cebeci–Smith) | 0 | from the mean velocity profile and wall distance | cheap, robust for attached boundary layers | needs an identifiable boundary-layer edge; poor in separation and wakes |
-| Spalart–Allmaras | 1 | a transport equation for the eddy viscosity itself | robust, easy to converge | needs wall distance; compressible variants change the answer |
-| $k$–$\omega$ and SST | 2 | from turbulent kinetic energy $k$ and specific dissipation rate $\omega$ | better in pressure gradients and mild separation | cold-wall eddy-viscosity errors (above); over-production of $k$ at shocks |
+| [Algebraic](../turbulence/rans-models.md#algebraic-models) (Baldwin–Lomax, Cebeci–Smith) | 0 | from the mean velocity profile and wall distance | cheap, robust for attached boundary layers | needs an identifiable boundary-layer edge; poor in separation and wakes |
+| [Spalart–Allmaras](../turbulence/rans-models.md#spalart-allmaras) | 1 | a transport equation for the eddy viscosity itself | robust, easy to converge | needs wall distance; compressible variants change the answer |
+| [$k$–$\omega$ and SST](../turbulence/rans-models.md#k-omega-and-sst) | 2 | from turbulent kinetic energy $k$ and specific dissipation rate $\omega$ | better in pressure gradients and mild separation | cold-wall eddy-viscosity errors (above); over-production of $k$ at shocks |
 
 All of them are eddy-viscosity models: the turbulent stress is assumed proportional to the mean strain rate. Two consequences matter at hypersonic speed. A shock is a region of enormous strain rate, so an eddy-viscosity model produces turbulent kinetic energy there far faster than real turbulence responds (real shock–turbulence interaction actually suppresses production; Sinha, Mahesh & Candler 2003), and codes limit production at shocks. How much this matters is shown on a 33° flare at Mach 7.16: baseline Spalart–Allmaras predicted no separation, while a strain-adaptive variant that limits production got the separation and pressure close to the test, but not the heat flux ([shock/boundary-layer interaction](shock-boundary-layer-interaction.md#trade-offs); MacLean et al. 2008). And the heat flux inherits whatever error the eddy viscosity has, through the turbulent Prandtl number.
 
@@ -63,11 +65,11 @@ A wall function replaces the near-wall grid with an assumed velocity and tempera
 
 ### Transition
 
-RANS models don't predict where the boundary layer becomes turbulent. Entry analyses usually prescribe the transition location, or run fully laminar and fully turbulent solutions as a bracket. The location comes from correlations (a momentum-thickness Reynolds number, sometimes divided by edge Mach number, exceeding a threshold of a few hundred; roughness-based criteria on ablated heatshields) or from stability analysis.
+RANS models don't predict where the boundary layer becomes turbulent. Entry analyses usually prescribe the transition location, or run fully laminar and fully turbulent solutions as a bracket. The location comes from correlations (a momentum-thickness Reynolds number, sometimes divided by edge Mach number, exceeding a threshold of a few hundred; roughness-based criteria on ablated heatshields) or from stability analysis. Mechanisms and prediction methods are on [transition](../turbulence/transition.md).
 
 ### Scale-resolving methods
 
-LES and DNS resolve the turbulence instead of modelling it, and need the low-dissipation numerics of [central schemes](../spatial/central-schemes.md) and time-accurate integration. They are used for transition mechanisms, shock/boundary-layer interaction unsteadiness and to build the databases RANS models are judged against. Hybrid RANS/LES (detached-eddy simulation) is used for capsule wakes, where the separated flow is unsteady at large scale.
+[LES and DNS](../turbulence/scale-resolving.md) resolve the turbulence instead of modelling it, and need the low-dissipation numerics of [central schemes](../spatial/central-schemes.md) and time-accurate integration. They are used for transition mechanisms, shock/boundary-layer interaction unsteadiness and to build the databases RANS models are judged against. Hybrid RANS/LES ([detached-eddy simulation](../turbulence/scale-resolving.md#detached-eddy-simulation)) is used for capsule wakes, where the separated flow is unsteady at large scale.
 
 ## Typical values
 
@@ -116,7 +118,7 @@ Production reentry codes use algebraic models (Baldwin–Lomax, Cebeci–Smith) 
 
 ## See also
 
-[Viscous fluxes](../spatial/viscous-fluxes.md) · [Central schemes](../spatial/central-schemes.md) (low-dissipation numerics for LES/DNS) · [Entry flow anatomy](entry-flow-anatomy.md)
+[Turbulence fundamentals](../turbulence/fundamentals.md) · [RANS models](../turbulence/rans-models.md) · [Scale-resolving methods](../turbulence/scale-resolving.md) · [Transition](../turbulence/transition.md) · [Viscous fluxes](../spatial/viscous-fluxes.md) · [Central schemes](../spatial/central-schemes.md) (low-dissipation numerics for LES/DNS) · [Entry flow anatomy](entry-flow-anatomy.md)
 
 ## References
 

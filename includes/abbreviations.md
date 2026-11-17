@@ -42,6 +42,21 @@
 *[RANS]: Reynolds-averaged Navier–Stokes
 *[LES]: Large-eddy simulation
 *[DNS]: Direct numerical simulation
+*[DES]: Detached-eddy simulation (hybrid RANS/LES)
+*[DDES]: Delayed detached-eddy simulation
+*[IDDES]: Improved delayed detached-eddy simulation (adds a wall-modelled LES branch)
+*[ILES]: Implicit large-eddy simulation (numerical dissipation acts as the subgrid model)
+*[MILES]: Monotone-integrated large-eddy simulation (an early form of ILES)
+*[WMLES]: Wall-modelled large-eddy simulation
+*[WRLES]: Wall-resolved large-eddy simulation
+*[SGS]: Subgrid scale
+*[URANS]: Unsteady Reynolds-averaged Navier–Stokes
+*[TKE]: Turbulent kinetic energy
+*[SST]: Shear-stress transport (Menter's k–ω/k–ε blend)
+*[EARSM]: Explicit algebraic Reynolds-stress model
+*[WALE]: Wall-adapting local eddy-viscosity subgrid model
+*[ZDES]: Zonal detached-eddy simulation
+*[LST]: Linear stability theory
 *[PSE]: Parabolized stability equations
 *[MFC]: Multi-component Flow Code (explicit, WENO, GPU-first; used here as the contrast case)
 *[1T]: One-temperature (thermal equilibrium) model

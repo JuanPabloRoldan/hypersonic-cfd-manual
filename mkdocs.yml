@@ -121,7 +121,11 @@ nav:
           - "3.5 Transport and diffusion": reference/thermo/transport-and-diffusion.md
           - "3.6 Ionization, electrons and plasma": reference/thermo/ionization-and-electrons.md
       - "4 Turbulence":
-          - "4.1 Turbulence modeling for hypersonic boundary layers": reference/physics/turbulence-modeling.md
+          - "4.1 Turbulence fundamentals and averaging": reference/turbulence/fundamentals.md
+          - "4.2 RANS turbulence models": reference/turbulence/rans-models.md
+          - "4.3 Scale-resolving methods: DNS, LES, hybrid": reference/turbulence/scale-resolving.md
+          - "4.4 Turbulence modeling for hypersonic boundary layers": reference/physics/turbulence-modeling.md
+          - "4.5 Laminar–turbulent transition": reference/turbulence/transition.md
       - "5 Boundary conditions and walls":
           - "5.1 Boundary conditions": reference/spatial/boundary-conditions.md
           - "5.2 Wall boundary conditions": reference/walls/wall-boundary-conditions.md

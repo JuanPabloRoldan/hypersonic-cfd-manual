@@ -199,7 +199,61 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - T. Gökçen & R. W. MacCormack, "Nonequilibrium effects for hypersonic transitional flows using continuum approach," AIAA Paper 89-0461 (1989).
 - I. D. Boyd & T. E. Schwartzentruber, *Nonequilibrium Gas Dynamics and Molecular Simulation*, Cambridge University Press, 2017.
 
-## Turbulence modeling
+## Turbulence: books, fundamentals, models, scale-resolving methods
+
+- S. B. Pope, *Turbulent Flows*, Cambridge University Press, 2000.
+- D. C. Wilcox, *Turbulence Modeling for CFD*, 3rd ed., DCW Industries, 2006.
+- T. B. Gatski & J.-P. Bonnet, *Compressibility, Turbulence and High Speed Flow*, 2nd ed., Academic Press, 2013.
+- A. J. Smits & J.-P. Dussauge, *Turbulent Shear Layers in Supersonic Flow*, 2nd ed., Springer, 2006.
+- E. Garnier, N. Adams & P. Sagaut, *Large Eddy Simulation for Compressible Flows*, Springer, 2009.
+- J. P. Boris, F. F. Grinstein, E. S. Oran & R. L. Kolbe, "New insights into large eddy simulation," *Fluid Dyn. Res.* 10 (1992).
+- F. F. Grinstein, L. G. Margolin & W. J. Rider (eds.), *Implicit Large Eddy Simulation*, Cambridge University Press, 2007.
+- A. N. Kolmogorov, "The local structure of turbulence in incompressible viscous fluid for very large Reynolds numbers," *Dokl. Akad. Nauk SSSR* 30 (1941).
+- A. Favre, "Équations des gaz turbulents compressibles," *J. Mécanique* 4 (1965).
+- M. V. Morkovin, "Effects of compressibility on turbulent flows," in *Mécanique de la Turbulence*, CNRS (1962).
+- E. R. van Driest, "Turbulent boundary layer in compressible fluids," *J. Aeronaut. Sci.* 18 (1951).
+- A. Trettel & J. Larsson, "Mean velocity scaling for compressible wall turbulence with heat transfer," *Phys. Fluids* 28 (2016).
+- P. G. Huang, G. N. Coleman & P. Bradshaw, "Compressible turbulent channel flows: DNS results and modelling," *J. Fluid Mech.* 305 (1995).
+- L. Duan, I. Beekman & M. P. Martin, "Direct numerical simulation of hypersonic turbulent boundary layers. Part 2. Effect of wall temperature," *J. Fluid Mech.* 655 (2010); "Part 3. Effect of Mach number," *J. Fluid Mech.* 672 (2011).
+- C. J. Roy & F. G. Blottner, "Review and assessment of turbulence models for hypersonic flows," *Prog. Aerosp. Sci.* 42 (2006).
+- T. Cebeci & A. M. O. Smith, *Analysis of Turbulent Boundary Layers*, Academic Press, 1974.
+- B. S. Baldwin & H. Lomax, "Thin-layer approximation and algebraic model for separated turbulent flows," AIAA Paper 78-257 (1978).
+- S. Catris & B. Aupoix, "Density corrections for turbulence models," *Aerosp. Sci. Technol.* 4 (2000).
+- B. E. Launder & D. B. Spalding, "The numerical computation of turbulent flows," *Comput. Methods Appl. Mech. Eng.* 3 (1974).
+- P. A. Durbin, "On the k–ε stagnation point anomaly," *Int. J. Heat Fluid Flow* 17 (1996).
+- D. C. Wilcox, "Formulation of the k–ω turbulence model revisited," *AIAA J.* 46 (2008).
+- F. R. Menter, "Two-equation eddy-viscosity turbulence models for engineering applications," *AIAA J.* 32 (1994).
+- F. R. Menter, M. Kuntz & R. Langtry, "Ten years of industrial experience with the SST turbulence model," in *Turbulence, Heat and Mass Transfer 4*, Begell House (2003).
+- B. E. Launder, G. J. Reece & W. Rodi, "Progress in the development of a Reynolds-stress turbulence closure," *J. Fluid Mech.* 68 (1975).
+- C. G. Speziale, S. Sarkar & T. B. Gatski, "Modelling the pressure–strain correlation of turbulence: an invariant dynamical systems approach," *J. Fluid Mech.* 227 (1991).
+- S. Wallin & A. V. Johansson, "An explicit algebraic Reynolds stress model for incompressible and compressible turbulent flows," *J. Fluid Mech.* 403 (2000).
+- NASA Langley Turbulence Modeling Resource, turbmodels.larc.nasa.gov (model definitions, variant names, verification cases).
+- H. Choi & P. Moin, "Grid-point requirements for large eddy simulation: Chapman's estimates revisited," *Phys. Fluids* 24 (2012).
+- N. J. Georgiadis, D. P. Rizzetta & C. Fureby, "Large-eddy simulation: current capabilities, recommended practices, and future research," *AIAA J.* 48 (2010).
+- J. Smagorinsky, "General circulation experiments with the primitive equations," *Mon. Weather Rev.* 91 (1963).
+- M. Germano, U. Piomelli, P. Moin & W. H. Cabot, "A dynamic subgrid-scale eddy viscosity model," *Phys. Fluids A* 3 (1991).
+- F. Nicoud & F. Ducros, "Subgrid-scale stress modelling based on the square of the velocity gradient tensor," *Flow Turbul. Combust.* 62 (1999).
+- S. Kawai & J. Larsson, "Wall-modeling in large eddy simulation: length scales, grid resolution, and accuracy," *Phys. Fluids* 24 (2012).
+- J. Larsson, S. Kawai, J. Bodart & I. Bermejo-Moreno, "Large eddy simulation with modeled wall-stress: recent progress and future directions," *Mech. Eng. Rev.* 3 (2016).
+- P. R. Spalart, W.-H. Jou, M. Strelets & S. R. Allmaras, "Comments on the feasibility of LES for wings, and on a hybrid RANS/LES approach," 1st AFOSR Int. Conf. on DNS/LES (1997).
+- P. R. Spalart, S. Deck, M. L. Shur, K. D. Squires, M. Kh. Strelets & A. Travin, "A new version of detached-eddy simulation, resistant to ambiguous grid densities," *Theor. Comput. Fluid Dyn.* 20 (2006).
+- M. L. Shur, P. R. Spalart, M. Kh. Strelets & A. K. Travin, "A hybrid RANS-LES approach with delayed-DES and wall-modelled LES capabilities," *Int. J. Heat Fluid Flow* 29 (2008).
+- P. R. Spalart, "Detached-eddy simulation," *Annu. Rev. Fluid Mech.* 41 (2009).
+- S. Deck, "Recent improvements in the Zonal Detached Eddy Simulation (ZDES) formulation," *Theor. Comput. Fluid Dyn.* 26 (2012).
+
+## Transition
+
+- L. M. Mack, "Boundary-layer linear stability theory," AGARD Report 709 (1984).
+- A. V. Fedorov, "Transition and stability of high-speed boundary layers," *Annu. Rev. Fluid Mech.* 43 (2011).
+- S. P. Schneider, "Hypersonic laminar–turbulent transition on circular cones and scramjet forebodies," *Prog. Aerosp. Sci.* 40 (2004).
+- S. P. Schneider, "Effects of roughness on hypersonic boundary-layer transition," *J. Spacecraft Rockets* 45 (2008).
+- D. C. Reda, "Review and synthesis of roughness-dominated transition correlations for reentry applications," *J. Spacecraft Rockets* 39 (2002).
+- R. B. Langtry & F. R. Menter, "Correlation-based transition modeling for unstructured parallelized computational fluid dynamics codes," *AIAA J.* 47 (2009).
+- J. G. Coder & M. D. Maughmer, "Computational fluid dynamics compatible transition modeling using an amplification factor transport equation," *AIAA J.* 52 (2014).
+- H. B. Johnson & G. V. Candler, "Hypersonic boundary layer stability analysis using PSE-Chem," AIAA Paper 2005-5023 (2005).
+- C.-L. Chang, "Langley Stability and Transition Analysis Code (LASTRAC) version 1.2 user manual," NASA/TM-2004-213233 (2004).
+
+## Turbulence: hypersonic and shock-interaction papers
 
 - M. MacLean, T. Wadhams, M. S. Holden & H. Johnson, "A computational analysis of ground test studies of the HIFIRE-1 transition experiment," AIAA Paper 2008-0641 (2008).
 - P. R. Spalart & S. R. Allmaras, "A one-equation turbulence model for aerodynamic flows," AIAA Paper 92-0439 (1992).

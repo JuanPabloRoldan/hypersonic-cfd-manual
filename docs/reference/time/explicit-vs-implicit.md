@@ -39,7 +39,7 @@ Implicit methods pay a fixed overhead per step to buy a bigger step. It is only 
 
 **Capsule wake unsteadiness.** Suppose the physics is shedding at kHz frequencies and you want 100 steps per period: $\Delta t_{\text{wanted}} \sim 10^{-5}$ s. The wall cells allow $\Delta t_{\text{allowed}} \sim 10^{-10}$ s, and in a time-accurate run that limit applies globally. The ratio is $\sim10^5 \gg C$: implicit wins, using [dual time stepping](dual-time-stepping.md).
 
-**DNS of transition, or shock–droplet interaction.** The physics you need is acoustics and small eddies, so $\Delta t_{\text{wanted}} \approx \Delta t_{\text{allowed}}$ and the ratio is near 1, below $C$. Explicit wins, especially on GPUs, where $C$ is effectively larger because explicit updates map better to the hardware. This is MFC's regime.
+**[DNS](../turbulence/scale-resolving.md#direct-numerical-simulation) of transition, or shock–droplet interaction.** The physics you need is acoustics and small eddies, so $\Delta t_{\text{wanted}} \approx \Delta t_{\text{allowed}}$ and the ratio is near 1, below $C$. Explicit wins, especially on GPUs, where $C$ is effectively larger because explicit updates map better to the hardware. This is MFC's regime.
 
 !!! note "Order-of-magnitude reasoning"
     The numbers above are illustrative. Real values of $C$ depend on the code, the linear solver and the hardware, and real iteration counts depend on the case.
