@@ -83,4 +83,4 @@ Pages marked with a hollow circle in the sidebar are outlines; half-filled circl
 
 ## Chapters still to come
 
-Outlines exist for shock/boundary-layer interaction (2.4), shock–shock interactions (2.5) and shock-layer radiation (13). Still to be added: material response and ablation, and further entry-flow physics (entropy layers and viscous interaction, transition, wake flow).
+Shock/boundary-layer interaction (2.4) is a draft; outlines exist for shock–shock interactions (2.5) and shock-layer radiation (13). Still to be added: material response and ablation, and further entry-flow physics (entropy layers and viscous interaction, transition, wake flow).

@@ -69,6 +69,7 @@ Naive LTS (every cell at its own step, never synchronized) destroys time accurac
 - Each cell is exactly as stable as it would be at its own CFL number; nothing new is introduced.
 - Neighbouring cells with very different local steps exchange fluxes computed at inconsistent pseudo-times. That is harmless at convergence but can cause start-up transients at sharp jumps in cell size.
 - Naive local stepping applied to an unsteady problem doesn't fail visibly. It gives a smooth, wrong time history.
+- In separated flows it can do the opposite and create unsteadiness that isn't there: Gnoffo showed artificial periodic vortex shedding with local time stepping on a concave body and on the [double cone](../physics/shock-boundary-layer-interaction.md#canonical-cases), and a time-accurate integration recovered the steady solution seen in experiment (Gnoffo 2002, as summarized by Candler 2011).
 
 ## Implications
 
@@ -95,4 +96,4 @@ Steady LTS: essentially all steady solvers (DPLR, LAURA, US3D, FUN3D, SU2). AMR 
 
 ## References
 
-Jameson, Schmidt & Turkel (1981); Berger & Oliger (1984); Berger & Colella (1989); Blazek. See the [bibliography](../../references.md).
+Jameson, Schmidt & Turkel (1981); Berger & Oliger (1984); Berger & Colella (1989); Gnoffo (2002); Candler, ch. 7 in Babinsky & Harvey (2011); Blazek. See the [bibliography](../../references.md).

@@ -1861,6 +1861,114 @@ def free_molecular_cp():
     save(fig, "free_molecular_cp")
 
 
+# ---------------------------------------------------------------------------
+# SWBLI 1. Separated compression-corner interaction: flow schematic and the
+#          wall pressure and heat-flux traces it produces. Schematic.
+# ---------------------------------------------------------------------------
+def swbli_compression_corner():
+    fig, (a1, a2) = plt.subplots(2, 1, figsize=(8.6, 7.4), gridspec_kw={"height_ratios": [1.35, 1]})
+    ang = np.radians(15)
+    xc = 10.0
+    # body
+    a1.fill([0, xc, xc + 7 * np.cos(ang), xc + 7 * np.cos(ang), 0],
+            [0, 0, 7 * np.sin(ang), -0.8, -0.8], color="#cfd8dc", ec="k", lw=1.2)
+    S = np.array([6.0, 0.0]); R = np.array([xc + 2.6 * np.cos(ang), 2.6 * np.sin(ang)])
+    # incoming boundary-layer edge, then separated shear layer (dividing streamline)
+    xb = np.linspace(0, S[0], 50)
+    a1.plot(xb, 1.1 * np.sqrt(xb / S[0]), color=GREY, lw=1, ls="--")
+    t = np.linspace(0, 1, 60)[:, None]
+    Q = np.array([9.0, 1.05])
+    shear = (1 - t) ** 2 * S + 2 * (1 - t) * t * Q + t ** 2 * R
+    a1.fill(np.r_[shear[:, 0], xc], np.r_[shear[:, 1], 0], color="#ffcc80", ec=C1, lw=1.4)
+    # recirculation arrows
+    a1.annotate("", xy=(7.4, 0.25), xytext=(9.3, 0.35), arrowprops=dict(arrowstyle="->", lw=0.9, color=C1))
+    # separation shock, reattachment shock, triple point, transmitted shock, expansion
+    T = np.array([13.6, 4.3])
+    a1.plot([S[0] + 0.3, T[0]], [0.35, T[1]], color=C3, lw=1.8)
+    a1.plot([R[0], T[0]], [R[1], T[1]], color=C0, lw=1.8)
+    a1.plot([T[0], 17.0], [T[1], 7.4], color="k", lw=1.6)
+    for k in range(4):
+        a1.plot([T[0], 16.2 + 0.35 * k], [T[1], 3.75 + 0.1 * k], color=C2, lw=0.8)
+    a1.plot([T[0], 17.4], [T[1], 5.6], color=GREY, lw=0.9, ls=":")
+    a1.plot(*T, "*", color="k", ms=11, zorder=5)
+    a1.plot(*S, "o", color="k", ms=4); a1.plot(*R, "o", color="k", ms=4)
+    kw = dict(fontsize=8.5, arrowprops=dict(arrowstyle="->", lw=0.8, color="k"))
+    a1.annotate("incoming boundary layer", xy=(3.0, 0.8), xytext=(0.3, 2.6), **kw)
+    a1.annotate("separation shock\n(free interaction)", xy=(8.4, 2.0), xytext=(4.0, 4.6), color=C3, **kw)
+    a1.annotate("separated shear layer\n(dividing streamline)", xy=(9.6, 1.0), xytext=(9.8, -2.4), color=C1, **kw)
+    a1.annotate("reattachment shock", xy=(13.0, 2.6), xytext=(15.6, 1.2), color=C0, **kw)
+    a1.annotate("triple point T\n(Edney type VI)", xy=T, xytext=(10.0, 6.4), **kw)
+    a1.annotate("expansion fan\ntowards the wall", xy=(16.3, 3.85), xytext=(17.6, 2.5), color=C2, **kw)
+    a1.annotate("slip line", xy=(16.4, 5.35), xytext=(17.6, 6.3), color=GREY, **kw)
+    a1.text(S[0] - 0.3, -0.55, "S", fontsize=9, ha="right"); a1.text(R[0] + 0.15, R[1] - 0.6, "R", fontsize=9)
+    a1.text(xc + 0.2, -0.6, r"corner, ramp angle $\alpha$", fontsize=8.5)
+    a1.annotate("", xy=(-0.2, 2.0), xytext=(-2.6, 2.0), arrowprops=dict(arrowstyle="->", lw=1.2))
+    a1.text(-2.6, 2.3, r"$M_0 > 1$", fontsize=9)
+    a1.set_xlim(-2.8, 21); a1.set_ylim(-3.0, 8); a1.set_aspect("equal"); a1.axis("off")
+    a1.set_title("Separated compression-corner interaction (schematic, not to scale)", fontsize=10)
+    # wall traces
+    x = np.linspace(0.8, 20, 600)
+    x0, xs, xr, xpk = 4.6, S[0], R[0], R[0] + 1.6
+    pT = 13.4
+    p = np.ones_like(x)
+    m = (x > x0) & (x <= xs); p[m] = 1 + 1.2 * ((x[m] - x0) / (xs - x0)) ** 1.5
+    m = (x > xs) & (x <= 9.6); p[m] = 2.2 + 0.4 * (x[m] - xs) / (9.6 - xs)
+    m = (x > 9.6) & (x <= xpk); p[m] = 2.6 + (pT * 1.15 - 2.6) * ((x[m] - 9.6) / (xpk - 9.6)) ** 2
+    m = x > xpk; p[m] = pT + 0.15 * pT * np.exp(-(x[m] - xpk) / 0.6) - 0.12 * pT * (x[m] > 16.0) * (1 - np.exp(-(x[m] - 16.0) / 0.8))
+    q = 1 / np.sqrt(x / 4.6)
+    m = (x > x0) & (x <= 9.8); q[m] = q[m] * (1 - 0.65 * np.sin(np.pi / 2 * np.clip((x[m] - x0) / (8.5 - x0), 0, 1)))
+    m = (x > 9.8) & (x <= xpk); q[m] = 0.33 + (7.2 - 0.33) * ((x[m] - 9.8) / (xpk - 9.8)) ** 2
+    m = x > xpk; q[m] = 2.9 + 4.3 * np.exp(-(x[m] - xpk) / 1.6)
+    a2.plot(x, p, color=C0, lw=1.8, label=r"wall pressure $p_w/p_0$")
+    a2.plot(x, q, color=C1, lw=1.8, label=r"heat flux $q_w/q_0$ (laminar incoming layer)")
+    a2.axhline(pT, color=C0, lw=0.8, ls=":")
+    a2.text(0.3, pT + 0.4, "inviscid pressure ratio across the ramp shock", fontsize=8, color=C0)
+    a2.annotate("plateau", xy=(7.6, 2.4), xytext=(6.0, 6.0), fontsize=8.5, arrowprops=dict(arrowstyle="->", lw=0.8))
+    a2.annotate("heating dips under\nthe laminar bubble", xy=(8.3, 0.5), xytext=(1.0, 5.0), fontsize=8.5, color=C1, arrowprops=dict(arrowstyle="->", lw=0.8, color=C1))
+    a2.annotate("peak just downstream\nof reattachment", xy=(xpk, 7.2), xytext=(14.0, 9.5), fontsize=8.5, color=C1, arrowprops=dict(arrowstyle="->", lw=0.8, color=C1))
+    a2.annotate("expansion from T", xy=(17.2, 12.3), xytext=(16.4, 7.5), fontsize=8.5, color=C2, arrowprops=dict(arrowstyle="->", lw=0.8, color=C2))
+    for xv, lab in ((x0, "onset"), (xs, "S"), (xc, "corner"), (xr, "R")):
+        a2.axvline(xv, color=GREY, lw=0.7, ls="--"); a2.text(xv, 16.6, lab, fontsize=8, ha="center")
+    a2.set_xlim(0, 20); a2.set_ylim(0, 17.5); a2.set_xlabel("distance along the surface (arbitrary units)")
+    a2.set_yticks([0, 1, 5, 10, 15]); a2.legend(fontsize=8.5, loc="center left", bbox_to_anchor=(0.0, 0.62))
+    a2.set_title("Wall traces (schematic shapes; levels illustrative for Mach 10, 15° ramp)", fontsize=9.5)
+    fig.tight_layout()
+    save(fig, "swbli_compression_corner")
+
+
+# ---------------------------------------------------------------------------
+# SWBLI 2. Free-interaction pressures (Chapman) and Holden's peak-heating
+#          correlation. Computed from the formulas named in the page.
+# ---------------------------------------------------------------------------
+def swbli_free_interaction():
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.4, 4.2))
+    g = 1.4
+    M = np.linspace(2, 16, 200)
+
+    def ratio(F, Cf, M):
+        return 1 + F * np.sqrt(2 * Cf) / (M ** 2 - 1) ** 0.25 * 0.5 * g * M ** 2
+
+    for Re, c in ((1e5, C1), (1e6, C0), (1e7, C2)):
+        Cf = 0.664 / np.sqrt(Re)
+        a1.plot(M, ratio(1.5, Cf, M), color=c, lw=1.8, label=rf"plateau, $Re_x=10^{{{int(np.log10(Re))}}}$")
+        a1.plot(M, ratio(0.8, Cf, M), color=c, lw=1.0, ls="--")
+    a1.plot([], [], color="k", lw=1.0, ls="--", label="at separation (same colours)")
+    a1.set_xlabel(r"$M_0$ at interaction onset"); a1.set_ylabel(r"$p/p_0$")
+    a1.set_title("Laminar free interaction (Chapman), $F_s=0.8$, $F_p=1.5$,\n"
+                 r"$C_{f0}=0.664/\sqrt{Re_x}$ (illustrative, $C=1$)", fontsize=9.5)
+    a1.legend(fontsize=8)
+    pr = np.logspace(0, 2, 100)
+    for n, c, lab in ((0.85, C0, r"$n=0.85$: turbulent, Mach 2–14 data"),
+                      (0.7, C1, r"$n=0.7$: centre of laminar data, Mach 11.7–18.9"),
+                      (0.5, GREY, r"$n=0.5$")):
+        a2.loglog(pr, pr ** n, color=c, lw=1.8 if n != 0.5 else 1.0, label=lab)
+    a2.set_xlabel(r"$p_{max}/p_0$"); a2.set_ylabel(r"$q_{max}/q_0$")
+    a2.set_title(r"Peak heating $q_{max}/q_0=(p_{max}/p_0)^n$" "\n(Holden, in Babinsky & Harvey 2011, Figs. 6.7b, 6.26)", fontsize=9.5)
+    a2.legend(fontsize=8)
+    fig.tight_layout()
+    save(fig, "swbli_free_interaction")
+
+
 if __name__ == "__main__":
     burgers_demo()
     timestep_limits()
@@ -1907,3 +2015,5 @@ if __name__ == "__main__":
     pns_marching()
     surface_inclination_methods()
     free_molecular_cp()
+    swbli_compression_corner()
+    swbli_free_interaction()

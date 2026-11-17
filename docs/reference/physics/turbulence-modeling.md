@@ -55,7 +55,7 @@ The Huang et al. DNS reproduce CUBRC's Mach 11.1 flat-plate experiment (wall she
 | Spalart–Allmaras | 1 | a transport equation for the eddy viscosity itself | robust, easy to converge | needs wall distance; compressible variants change the answer |
 | $k$–$\omega$ and SST | 2 | from turbulent kinetic energy $k$ and specific dissipation rate $\omega$ | better in pressure gradients and mild separation | cold-wall eddy-viscosity errors (above); over-production of $k$ at shocks |
 
-All of them are eddy-viscosity models: the turbulent stress is assumed proportional to the mean strain rate. Two consequences matter at hypersonic speed. A shock is a region of enormous strain rate, so an eddy-viscosity model produces turbulent kinetic energy there far faster than real turbulence responds, and codes limit production at shocks. And the heat flux inherits whatever error the eddy viscosity has, through the turbulent Prandtl number.
+All of them are eddy-viscosity models: the turbulent stress is assumed proportional to the mean strain rate. Two consequences matter at hypersonic speed. A shock is a region of enormous strain rate, so an eddy-viscosity model produces turbulent kinetic energy there far faster than real turbulence responds (real shock–turbulence interaction actually suppresses production; Sinha, Mahesh & Candler 2003), and codes limit production at shocks. How much this matters is shown on a 33° flare at Mach 7.16: baseline Spalart–Allmaras predicted no separation, while a strain-adaptive variant that limits production got the separation and pressure close to the test, but not the heat flux ([shock/boundary-layer interaction](shock-boundary-layer-interaction.md#trade-offs); MacLean et al. 2008). And the heat flux inherits whatever error the eddy viscosity has, through the turbulent Prandtl number.
 
 ### Wall functions
 
@@ -120,4 +120,4 @@ Production reentry codes use algebraic models (Baldwin–Lomax, Cebeci–Smith) 
 
 ## References
 
-Bowersox & North (2010); Huang, Nicholson, Duan, Choudhari & Bowersox (2020); Danis & Durbin (2022). See the [bibliography](../../references.md).
+Bowersox & North (2010); Huang, Nicholson, Duan, Choudhari & Bowersox (2020); Danis & Durbin (2022); Sinha, Mahesh & Candler (2003); MacLean et al. (2008); Rung et al. (2003); Knight & Zheltovodov, chs. 4–5 in Babinsky & Harvey (2011). See the [bibliography](../../references.md).

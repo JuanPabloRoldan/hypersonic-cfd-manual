@@ -48,10 +48,14 @@ Two-dimensional (cylinder) and three-dimensional (sphere, fin leading edge) inte
 
 ## Typical values
 
-To be added from Edney (1968) and Wieting & Holden (1989), who measured interference heating on a cylinder at Mach 6 and 8. Peak heating in Type IV interactions is commonly quoted as an order of magnitude above the undisturbed stagnation value.
+- **A computed laminar case (Candler 2011, §7.2.3).** Holden's Run 43: Mach 13.94 over a cylinder of 3.81 cm radius, free-stream unit Reynolds number 42,600/m (low enough that the interaction stays laminar), shock from a 10° wedge generator. Sweeping the impingement point through the six types on a $1200\times800$ grid around the half-cylinder, the worst case gave a peak pressure about **16 times** and a peak heat flux about **22 times** the undisturbed stagnation-point values. The worst case was a jet striking the surface obliquely, which heated more than the jet striking it normally.
+- **Peak width:** about the size of the terminal shock in the jet; its spread comes mainly from the thermal boundary layer, so higher Reynolds numbers give even narrower peaks (Candler 2011, §7.2.3).
+- **Agreement with experiment:** laminar computations over-predicted measured peak pressure and heating by about 30%; accounting for finite gauge size and varying surface temperature improved the agreement (D'Ambrosio 2002, as summarized by Candler 2011, §7.2.3).
+- **High enthalpy:** dissociation caused by the interaction changes the shock strengths and typically **reduces** the peak heating (Sanderson, Hornung & Sturtevant 2004).
+- Measured amplification factors at Mach 6 and 8 for types III–V: to be added from Wieting & Holden (1989) and Holden et al. (1998).
 
 !!! warning "Calibration"
-    The order-of-magnitude statement is the commonly cited level, not a figure taken from a specific table; the page will quote measured amplification factors with their test conditions when it is written.
+    The 16× and 22× factors are from one laminar computation at one condition, not a design rule. Transitional and turbulent interactions, and three-dimensional ones, have different peaks; Holden (2011, §6.4) gives correlations of measured shock–shock heating that this page will draw on.
 
 ## Trade-offs
 
@@ -87,4 +91,4 @@ To be written from validation papers.
 
 ## References
 
-Edney (1968); Wieting & Holden (1989); Anderson, *Hypersonic and High-Temperature Gas Dynamics*. See the [bibliography](../../references.md).
+Edney (1968); Wieting & Holden (1989); Holden et al. (1998); D'Ambrosio (2002); Sanderson, Hornung & Sturtevant (2004); Anderson, *Hypersonic and High-Temperature Gas Dynamics*; Babinsky & Harvey (eds.) (2011): Délery, ch. 2, §2.2.3 (Edney classification with shock polars), Holden, ch. 6, §6.4 (shock–shock experiments and correlations), Candler, ch. 7, §7.2.3 (computed cylinder interactions). See the [bibliography](../../references.md).

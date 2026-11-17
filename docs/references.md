@@ -174,6 +174,17 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 - N. T. Clemens & V. Narayanaswamy, "Low-frequency unsteadiness of shock wave/turbulent boundary layer interactions," *Annu. Rev. Fluid Mech.* 46 (2014).
 - D. V. Gaitonde, "Progress in shock wave/boundary layer interactions," *Prog. Aerosp. Sci.* 72 (2015).
 - A. R. Wieting & M. S. Holden, "Experimental shock-wave interference heating on a cylinder at Mach 6 and 8," *AIAA J.* 27 (1989).
+- Chapters of Babinsky & Harvey (eds.), *Shock Wave–Boundary-Layer Interactions* (2011), cited by author: J. Délery, "Physical introduction" (ch. 2); H. Babinsky & J. Délery, "Transonic shock wave–boundary-layer interactions" (ch. 3); D. D. Knight & A. A. Zheltovodov, "Ideal-gas shock wave–turbulent boundary-layer interactions in supersonic flows and their modeling" (ch. 4: two-dimensional; ch. 5, with the authors reversed: three-dimensional); M. S. Holden, "Experimental studies of shock wave–boundary-layer interactions in hypersonic flows" (ch. 6); G. V. Candler, "Numerical simulation of hypersonic shock wave–boundary-layer interactions" (ch. 7); J. K. Harvey, "Shock wave–boundary-layer interactions occurring in hypersonic flows in the upper atmosphere" (ch. 8); P. Dupont, J. F. Debiève & J. P. Dussauge, "Shock-wave unsteadiness in turbulent shock boundary-layer interactions" (ch. 9); G. V. Inger, "Analytical treatment of shock wave–boundary-layer interactions" (ch. 10).
+- M. S. Holden, T. P. Wadhams, J. K. Harvey & G. V. Candler, "Experiments and DSMC and Navier–Stokes computations for hypersonic shock boundary layer interactions," AIAA Paper 2003-1131 (2003).
+- I. Nompelis, G. V. Candler & M. S. Holden, "Effect of vibrational nonequilibrium on hypersonic double-cone experiments," *AIAA J.* 41 (2003).
+- I. Nompelis, G. V. Candler, M. MacLean & M. S. Holden, "Investigation of hypersonic double-cone flow experiments at high enthalpy in the LENS facility," AIAA Paper 2007-0203 (2007).
+- M.-C. Druguet, G. V. Candler & I. Nompelis, "Effect of numerics on Navier–Stokes computations of hypersonic double-cone flows," *AIAA J.* 43 (2005).
+- P. A. Gnoffo, "On the numerical convergence to steady state of hypersonic flows over bodies with concavities," in *West-East High-Speed Flow Fields 2002*, CIMNE (2002).
+- J. R. Maus, B. J. Griffith, K. Y. Szema & J. T. Best, "Hypersonic Mach number and real-gas effects on Space Shuttle Orbiter aerodynamics," *J. Spacecraft Rockets* 21 (1984).
+- K. J. Weilmuenster, P. A. Gnoffo & F. A. Greene, "Navier–Stokes simulations of Orbiter aerodynamic characteristics including pitch trim and body flap," *J. Spacecraft Rockets* 31 (1994).
+- D. D'Ambrosio, "Numerical prediction of laminar shock/shock interactions in hypersonic flow," AIAA Paper 2002-0582 (2002).
+- M. S. Holden, S. Sweet, J. Kolly & G. Smolinski, "A review of aerothermal characteristics of laminar, transitional, and turbulent shock/shock interaction regions in hypersonic flows," AIAA Paper 1998-0899 (1998).
+- S. R. Sanderson, H. G. Hornung & B. Sturtevant, "The influence of non-equilibrium dissociation on the flow produced by shock impingement on a blunt body," *J. Fluid Mech.* 516 (2004).
 - R. Goulard, "The coupling of radiation and convection in detached shock layers," *J. Quant. Spectrosc. Radiat. Transfer* 1 (1961).
 
 ## Rarefied flow
@@ -190,6 +201,11 @@ Works cited across the manual. NASA technical reports are available on the NASA 
 
 ## Turbulence modeling
 
+- M. MacLean, T. Wadhams, M. S. Holden & H. Johnson, "A computational analysis of ground test studies of the HIFIRE-1 transition experiment," AIAA Paper 2008-0641 (2008).
+- P. R. Spalart & S. R. Allmaras, "A one-equation turbulence model for aerodynamic flows," AIAA Paper 92-0439 (1992).
+- T. Rung, U. Bunge, M. Schatz & F. Thiele, "Restatement of the Spalart–Allmaras eddy-viscosity model in strain-adaptive formulation," *AIAA J.* 41 (2003).
+- K. Sinha, K. Mahesh & G. V. Candler, "Modeling shock unsteadiness in shock/turbulence interaction," *Phys. Fluids* 15 (2003).
+- K. Sinha, K. Mahesh & G. V. Candler, "Modeling the effect of shock unsteadiness in shock/turbulent boundary layer interactions," *AIAA J.* 43 (2005).
 - R. D. W. Bowersox & S. W. North, "Algebraic turbulent energy flux models for hypersonic shear flows," *Prog. Aerosp. Sci.* 46 (2010).
 - J. Huang, G. L. Nicholson, L. Duan, M. M. Choudhari & R. D. W. Bowersox, "Simulation and modeling of cold-wall hypersonic turbulent boundary layers on flat plate," AIAA conference paper (2020), NTRS 20200002806.
 - M. E. Danis & P. Durbin, "Compressibility correction to k–ω models for hypersonic turbulent boundary layers," *AIAA J.* 60 (2022).

@@ -166,6 +166,16 @@ Key terms in a fixed format: what each is, the problem it solves, its implicatio
 - **Which codes:** all reacting codes.
 - **See also:** [frozen and equilibrium sound speed](reference/foundations/mathematical-character.md#frozen-and-equilibrium-sound-speed).
 
+### Free interaction (also: Chapman's free-interaction theory, plateau pressure)
+
+- **Depth:** [deep] · **Topic:** shock/boundary-layer interaction
+- **What it is:** the result that the first part of a separated interaction (pressure rise to separation and to the plateau, and its length) depends only on the incoming boundary layer, $(p-p_0)/q_0 = F\sqrt{2C_{f0}}/(M_0^2-1)^{1/4}$ with universal $F$ (laminar 0.8 at separation, 1.5 at the plateau; turbulent 4.2 and 6), not on the ramp or shock that causes it.
+- **Problem it solves:** predicts separation and plateau pressures without a CFD run, and explains why a stronger obstacle lengthens the bubble instead of raising the plateau, leaving most of the compression and the heating peak to reattachment.
+- **Implications:** laminar layers separate at a fraction of the pressure rise turbulent ones withstand; laminar interactions grow with Reynolds number.
+- **In a run:** a sanity check on computed plateau pressures; the separation point, not the residual, is the quantity to watch.
+- **Which codes:** theory, not a code feature.
+- **See also:** [shock/boundary-layer interaction](reference/physics/shock-boundary-layer-interaction.md#free-interaction-the-separation-and-plateau-pressures).
+
 ### Grid convergence index (also: GCI, Richardson extrapolation, observed order)
 
 - **Depth:** [deep] · **Topic:** verification
