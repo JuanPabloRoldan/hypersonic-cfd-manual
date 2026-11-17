@@ -747,9 +747,9 @@ def capsule_anatomy():
     ax.fill(outline_x, outline_y, color="#cfd8dc", zorder=3)
     ax.plot(outline_x, outline_y, color="k", lw=1.4, zorder=4)
     apex = hx.min()
-    # bow shock
+    # bow shock: vertex a standoff ahead of the apex, wings swept downstream
     ys = np.linspace(-2.6, 2.6, 300)
-    xs = apex - 0.28 - 0.42 * (np.sqrt(1 + (ys / 0.75) ** 2) - 1)
+    xs = apex - 0.28 + 0.45 * (np.sqrt(1 + (ys / 0.9) ** 2) - 1)
     ax.plot(xs, ys, color=C1, lw=2.2)
     # boundary layer (thin band along heat shield and around shoulder)
     for sgn in (1, -1):
